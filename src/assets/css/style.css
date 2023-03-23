@@ -4574,3 +4574,10 @@ object {
   color: white;
   background: var(--iq-bg1);
 }
+
+/* sign in page logo and switch lang container */
+.signinlogo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

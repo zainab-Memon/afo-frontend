@@ -163,12 +163,24 @@ const HeaderStyle1 = (props) => {
                           <Link to="/">Home</Link>
                         </li>
                         <li className="menu-item">
+                          <Link to="/">Genre</Link>
+                        </li>
+                        <li className="menu-item">
                           <Link to="/movie-category">Movies</Link>
+                        </li>
+                        <li className="menu-item">
+                          <Link to="/">Videos</Link>
+                        </li>
+                        <li className="menu-item">
+                          <Link to="/">Podcast</Link>
                         </li>
                         <li className="menu-item">
                           <Link to="/show-category">Tv Shows</Link>
                         </li>
                         <li className="menu-item">
+                          <Link to="/">Live Channels</Link>
+                        </li>
+                        {/* <li className="menu-item">
                           <Link to="#">Blog</Link>
                           <ul className="sub-menu">
                             <li className="menu-item">
@@ -178,8 +190,8 @@ const HeaderStyle1 = (props) => {
                               <Link to="/blog-details">Blog details</Link>
                             </li>
                           </ul>
-                        </li>
-                        <li className="menu-item">
+                        </li> */}
+                        {/* <li className="menu-item">
                           <Link to="#">Pages</Link>
                           <ul className="sub-menu">
                             <li className="menu-item">
@@ -210,7 +222,7 @@ const HeaderStyle1 = (props) => {
                               </ul>
                             </li>
                           </ul>
-                        </li>
+                        </li> */}
                       </Nav>
                     </div>
                   </Navbar.Collapse>
@@ -337,7 +349,7 @@ const HeaderStyle1 = (props) => {
                         >
                           <Card className="shadow-none m-0">
                             <Card.Body className="p-0 pl-3 pr-3">
-                              <Link
+                              {/* <Link
                                 to="/manage-profile"
                                 className="iq-sub-card setting-dropdown"
                               >
@@ -349,17 +361,17 @@ const HeaderStyle1 = (props) => {
                                     <h6 className="my-0 ">Manage Profile</h6>
                                   </div>
                                 </div>
-                              </Link>
+                              </Link> */}
                               <Link
                                 to="/setting"
                                 className="iq-sub-card setting-dropdown"
                               >
                                 <div className="media align-items-center">
                                   <div className="right-icon">
-                                    <i className="ri-settings-4-line text-primary"></i>
+                                    <i className="ri-file-user-line text-primary"></i>
                                   </div>
                                   <div className="media-body ml-3">
-                                    <h6 className="my-0 ">Settings</h6>
+                                    <h6 className="my-0 ">Manage Profile</h6>
                                   </div>
                                 </div>
                               </Link>

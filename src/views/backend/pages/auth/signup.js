@@ -28,7 +28,16 @@ const mapDispatchToProps = (dispatch) => ({
   ),
 });
 const SignUp = (props) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  // switch language
+  //Creating a method to change the language onChnage from select box
+  const changeLanguageHandler = (e) => {
+    const languageValue = e.target.value;
+
+    i18n.changeLanguage(languageValue);
+    // setting to local storage
+    localStorage.setItem("lang", languageValue);
+  };
 
   const [selectedOption, setSelectedOption] = useState("btn1");
 
@@ -94,9 +103,25 @@ const SignUp = (props) => {
         </div>
       </div>
       <section className="sign-in-page">
-        <Col md="3" xs="12">
-          <img src={logo} alt="Logo" />
-        </Col>
+        <div className="signinlogo">
+          <Col md="3" xs="12">
+            <img src={logo} alt="Logo" />
+          </Col>
+          <Col md="3" xs="12">
+            {" "}
+            <Form>
+              <select onChange={changeLanguageHandler} className="select-list">
+                <option>Switch Language</option>
+                <option value="en">English</option>
+                <option value="fr">French</option>
+                <option value="de">Deutsch</option>
+                <option value="pl">Polski</option>
+                <option value="it">Italiano</option>
+                <option value="es">Espanol</option>
+              </select>
+            </Form>
+          </Col>
+        </div>
         <Container>
           <Row className="justify-content-center align-items-center height-self-center">
             <Col lg="7" md="12" className="align-self-center">
@@ -112,8 +137,9 @@ const SignUp = (props) => {
                             <Form.Control
                               type="text"
                               className="form-control mb-0"
-                              id="exampleInputEmail2"
-                              placeholder={t("enter full name")}
+                              id="exampleInputusername"
+                              // placeholder={t("enter full name")}
+                              placeholder="Enter Username"
                               autoComplete="off"
                               required
                             />
@@ -138,7 +164,7 @@ const SignUp = (props) => {
                             <Form.Control
                               type="text"
                               className="mb-0"
-                              id="exampleInputEmail2"
+                              id="exampleInputfirstname"
                               placeholder={t("first name")}
                               autoComplete="off"
                               required
@@ -151,8 +177,32 @@ const SignUp = (props) => {
                             <Form.Control
                               type="email"
                               className="mb-0"
-                              id="exampleInputEmail3"
+                              id="exampleInputlastname"
                               placeholder={t("last name")}
+                              autoComplete="off"
+                              required
+                            />
+                          </Form.Group>
+                        </Col>
+                        <Col md="6">
+                          <Form.Group>
+                            <Form.Label>Date of Birth</Form.Label>
+                            <Form.Control
+                              type="date"
+                              className="mb-0"
+                              id="exampleInputdob"
+                              autoComplete="off"
+                              required
+                            />
+                          </Form.Group>
+                        </Col>
+                        <Col md="6">
+                          <Form.Group>
+                            <Form.Label>Gender</Form.Label>
+                            <Form.Control
+                              type="date"
+                              className="mb-0"
+                              id="exampleInputdob"
                               autoComplete="off"
                               required
                             />
@@ -177,7 +227,7 @@ const SignUp = (props) => {
                             <Form.Control
                               type="password"
                               className="mb-0"
-                              id="exampleInputPassword2"
+                              id="exampleInputPasswordconfirm"
                               placeholder={t("confirm password")}
                               required
                             />

@@ -26,7 +26,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const Login = (props) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   let history = useHistory();
   const [show, setShow] = useState(false);
@@ -39,6 +39,16 @@ const Login = (props) => {
       props.rtlModeAction(rtlMode);
     }
   });
+
+  // switch language
+  //Creating a method to change the language onChnage from select box
+  const changeLanguageHandler = (e) => {
+    const languageValue = e.target.value;
+
+    i18n.changeLanguage(languageValue);
+    // setting to local storage
+    localStorage.setItem("lang", languageValue);
+  };
 
   return (
     <>
@@ -87,9 +97,26 @@ const Login = (props) => {
         </div>
       </div>
       <section className="sign-in-page">
-        <Col md="3" xs="12">
-          <img src={logo} alt="Logo" />
-        </Col>
+        <div className="signinlogo">
+          <Col md="3" xs="12">
+            <img src={logo} alt="Logo" />
+          </Col>
+          <Col md="3" xs="12">
+            {" "}
+            <Form>
+              <select onChange={changeLanguageHandler} className="select-list">
+                <option>Switch Language</option>
+                <option value="en">English</option>
+                <option value="fr">French</option>
+                <option value="de">Deutsch</option>
+                <option value="pl">Polski</option>
+                <option value="it">Italiano</option>
+                <option value="es">Espanol</option>
+              </select>
+            </Form>
+          </Col>
+        </div>
+
         <Container>
           <Row className="justify-content-center align-items-center height-self-center">
             <Col lg="5" md="12" className="align-self-center">
