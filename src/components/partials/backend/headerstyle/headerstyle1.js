@@ -166,7 +166,7 @@ const HeaderStyle1 = (props) => {
                           <Link to="/">Genre</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/movie-category">Movies</Link>
+                          <Link to="">Movies</Link>
                         </li>
                         <li className="menu-item">
                           <Link to="/">Videos</Link>
@@ -175,54 +175,11 @@ const HeaderStyle1 = (props) => {
                           <Link to="/">Podcast</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/show-category">Tv Shows</Link>
+                          <Link to="/">Tv Shows</Link>
                         </li>
                         <li className="menu-item">
                           <Link to="/">Live Channels</Link>
                         </li>
-                        {/* <li className="menu-item">
-                          <Link to="#">Blog</Link>
-                          <ul className="sub-menu">
-                            <li className="menu-item">
-                              <Link to="/blog">Blog</Link>
-                            </li>
-                            <li className="menu-item">
-                              <Link to="/blog-details">Blog details</Link>
-                            </li>
-                          </ul>
-                        </li> */}
-                        {/* <li className="menu-item">
-                          <Link to="#">Pages</Link>
-                          <ul className="sub-menu">
-                            <li className="menu-item">
-                              <Link to="/about-us">About Us</Link>
-                            </li>
-                            <li className="menu-item ">
-                              <Link to="/contact">Contact</Link>
-                            </li>
-                            <li className="menu-item">
-                              <Link to="/faq">FAQ</Link>
-                            </li>
-                            <li className="menu-item">
-                              <Link to="/privacy-policy">Privacy-Policy</Link>
-                            </li>
-                            <li className="menu-item">
-                              <Link to="#">Pricing</Link>
-                              <ul className="sub-menu">
-                                <li className="menu-item">
-                                  <Link to="/pricing-plan-1">
-                                    Pricing Plan 1
-                                  </Link>
-                                </li>
-                                <li className="menu-item">
-                                  <Link to="/pricing-plan-2">
-                                    Pricing Plan 2
-                                  </Link>
-                                </li>
-                              </ul>
-                            </li>
-                          </ul>
-                        </li> */}
                       </Nav>
                     </div>
                   </Navbar.Collapse>
@@ -349,19 +306,6 @@ const HeaderStyle1 = (props) => {
                         >
                           <Card className="shadow-none m-0">
                             <Card.Body className="p-0 pl-3 pr-3">
-                              {/* <Link
-                                to="/manage-profile"
-                                className="iq-sub-card setting-dropdown"
-                              >
-                                <div className="media align-items-center">
-                                  <div className="right-icon">
-                                    <i className="ri-file-user-line text-primary"></i>
-                                  </div>
-                                  <div className="media-body ml-3">
-                                    <h6 className="my-0 ">Manage Profile</h6>
-                                  </div>
-                                </div>
-                              </Link> */}
                               <Link
                                 to="/setting"
                                 className="iq-sub-card setting-dropdown"
@@ -376,7 +320,7 @@ const HeaderStyle1 = (props) => {
                                 </div>
                               </Link>
                               <Link
-                                to="/pricing-plan-1"
+                                to="#"
                                 className="iq-sub-card setting-dropdown"
                               >
                                 <div className="media align-items-center">
@@ -419,90 +363,6 @@ const HeaderStyle1 = (props) => {
                           <option value="es">Espanol</option>
                         </select>
                       </Form>
-                      {/* ---------------- Multi Language DROPDOWN------------------------------------- */}
-                      {/* <Dropdown as="li" className="nav-item nav-icon">
-                        <Dropdown.Toggle
-                          href="#"
-                          as={CustomToggle}
-                          variant="search-toggle"
-                          onChange={changeLanguageHandler}
-                        >
-                          <div
-                            className="iq-user-dropdown search-toggle p-0 d-flex align-items-center active"
-                            data-toggle="search-toggle"
-                          >
-                            Switch Language
-                          </div>
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu
-                          className="iq-sub-dropdown iq-user-dropdown iq-lang-dropdown shadow-none m-0"
-                          align="right"
-                        >
-                          <Dropdown.Item className="p-0 pl-3 pr-3" value="fr">
-                            <div className="iq-sub-card setting-dropdown">
-                              <div className="media align-items-center">
-                                <div className="media-body ml-3">
-                                  <h6 className="my-0 ">French</h6>
-                                </div>
-                              </div>
-                            </div>
-                          </Dropdown.Item>
-                          <Card className="shadow-none m-0">
-                            <Card.Body className="p-0 pl-3 pr-3">
-                              <Link
-                                to="#"
-                                className="iq-sub-card setting-dropdown"
-                              >
-                                <div className="media align-items-center">
-                                  <div className="media-body ml-3">
-                                    <h6 className="my-0 ">Spanish</h6>
-                                  </div>
-                                </div>
-                              </Link>
-                              <Link
-                                to="#"
-                                className="iq-sub-card setting-dropdown"
-                              >
-                                <div className="media align-items-center">
-                                  <div className="media-body ml-3">
-                                    <h6 className="my-0 ">French</h6>
-                                  </div>
-                                </div>
-                              </Link>
-                              <Link
-                                to="#"
-                                className="iq-sub-card setting-dropdown"
-                              >
-                                <div className="media align-items-center">
-                                  <div className="media-body ml-3">
-                                    <h6 className="my-0 ">Chinese</h6>
-                                  </div>
-                                </div>
-                              </Link>
-                              <Link
-                                to="#"
-                                className="iq-sub-card setting-dropdown"
-                              >
-                                <div className="media align-items-center">
-                                  <div className="media-body ml-3">
-                                    <h6 className="my-0 ">Japanese</h6>
-                                  </div>
-                                </div>
-                              </Link>
-                              <Link
-                                to="#"
-                                className="iq-sub-card setting-dropdown"
-                              >
-                                <div className="media align-items-center">
-                                  <div className="media-body ml-3">
-                                    <h6 className="my-0 ">Korean</h6>
-                                  </div>
-                                </div>
-                              </Link>
-                            </Card.Body>
-                          </Card>
-                        </Dropdown.Menu>
-                      </Dropdown> */}
                     </ul>
                   </div>
                 </Navbar>

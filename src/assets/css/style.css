@@ -3815,6 +3815,7 @@ input[type="email"],
 input[type="search"],
 input[type="password"],
 input[type="tel"],
+input[type="date"],
 textarea {
   width: 100%;
   padding: 0 15px;
@@ -4580,4 +4581,18 @@ object {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+/* gender dropdown width */
+.gender-dropdown .dropdown-toggle {
+  width: 100%;
+  background-color: var(--iq-body);
+  border: 1px solid #404043;
+  text-align: left;
+  padding-left: 15px;
+  color: #d9d5d5;
+  font-size: 14px;
+}
+.gender-dropdown .dropdown-toggle::after {
+  margin-left: 1rem;
 }

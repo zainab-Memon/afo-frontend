@@ -2650,20 +2650,20 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color:var(--iq-primary);
+  border-color: var(--iq-primary);
 }
 
 .btn-primary:hover {
   color: #fff;
   /* background-color: #0069d9; */
   background-color: var(--iq-primary-hover);
-  border-color: #0062cc;
+  border-color: var(--iq-primary-hover);
 }
 
 .btn-primary.focus,
 .btn-primary:focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+  box-shadow: 0 0 0 0.2rem var(--iq-primary-hover);;
 }
 
 .btn-primary.disabled,

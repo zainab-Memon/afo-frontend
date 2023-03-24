@@ -6,6 +6,7 @@ import {
   Col,
   Form,
   ButtonGroup,
+  Dropdown,
 } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -28,6 +29,11 @@ const mapDispatchToProps = (dispatch) => ({
   ),
 });
 const SignUp = (props) => {
+  // gender dropdown
+  const [selectedGender, setSelectedGender] = useState("");
+  const handleGender = (e) => {
+    setSelectedGender(e);
+  };
   const { t, i18n } = useTranslation();
   // switch language
   //Creating a method to change the language onChnage from select box
@@ -138,8 +144,7 @@ const SignUp = (props) => {
                               type="text"
                               className="form-control mb-0"
                               id="exampleInputusername"
-                              // placeholder={t("enter full name")}
-                              placeholder="Enter Username"
+                              placeholder={t("enter username")}
                               autoComplete="off"
                               required
                             />
@@ -199,13 +204,28 @@ const SignUp = (props) => {
                         <Col md="6">
                           <Form.Group>
                             <Form.Label>Gender</Form.Label>
-                            <Form.Control
-                              type="date"
-                              className="mb-0"
-                              id="exampleInputdob"
-                              autoComplete="off"
-                              required
-                            />
+                            <Dropdown
+                              className="gender-dropdown"
+                              onSelect={handleGender}
+                            >
+                              <Dropdown.Toggle id="dropdown-basic">
+                                {selectedGender
+                                  ? selectedGender
+                                  : "Choose Gender"}
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item eventKey="Male">
+                                  Male
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey="Female">
+                                  Female
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey="Other">
+                                  Other
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
                           </Form.Group>
                         </Col>
 

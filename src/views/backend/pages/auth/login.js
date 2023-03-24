@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+
 // rtl
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -10,6 +11,8 @@ import logo from "../../../../assets/images/login/logo.png";
 
 // multi lang
 import { useTranslation } from "react-i18next";
+
+import CryptoJS from "crypto-js";
 
 const mapStateToProps = (state) => {
   return {
@@ -48,6 +51,16 @@ const Login = (props) => {
     i18n.changeLanguage(languageValue);
     // setting to local storage
     localStorage.setItem("lang", languageValue);
+  };
+
+  // input values
+  const [loginInput, setLoginInput] = useState({});
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setLoginInput({ ...loginInput, [name]: value });
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
   };
 
   return (
@@ -133,6 +146,9 @@ const Login = (props) => {
                           placeholder={t("enter email")}
                           autoComplete="off"
                           required
+                          name="email"
+                          value={loginInput.email || ""}
+                          onChange={handleInputChange}
                         />
                       </Form.Group>
                       <Form.Group>
@@ -142,12 +158,16 @@ const Login = (props) => {
                           id="exampleInputPassword2"
                           placeholder={t("enter password")}
                           required
+                          name="password"
+                          value={loginInput.password || ""}
+                          onChange={handleInputChange}
                         />
                       </Form.Group>
                       <div className="sign-info">
                         <Button
                           className="btn btn-hover btn-primary"
-                          onClick={() => history.push("/")}
+                          // onClick={() => history.push("/")}
+                          onClick={handleSubmit}
                         >
                           {t("sign in")}
                         </Button>

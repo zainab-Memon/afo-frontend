@@ -220,21 +220,6 @@ const UserAccountSetting = () => {
                     </Link>
                   </Col>
                 </Row>
-                {/* <h5 className="mb-3 pb-3 mt-4 a-border">Setting</h5> */}
-                <Row>
-                  {/* settings */}
-                  {/* <div className="col-12 setting">
-                    <Link to="#" className="text-body d-block mb-1">
-                      Recent device streaming activity
-                    </Link>
-                    <Link to="#" className="text-body d-block mb-1">
-                      Sign out of all devices{" "}
-                    </Link>
-                    <Link to="#" className="text-body d-block">
-                      Download your person information
-                    </Link>
-                  </div> */}
-                </Row>
               </div>
             </Col>
           </Row>
@@ -676,8 +661,6 @@ const UserAccountSetting = () => {
                     <button
                       className="btn btn-hover "
                       type="button"
-                      //   aria-controls="collapseExample1"
-                      //   aria-expanded="false"
                       onClick={handlLoadMore}
                     >
                       <span>{t("load more")}</span>
