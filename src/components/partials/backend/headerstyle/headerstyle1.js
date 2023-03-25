@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Navbar, Dropdown, Nav } from "react-bootstrap";
-import Form from "react-bootstrap/form";
+import { Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Card from "../../../../components/Card";
 
