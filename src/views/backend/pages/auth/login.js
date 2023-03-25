@@ -13,6 +13,45 @@ import logo from "../../../../assets/images/login/logo.png";
 import { useTranslation } from "react-i18next";
 
 import CryptoJS from "crypto-js";
+import { Buffer } from "buffer";
+import axios from "axios";
+// iv generator
+function generateRandomIv(length) {
+  let pool = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  pool = pool.repeat(5);
+  pool = shuffle(pool);
+  pool = pool.substring(0, length);
+  return pool.toString();
+}
+// shuffle
+function shuffle(str) {
+  if (arguments.length === 0) {
+    throw new Error("Wrong parameter count for str_shuffle()");
+  }
+  if (str === null) {
+    return "";
+  }
+  str += "";
+  let newStr = "";
+  let rand;
+  let i = str.length;
+  while (i) {
+    rand = Math.floor(Math.random() * i);
+    newStr += str.charAt(rand);
+    str = str.substring(0, rand) + str.substr(rand + 1);
+    i--;
+  }
+  return newStr;
+}
+// btoa and atob
+
+const btoa = (text) => {
+  return Buffer.from(text, "binary").toString("base64");
+};
+
+const atob = (base64) => {
+  return Buffer.from(base64, "base64").toString("binary");
+};
 
 const mapStateToProps = (state) => {
   return {
@@ -29,11 +68,84 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const Login = (props) => {
+  const [error, setError] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [emptyObj, setEmptyObj] = useState(false);
+  function login(obj) {
+    if (Object.keys(obj).length === 0) {
+      setEmptyObj(true);
+      setTimeout(() => {
+        setEmptyObj(false);
+      }, 3000);
+      return;
+    }
+    let msg = JSON.stringify(obj);
+    const i = generateRandomIv(16);
+    const key = CryptoJS.enc.Utf8.parse("ED6C504C24FD3140D42E3BFE9F92E4A1");
+    const iv = CryptoJS.enc.Utf8.parse(i);
+
+    const encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(msg), key, {
+      iv: iv,
+      mode: CryptoJS.mode.CBC,
+    });
+    var transitmessage = JSON.stringify({
+      iv: btoa(i),
+      value: encrypted.toString(),
+    });
+    transitmessage = btoa(transitmessage);
+
+    let request = {
+      data: transitmessage,
+    };
+    console.log(request);
+
+    const url = "http://54.221.169.56:3004/api/user/login";
+
+    axios
+      .post(url, request)
+      .then((response) => {
+        let res = atob(response.data.data);
+        let jsn = JSON.parse(res);
+        const decrypted = CryptoJS.AES.decrypt(jsn.value, key, {
+          mode: CryptoJS.mode.CBC,
+          iv: CryptoJS.enc.Utf8.parse(atob(jsn.iv)),
+        });
+        const decrypt = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+        const token = decrypt.token;
+        // session request
+        const authUrl = `http://54.221.169.56:3004/api/user/auth/${token}`;
+        axios
+          .get(authUrl)
+          .then((authResponse) => {
+            console.log(authResponse);
+            let res = atob(response.data.data);
+            let jsn = JSON.parse(res);
+            const decrypted = CryptoJS.AES.decrypt(jsn.value, key, {
+              mode: CryptoJS.mode.CBC,
+              iv: CryptoJS.enc.Utf8.parse(atob(jsn.iv)),
+            });
+            const decrypt = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+            const sessionToken = decrypt.token;
+            localStorage.setItem("token", sessionToken);
+            history.push("/");
+          })
+          .catch((authError) => {
+            console.error(authError);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+        setError("Invalid Email or password");
+        setShowError(true);
+        setTimeout(() => {
+          setShowError(false);
+        }, 3000);
+      });
+  }
   const { t, i18n } = useTranslation();
 
   let history = useHistory();
   const [show, setShow] = useState(false);
-
   useEffect(() => {
     const rtlMode = sessionStorage.getItem("rtl-mode");
     if (rtlMode === null) {
@@ -47,7 +159,6 @@ const Login = (props) => {
   //Creating a method to change the language onChnage from select box
   const changeLanguageHandler = (e) => {
     const languageValue = e.target.value;
-
     i18n.changeLanguage(languageValue);
     // setting to local storage
     localStorage.setItem("lang", languageValue);
@@ -59,10 +170,10 @@ const Login = (props) => {
     const { name, value } = event.target;
     setLoginInput({ ...loginInput, [name]: value });
   };
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    login(loginInput);
   };
-
   return (
     <>
       <div className={`rtl-box ${show === true ? "show" : ""}`}>
@@ -137,6 +248,34 @@ const Login = (props) => {
                 <div className="sign-in-page-data">
                   <div className="sign-in-from w-100 m-auto">
                     <h3 className="mb-3 text-center">{t("sign in")}</h3>
+                    {/* {error && (
+                      <p
+                        style={{
+                          backgroundColor: "red",
+                          padding: "4px",
+                          textAlign: "center",
+                        }}
+                      >
+                        {" "}
+                        {error}
+                      </p>
+                    )} */}
+                    <div
+                      className={`alert alert-danger ${
+                        showError ? "" : "d-none"
+                      }`}
+                      role="alert"
+                    >
+                      {error}
+                    </div>
+                    <div
+                      className={`alert alert-danger ${
+                        emptyObj ? "" : "d-none"
+                      }`}
+                      role="alert"
+                    >
+                      Enter email and password
+                    </div>
                     <Form className="mt-4">
                       <Form.Group>
                         <Form.Control

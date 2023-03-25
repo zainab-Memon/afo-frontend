@@ -15,6 +15,48 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { rtlModeAction, getRtlMode } from "../../../../store/mode/rtlmode";
 import logo from "../../../../assets/images/login/logo.png";
+// token
+import CryptoJS from "crypto-js";
+import { Buffer } from "buffer";
+import axios from "axios";
+// iv generator
+function generateRandomIv(length) {
+  let pool = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  pool = pool.repeat(5);
+  pool = shuffle(pool);
+  pool = pool.substring(0, length);
+  return pool.toString();
+}
+// shuffle
+function shuffle(str) {
+  if (arguments.length === 0) {
+    throw new Error("Wrong parameter count for str_shuffle()");
+  }
+  if (str === null) {
+    return "";
+  }
+  str += "";
+  let newStr = "";
+  let rand;
+  let i = str.length;
+  while (i) {
+    rand = Math.floor(Math.random() * i);
+    newStr += str.charAt(rand);
+    str = str.substring(0, rand) + str.substr(rand + 1);
+    i--;
+  }
+  return newStr;
+}
+// btoa and atob
+
+const btoa = (text) => {
+  return Buffer.from(text, "binary").toString("base64");
+};
+
+const atob = (base64) => {
+  return Buffer.from(base64, "base64").toString("binary");
+};
+
 const mapStateToProps = (state) => {
   return {
     rtlMode: getRtlMode(state),
@@ -28,27 +70,115 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch
   ),
 });
+
 const SignUp = (props) => {
+  // auth
+  function signinAuth(obj) {
+    let msg = JSON.stringify(obj);
+    const i = generateRandomIv(16);
+    const key = CryptoJS.enc.Utf8.parse("ED6C504C24FD3140D42E3BFE9F92E4A1");
+    const iv = CryptoJS.enc.Utf8.parse(i);
+
+    const encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(msg), key, {
+      iv: iv,
+      mode: CryptoJS.mode.CBC,
+    });
+    var transitmessage = JSON.stringify({
+      iv: btoa(i),
+      value: encrypted.toString(),
+    });
+    transitmessage = btoa(transitmessage);
+
+    let request = {
+      data: transitmessage,
+    };
+    console.log(request);
+    let res = atob(request.data);
+    let jsn = JSON.parse(res);
+    const decrypted = CryptoJS.AES.decrypt(jsn.value, key, {
+      mode: CryptoJS.mode.CBC,
+      iv: CryptoJS.enc.Utf8.parse(atob(jsn.iv)),
+    });
+    const decrypt = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+    console.log(decrypt);
+    const url = "http://54.221.169.56:3004/api/user";
+
+    axios
+      .post(url, request)
+      .then((response) => {
+        let res = atob(response.data);
+        let jsn = JSON.parse(res);
+        const decrypted = CryptoJS.AES.decrypt(jsn.value, key, {
+          mode: CryptoJS.mode.CBC,
+          iv: CryptoJS.enc.Utf8.parse(atob(jsn.iv)),
+        });
+        const decrypt = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+        console.log(decrypt.token);
+        localStorage.setItem("token", decrypt.token);
+        history.push("/");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   // gender dropdown
-  const [selectedGender, setSelectedGender] = useState("");
+  const [selectedGender, setSelectedGender] = useState();
   const handleGender = (e) => {
     setSelectedGender(e);
+    setFormData({ ...formData, gender: e });
+    console.log(selectedGender);
   };
+  // formdata
+  const [formData, setFormData] = useState({
+    user_name: "",
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    // confirmPassword: "",
+    phone: "",
+    dob: "",
+
+    // subscriptionType: "",
+  });
+
+  // handle form data
+  const handleFormChange = (event) => {
+    const { name, value } = event.target;
+    if (name === "subscriptionType") {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: event.target.id,
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+    console.log(formData);
+  };
+
   const { t, i18n } = useTranslation();
   // switch language
   //Creating a method to change the language onChnage from select box
   const changeLanguageHandler = (e) => {
     const languageValue = e.target.value;
-
     i18n.changeLanguage(languageValue);
     // setting to local storage
     localStorage.setItem("lang", languageValue);
   };
-
-  const [selectedOption, setSelectedOption] = useState("btn1");
-
+  // subscription type button
+  const [selectedOption, setSelectedOption] = useState("paid");
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.id);
+    // setFormData({ ...formData, subscriptType: event.target.id });
+  };
+  // handlesignin
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    signinAuth(formData);
   };
   let history = useHistory();
   const [show, setShow] = useState(false);
@@ -114,7 +244,6 @@ const SignUp = (props) => {
             <img src={logo} alt="Logo" />
           </Col>
           <Col md="3" xs="12">
-            {" "}
             <Form>
               <select onChange={changeLanguageHandler} className="select-list">
                 <option>Switch Language</option>
@@ -147,6 +276,9 @@ const SignUp = (props) => {
                               placeholder={t("enter username")}
                               autoComplete="off"
                               required
+                              name="user_name"
+                              value={formData.name}
+                              onChange={handleFormChange}
                             />
                           </Form.Group>
                         </Col>
@@ -160,6 +292,9 @@ const SignUp = (props) => {
                               placeholder={t("enter email")}
                               autoComplete="off"
                               required
+                              name="email"
+                              value={formData.name}
+                              onChange={handleFormChange}
                             />
                           </Form.Group>
                         </Col>
@@ -173,6 +308,9 @@ const SignUp = (props) => {
                               placeholder={t("first name")}
                               autoComplete="off"
                               required
+                              name="first_name"
+                              value={formData.name}
+                              onChange={handleFormChange}
                             />
                           </Form.Group>
                         </Col>
@@ -186,6 +324,9 @@ const SignUp = (props) => {
                               placeholder={t("last name")}
                               autoComplete="off"
                               required
+                              name="last_name"
+                              value={formData.name}
+                              onChange={handleFormChange}
                             />
                           </Form.Group>
                         </Col>
@@ -198,6 +339,9 @@ const SignUp = (props) => {
                               id="exampleInputdob"
                               autoComplete="off"
                               required
+                              name="dob"
+                              value={formData.name}
+                              onChange={handleFormChange}
                             />
                           </Form.Group>
                         </Col>
@@ -207,6 +351,7 @@ const SignUp = (props) => {
                             <Dropdown
                               className="gender-dropdown"
                               onSelect={handleGender}
+                              name="gender"
                             >
                               <Dropdown.Toggle id="dropdown-basic">
                                 {selectedGender
@@ -238,6 +383,9 @@ const SignUp = (props) => {
                               id="exampleInputPassword2"
                               placeholder={t("enter password")}
                               required
+                              name="password"
+                              value={formData.name}
+                              onChange={handleFormChange}
                             />
                           </Form.Group>
                         </Col>
@@ -250,6 +398,9 @@ const SignUp = (props) => {
                               id="exampleInputPasswordconfirm"
                               placeholder={t("confirm password")}
                               required
+                              // name="confirmPassword"
+                              // value={formData.name}
+                              // onChange={handleFormChange}
                             />
                           </Form.Group>
                         </Col>
@@ -262,6 +413,9 @@ const SignUp = (props) => {
                               id="exampleInputPhonenumber"
                               placeholder={t("enter phone number")}
                               required
+                              name="phone"
+                              value={formData.name}
+                              onChange={handleFormChange}
                             />
                           </Form.Group>
                         </Col>
@@ -271,9 +425,10 @@ const SignUp = (props) => {
                             <Form.Label>{t("subscription type")}</Form.Label>
                             <ButtonGroup>
                               <Button
-                                id="btn1"
+                                id="paid"
+                                name="subscriptionType"
                                 variant={
-                                  selectedOption === "btn1"
+                                  selectedOption === "paid"
                                     ? "primary"
                                     : "outline-primary"
                                 }
@@ -283,9 +438,10 @@ const SignUp = (props) => {
                                 {t("paid")}
                               </Button>
                               <Button
-                                id="btn2"
+                                id="free"
+                                name="subscriptionType"
                                 variant={
-                                  selectedOption === "btn2"
+                                  selectedOption === "free"
                                     ? "primary"
                                     : "outline-primary"
                                 }
@@ -329,7 +485,8 @@ const SignUp = (props) => {
                         </label>
                       </div> */}
                       <Button
-                        onClick={() => history.push("/")}
+                        // onClick={() => history.push("/")}
+                        onClick={handleSubmit}
                         className="btn btn-hover btn-primary my-2"
                       >
                         {t("sign up")}

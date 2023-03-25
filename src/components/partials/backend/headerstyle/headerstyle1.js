@@ -335,6 +335,9 @@ const HeaderStyle1 = (props) => {
                               <Link
                                 to="/extra-pages/login"
                                 className="iq-sub-card setting-dropdown"
+                                onClick={() => {
+                                  localStorage.removeItem("token");
+                                }}
                               >
                                 <div className="media align-items-center">
                                   <div className="right-icon">

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 // Partials
 import HeaderStyle1 from "../../components/partials/backend/headerstyle/headerstyle1";
 
@@ -7,6 +8,13 @@ import HeaderStyle1 from "../../components/partials/backend/headerstyle/headerst
 import Layout1Route from "../../router/layout1-route";
 
 const Layout1 = () => {
+  let history = useHistory();
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      history.push("/extra-pages/login");
+    }
+  }, []);
+
   const backToTop = document.getElementById("back-to-top");
   // console.log(backToTop)
   if (backToTop !== null && backToTop !== undefined) {
