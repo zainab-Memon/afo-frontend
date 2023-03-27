@@ -323,7 +323,8 @@ const Login = (props) => {
                     </Link>
                   </div>
                   <div className="d-flex justify-content-center links">
-                    <Link to="/extra-pages/recover-pswd" className="f-link">
+                    {/* <Link to="/extra-pages/recover-pswd" className="f-link"> */}
+                    <Link to="/extra-pages/login" className="f-link">
                       {t("forgot your password")}
                     </Link>
                   </div>
