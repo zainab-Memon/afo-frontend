@@ -72,6 +72,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const SignUp = (props) => {
+  const [userExistError, setuserExistError] = useState("");
+  const [showError, setShowError] = useState(false);
   // auth
   function signinAuth(obj) {
     let msg = JSON.stringify(obj);
@@ -93,32 +95,38 @@ const SignUp = (props) => {
       data: transitmessage,
     };
     console.log(request);
-    let res = atob(request.data);
-    let jsn = JSON.parse(res);
-    const decrypted = CryptoJS.AES.decrypt(jsn.value, key, {
-      mode: CryptoJS.mode.CBC,
-      iv: CryptoJS.enc.Utf8.parse(atob(jsn.iv)),
-    });
-    const decrypt = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-    console.log(decrypt);
+    // // decryption of my input
+    // let res = atob(request.data);
+    // let jsn = JSON.parse(res);
+    // const decrypted = CryptoJS.AES.decrypt(jsn.value, key, {
+    //   mode: CryptoJS.mode.CBC,
+    //   iv: CryptoJS.enc.Utf8.parse(atob(jsn.iv)),
+    // });
+    // const decrypt = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+    // console.log(decrypt);
+    // //
     const url = "http://54.221.169.56:3004/api/user";
 
     axios
       .post(url, request)
       .then((response) => {
-        let res = atob(response.data);
+        console.log(response);
+        let res = atob(response.data.data);
         let jsn = JSON.parse(res);
         const decrypted = CryptoJS.AES.decrypt(jsn.value, key, {
           mode: CryptoJS.mode.CBC,
           iv: CryptoJS.enc.Utf8.parse(atob(jsn.iv)),
         });
         const decrypt = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-        console.log(decrypt.token);
-        localStorage.setItem("token", decrypt.token);
-        history.push("/");
+        console.log(decrypt);
       })
       .catch((error) => {
         console.error(error);
+        setuserExistError("User Already Exists");
+        setShowError(true);
+        setTimeout(() => {
+          setShowError(false);
+        }, 3000);
       });
   }
 
@@ -157,7 +165,6 @@ const SignUp = (props) => {
         [name]: value,
       }));
     }
-    console.log(formData);
   };
 
   const { t, i18n } = useTranslation();
@@ -264,6 +271,14 @@ const SignUp = (props) => {
                 <div className="sign-in-page-data">
                   <div className="sign-in-from w-100 m-auto">
                     <h3 className="mb-3 text-center">{t("sign up")}</h3>
+                    <div
+                      className={`alert alert-danger ${
+                        showError ? "" : "d-none"
+                      }`}
+                      role="alert"
+                    >
+                      {userExistError}
+                    </div>
                     <Form>
                       <Row>
                         <Col md="6">

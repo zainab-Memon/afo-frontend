@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import AuthSession from "../../../../getSessionAuth";
 
 import user from "../../../../assets/images/user/user.jpg";
 import { useTranslation } from "react-i18next";
@@ -225,6 +226,502 @@ const UserAccountSetting = () => {
           </Row>
           {/* sliders */}
           {/* fav--------------------------------- */}
+          {/* <Row>
+            <Col sm="12" className="overflow-hidden">
+              <div className="d-flex align-items-center justify-content-between">
+                <h4 className="main-title">{t("my favourites")}</h4>
+              </div>
+              <div id="favorites-contens">
+                <div id="prev" className="swiper-button swiper-button-prev">
+                  <i className="fa fa-chevron-left"></i>
+                </div>
+                <div id="next" className="swiper-button swiper-button-next">
+                  <i className="fa fa-chevron-right"></i>
+                </div>
+                <Swiper
+                  navigation={{
+                    prevEl: "#prev",
+                    nextEl: "#next",
+                  }}
+                  breakpoints={{
+                    320: { slidesPerView: 1 },
+                    550: { slidesPerView: 2 },
+                    991: { slidesPerView: 4 },
+                    1400: { slidesPerView: 4 },
+                  }}
+                  loop={true}
+                  slidesPerView={4}
+                  spaceBetween={20}
+                  as="ul"
+                  className="favorites-slider list-inline  row p-0 m-0 iq-rtl-direction"
+                >
+                  <SwiperSlide as="li">
+                    <div className="block-images position-relative">
+                      <div className="img-box">
+                        <img src={fav1} className="img-fluid" alt="" />
+                      </div>
+                      <div className="block-description">
+                        <h6 className="iq-title">
+                          <Link to="/show-details">Sand Dust</Link>
+                        </h6>
+                        <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                          <div className="badge badge-secondary p-1 mr-2">
+                            13+
+                          </div>
+                          <span className="text-white">2h 30m</span>
+                        </div>
+                        <div className="hover-buttons">
+                          <Link
+                            to="/show-details"
+                            role="button"
+                            className="btn btn-hover iq-button"
+                          >
+                            <i
+                              className="fa fa-play mr-1"
+                              aria-hidden="true"
+                            ></i>
+                            Play Now
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                  <SwiperSlide as="li">
+                    <div className="block-images position-relative">
+                      <div className="img-box">
+                        <img src={fav2} className="img-fluid" alt="" />
+                      </div>
+                      <div className="block-description">
+                        <h6 className="iq-title">
+                          <Link to="/show-details">Last Race</Link>
+                        </h6>
+                        <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                          <div className="badge badge-secondary p-1 mr-2">
+                            7+
+                          </div>
+                          <span className="text-white">2 Seasons</span>
+                        </div>
+                        <div className="hover-buttons">
+                          <Link
+                            to="/show-details"
+                            role="button"
+                            className="btn btn-hover iq-button"
+                          >
+                            <i
+                              className="fa fa-play mr-1"
+                              aria-hidden="true"
+                            ></i>
+                            Play Now
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                  <SwiperSlide as="li">
+                    <div className="block-images position-relative">
+                      <div className="img-box">
+                        <img src={fav3} className="img-fluid" alt="" />
+                      </div>
+                      <div className="block-description">
+                        <h6 className="iq-title">
+                          <Link to="/show-details">Boop Bitty</Link>
+                        </h6>
+                        <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                          <div className="badge badge-secondary p-1 mr-2">
+                            15+
+                          </div>
+                          <span className="text-white">2h 30m</span>
+                        </div>
+                        <div className="hover-buttons">
+                          <Link
+                            to="/show-details"
+                            role="button"
+                            className="btn btn-hover iq-button"
+                          >
+                            <i
+                              className="fa fa-play mr-1"
+                              aria-hidden="true"
+                            ></i>
+                            Play Now
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                  <SwiperSlide as="li">
+                    <div className="block-images position-relative">
+                      <div className="img-box">
+                        <img src={fav4} className="img-fluid" alt="" />
+                      </div>
+                      <div className="block-description">
+                        <h6 className="iq-title">
+                          <Link to="/show-details">Dino Land</Link>
+                        </h6>
+                        <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                          <div className="badge badge-secondary p-1 mr-2">
+                            18+
+                          </div>
+                          <span className="text-white">3 Seasons</span>
+                        </div>
+                        <div className="hover-buttons">
+                          <Link
+                            to="/show-details"
+                            role="button"
+                            className="btn btn-hover iq-button"
+                          >
+                            <i
+                              className="fa fa-play mr-1"
+                              aria-hidden="true"
+                            ></i>
+                            Play Now
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                  <SwiperSlide as="li">
+                    <div className="block-images position-relative">
+                      <div className="img-box">
+                        <img src={fav5} className="img-fluid" alt="" />
+                      </div>
+                      <div className="block-description">
+                        <h6 className="iq-title">
+                          <Link to="/show-details">Jaction action</Link>
+                        </h6>
+                        <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                          <div className="badge badge-secondary p-1 mr-2">
+                            10+
+                          </div>
+                          <span className="text-white">1 Season</span>
+                        </div>
+                        <div className="hover-buttons">
+                          <Link
+                            to="/show-details"
+                            role="button"
+                            className="btn btn-hover iq-button"
+                          >
+                            <i
+                              className="fa fa-play mr-1"
+                              aria-hidden="true"
+                            ></i>
+                            Play Now
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                </Swiper>
+              </div>
+            </Col>
+          </Row> */}
+
+          {/* watch list slider---------------------------------------- */}
+          {/* <Row>
+            <Col sm="12" className="overflow-hidden">
+              <div className="d-flex align-items-center justify-content-between">
+                <h4 className="main-title">{t("my watchlist")}</h4>
+              </div>
+              <div id="suggestede-contens">
+                <div id="prev1" className="swiper-button swiper-button-prev">
+                  <i className="fa fa-chevron-left"></i>
+                </div>
+                <div id="next1" className="swiper-button swiper-button-next">
+                  <i className="fa fa-chevron-right"></i>
+                </div>
+                <Swiper
+                  navigation={{
+                    prevEl: "#prev1",
+                    nextEl: "#next1",
+                  }}
+                  breakpoints={{
+                    320: { slidesPerView: 1 },
+                    550: { slidesPerView: 2 },
+                    991: { slidesPerView: 4 },
+                    1400: { slidesPerView: 4 },
+                  }}
+                  loop={true}
+                  slidesPerView={4}
+                  spaceBetween={20}
+                  as="ul"
+                  className="favorites-slider list-inline  row p-0 m-0 iq-rtl-direction"
+                >
+                  <SwiperSlide as="li">
+                    <div className=" block-images position-relative">
+                      <div className="img-box">
+                        <img src={fav1} className="img-fluid" alt="" />
+                      </div>
+                      <div className="block-description">
+                        <h6 className="iq-title">
+                          <Link to="/show-details">Sand Dust</Link>
+                        </h6>
+                        <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                          <div className="badge badge-secondary p-1 mr-2">
+                            13+
+                          </div>
+                          <span className="text-white">2h 30m</span>
+                        </div>
+                        <div className="hover-buttons">
+                          <Link
+                            to="/show-details"
+                            role="button"
+                            className="btn btn-hover iq-button"
+                          >
+                            <i
+                              className="fa fa-play mr-1"
+                              aria-hidden="true"
+                            ></i>
+                            Play Now
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                  <SwiperSlide as="li">
+                    <div className="block-images position-relative">
+                      <div className="img-box">
+                        <img src={fav2} className="img-fluid" alt="" />
+                      </div>
+                      <div className="block-description">
+                        <h6 className="iq-title">
+                          <Link to="/show-details">Last Race</Link>
+                        </h6>
+                        <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                          <div className="badge badge-secondary p-1 mr-2">
+                            7+
+                          </div>
+                          <span className="text-white">2 Seasons</span>
+                        </div>
+                        <div className="hover-buttons">
+                          <Link
+                            to="/show-details"
+                            role="button"
+                            className="btn btn-hover iq-button"
+                          >
+                            <i
+                              className="fa fa-play mr-1"
+                              aria-hidden="true"
+                            ></i>
+                            Play Now
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                  <SwiperSlide as="li">
+                    <div className="block-images position-relative">
+                      <div className="img-box">
+                        <img src={fav3} className="img-fluid" alt="" />
+                      </div>
+                      <div className="block-description">
+                        <h6 className="iq-title">
+                          <Link to="/show-details">Boop Bitty</Link>
+                        </h6>
+                        <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                          <div className="badge badge-secondary p-1 mr-2">
+                            15+
+                          </div>
+                          <span className="text-white">2h 30m</span>
+                        </div>
+                        <div className="hover-buttons">
+                          <Link
+                            to="/show-details"
+                            role="button"
+                            className="btn btn-hover iq-button"
+                          >
+                            <i
+                              className="fa fa-play mr-1"
+                              aria-hidden="true"
+                            ></i>
+                            Play Now
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                  <SwiperSlide as="li">
+                    <div className="block-images position-relative">
+                      <div className="img-box">
+                        <img src={fav4} className="img-fluid" alt="" />
+                      </div>
+                      <div className="block-description">
+                        <h6 className="iq-title">
+                          <Link to="/show-details">Dino Land</Link>
+                        </h6>
+                        <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                          <div className="badge badge-secondary p-1 mr-2">
+                            18+
+                          </div>
+                          <span className="text-white">3 Seasons</span>
+                        </div>
+                        <div className="hover-buttons">
+                          <Link
+                            to="/show-details"
+                            role="button"
+                            className="btn btn-hover iq-button"
+                          >
+                            <i
+                              className="fa fa-play mr-1"
+                              aria-hidden="true"
+                            ></i>
+                            Play Now
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                  <SwiperSlide as="li">
+                    <div className="block-images position-relative">
+                      <div className="img-box">
+                        <img src={fav5} className="img-fluid" alt="" />
+                      </div>
+                      <div className="block-description">
+                        <h6 className="iq-title">
+                          <Link to="/show-details">Jaction action</Link>
+                        </h6>
+                        <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                          <div className="badge badge-secondary p-1 mr-2">
+                            10+
+                          </div>
+                          <span className="text-white">1 Season</span>
+                        </div>
+                        <div className="hover-buttons">
+                          <Link
+                            to="/show-details"
+                            role="button"
+                            className="btn btn-hover iq-button"
+                          >
+                            <i
+                              className="fa fa-play mr-1"
+                              aria-hidden="true"
+                            ></i>
+                            Play Now
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                </Swiper>
+              </div>
+            </Col>
+          </Row> */}
+          {/* history ---------------------
+           */}
+          {/* <Row>
+            <Col sm="12" className="overflow-hidden">
+              <div className="d-flex align-items-center justify-content-between">
+                <h4 className="main-title pb-3">{t("my history")}</h4>
+              </div>
+              <div>
+                <div id="upcoming-contens">
+                  <ul className="list-inline mb-0 iq-rtl-direction row">
+                    {userhistory.length > 0 &&
+                      userhistory.map((movie) => (
+                        <li
+                          className="slide-item  mb-4 col-lg-3 col-md-4 col-sm-6"
+                          key={movie.id}
+                        >
+                          <div className=" block-images position-relative">
+                            <div className="img-box">
+                              <img
+                                src={movie.img}
+                                className="img-fluid"
+                                alt=""
+                              />
+                            </div>
+                            <div className="block-description">
+                              <h6 className="iq-title">
+                                <Link to="/show-details">{movie.title}</Link>
+                              </h6>
+                              <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                                <div className="badge badge-secondary p-1 mr-2">
+                                  {movie.rating}
+                                </div>
+                                <span className="text-white">
+                                  {movie.runningTime}
+                                </span>
+                              </div>
+                              <div className="hover-buttons">
+                                <Link
+                                  to="/show-details"
+                                  role="button"
+                                  className="btn btn-hover iq-button"
+                                >
+                                  <i
+                                    className="fa fa-play mr-1"
+                                    aria-hidden="true"
+                                  ></i>
+                                  Play Now
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                  </ul>
+                  {!load && (
+                    <button
+                      className="btn btn-hover "
+                      type="button"
+                      onClick={handlLoadMore}
+                    >
+                      <span>{t("load more")}</span>
+                    </button>
+                  )}
+
+                  <div>
+                    <ul className="list-inline  mb-0 iq-rtl-direction  row">
+                      {load &&
+                        userhistory.map((movie) => (
+                          <li
+                            className="slide-item  mb-4 col-lg-3 col-md-4 col-sm-6"
+                            key={movie.id}
+                          >
+                            <div className=" block-images position-relative">
+                              <div className="img-box">
+                                <img
+                                  src={movie.img}
+                                  className="img-fluid"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="block-description">
+                                <h6 className="iq-title">
+                                  <Link to="/show-details">{movie.title}</Link>
+                                </h6>
+                                <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                                  <div className="badge badge-secondary p-1 mr-2">
+                                    {movie.rating}
+                                  </div>
+                                  <span className="text-white">
+                                    {movie.runningTime}
+                                  </span>
+                                </div>
+                                <div className="hover-buttons">
+                                  <Link
+                                    to="/show-details"
+                                    role="button"
+                                    className="btn btn-hover iq-button"
+                                  >
+                                    <i
+                                      className="fa fa-play mr-1"
+                                      aria-hidden="true"
+                                    ></i>
+                                    Play Now
+                                  </Link>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </Col>
+          </Row> */}
+        </Container>
+        <Container fluid>
+          {/* fav slider */}
           <Row>
             <Col sm="12" className="overflow-hidden">
               <div className="d-flex align-items-center justify-content-between">
@@ -413,8 +910,7 @@ const UserAccountSetting = () => {
               </div>
             </Col>
           </Row>
-
-          {/* watch list slider---------------------------------------- */}
+          {/* watchlist slider */}
           <Row>
             <Col sm="12" className="overflow-hidden">
               <div className="d-flex align-items-center justify-content-between">
@@ -603,8 +1099,7 @@ const UserAccountSetting = () => {
               </div>
             </Col>
           </Row>
-          {/* history ---------------------
-           */}
+          {/* history slider */}
           <Row>
             <Col sm="12" className="overflow-hidden">
               <div className="d-flex align-items-center justify-content-between">
@@ -612,7 +1107,7 @@ const UserAccountSetting = () => {
               </div>
               <div>
                 <div id="upcoming-contens">
-                  <ul className="list-inline  mb-0 iq-rtl-direction  row">
+                  <ul className="list-inline mb-0 iq-rtl-direction row">
                     {userhistory.length > 0 &&
                       userhistory.map((movie) => (
                         <li

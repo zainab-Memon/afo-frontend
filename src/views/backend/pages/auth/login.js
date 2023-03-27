@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import AuthSession from "../../../../getSessionAuth";
 
 // rtl
 import { connect } from "react-redux";
@@ -83,7 +84,6 @@ const Login = (props) => {
     const i = generateRandomIv(16);
     const key = CryptoJS.enc.Utf8.parse("ED6C504C24FD3140D42E3BFE9F92E4A1");
     const iv = CryptoJS.enc.Utf8.parse(i);
-
     const encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(msg), key, {
       iv: iv,
       mode: CryptoJS.mode.CBC,
@@ -93,17 +93,15 @@ const Login = (props) => {
       value: encrypted.toString(),
     });
     transitmessage = btoa(transitmessage);
-
     let request = {
       data: transitmessage,
     };
-    console.log(request);
-
+    // console.log(request);
     const url = "http://54.221.169.56:3004/api/user/login";
 
     axios
       .post(url, request)
-      .then((response) => {
+      .then(async (response) => {
         let res = atob(response.data.data);
         let jsn = JSON.parse(res);
         const decrypted = CryptoJS.AES.decrypt(jsn.value, key, {
@@ -111,27 +109,15 @@ const Login = (props) => {
           iv: CryptoJS.enc.Utf8.parse(atob(jsn.iv)),
         });
         const decrypt = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-        const token = decrypt.token;
+        const Authtoken = decrypt.token;
+        localStorage.setItem("token", Authtoken);
         // session request
-        const authUrl = `http://54.221.169.56:3004/api/user/auth/${token}`;
-        axios
-          .get(authUrl)
-          .then((authResponse) => {
-            console.log(authResponse);
-            let res = atob(response.data.data);
-            let jsn = JSON.parse(res);
-            const decrypted = CryptoJS.AES.decrypt(jsn.value, key, {
-              mode: CryptoJS.mode.CBC,
-              iv: CryptoJS.enc.Utf8.parse(atob(jsn.iv)),
-            });
-            const decrypt = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-            const sessionToken = decrypt.token;
-            localStorage.setItem("token", sessionToken);
-            history.push("/");
-          })
-          .catch((authError) => {
-            console.error(authError);
-          });
+        const result = await AuthSession(history);
+        if (result) {
+          history.push("/");
+        } else {
+          history.push("/extra-pages/login");
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -226,7 +212,6 @@ const Login = (props) => {
             <img src={logo} alt="Logo" />
           </Col>
           <Col md="3" xs="12">
-            {" "}
             <Form>
               <select onChange={changeLanguageHandler} className="select-list">
                 <option>Switch Language</option>

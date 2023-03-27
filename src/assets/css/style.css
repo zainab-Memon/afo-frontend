@@ -818,15 +818,15 @@ li.slide-item .block-images {
 }
 li.slide-item:hover .block-images {
   overflow: visible;
-  border-left: 5px solid #e50914;
+  border-left: 5px solid var(--iq-primary-hover);
 }
 li.slide-item:hover .block-images .img-box {
   position: relative;
 }
 li.slide-item:hover .block-images {
   z-index: 99;
-  transform: scale3d(1.1, 1.1, 1) translate3d(0, 0, 0) perspective(500px);
-  -webkit-transform: scale3d(1.1, 1.1, 1) translate3d(0, 0, 0)
+  transform: scale3d(1.1, 1.1, 1) translate3d(6%, 0, 0) perspective(500px);
+  -webkit-transform: scale3d(1.1, 1.1, 1) translate3d(6%, 0, 0)
     perspective(500px);
   -moz-transform: scale3d(1.1, 1.1, 1) translate3d(0, 0, 0) perspective(500px);
   -o-transform: scale3d(1.1, 1.1, 1) translate3d(0, 0, 0) perspective(500px);
@@ -2387,13 +2387,13 @@ span.flatpickr-weekday,
   color: var(--iq-white);
 }
 .sign-in-page {
-  /* height: 100vh; */
+  height: 100vh;
   position: relative;
   background: url(../images/login/bg-login.jpg) no-repeat scroll 0 0;
   background-size: cover;
 }
 .sign-in-page .height-self-center {
-  height: 100vh;
+  /* height: 100vh; */
   border-radius: 15px;
 }
 .sign-in-page-data {

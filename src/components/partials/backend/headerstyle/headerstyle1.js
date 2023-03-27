@@ -1,13 +1,13 @@
 import React from "react";
 import { Container, Row, Col, Navbar, Dropdown, Nav } from "react-bootstrap";
 import { Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Card from "../../../../components/Card";
 
 import CustomToggle from "../../../../components/dropdowns";
 // MULTI LANG HOOK
 import { useTranslation } from "react-i18next";
-
+import AuthSession from "../../../../getSessionAuth";
 //img
 
 import logo from "../../../../assets/images/logo.png";
@@ -27,6 +27,16 @@ const HeaderStyle1 = (props) => {
     i18n.changeLanguage(languageValue);
     // setting to local storage
     localStorage.setItem("lang", languageValue);
+  };
+  let history = useHistory("");
+  // handle click
+  const handleprofileClick = async () => {
+    const result = await AuthSession(history);
+    if (result) {
+      history.push("/setting");
+    } else {
+      history.push("/extra-pages/login");
+    }
   };
 
   return (
@@ -307,7 +317,8 @@ const HeaderStyle1 = (props) => {
                           <Card className="shadow-none m-0">
                             <Card.Body className="p-0 pl-3 pr-3">
                               <Link
-                                to="/setting"
+                                to="#"
+                                onClick={handleprofileClick}
                                 className="iq-sub-card setting-dropdown"
                               >
                                 <div className="media align-items-center">
