@@ -1,6 +1,6 @@
 import { Switch, Route, useLocation } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-
+import PrivateRoute from "./PrivateRoute";
 import UserAccountSettingList from "../views/backend/app/usermanagement/useraccountsetting";
 
 const Layout1Route = () => {
@@ -14,7 +14,11 @@ const Layout1Route = () => {
         timeout={300}
       >
         <Switch location={location}>
-          <Route path="/setting" component={UserAccountSettingList} />
+          <PrivateRoute
+            path="/home/setting"
+            component={UserAccountSettingList}
+          />
+          {/* <Route path="/home/setting" component={UserAccountSettingList} /> */}
         </Switch>
       </CSSTransition>
     </TransitionGroup>

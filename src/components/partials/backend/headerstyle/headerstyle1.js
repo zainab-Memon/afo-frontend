@@ -31,11 +31,11 @@ const HeaderStyle1 = (props) => {
   let history = useHistory("");
   // handle click
   const handleprofileClick = async () => {
-    const result = await AuthSession(history);
+    const result = await AuthSession();
     if (result) {
-      history.push("/setting");
+      history.push("/home/setting");
     } else {
-      history.push("/extra-pages/login");
+      history.push("/");
     }
   };
 
@@ -170,25 +170,25 @@ const HeaderStyle1 = (props) => {
                     <div className="menu-main-menu-container">
                       <Nav as="ul" id="top-menu" className="ml-auto">
                         <li className="menu-item">
-                          <Link to="/">Home</Link>
+                          <Link to="/home">Home</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/">Genre</Link>
+                          <Link to="/home">Genre</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="">Movies</Link>
+                          <Link to="/home">Movies</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/">Videos</Link>
+                          <Link to="/home">Videos</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/">Podcast</Link>
+                          <Link to="/home">Podcast</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/">Tv Shows</Link>
+                          <Link to="/home">Tv Shows</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/">Live Channels</Link>
+                          <Link to="/home">Live Channels</Link>
                         </li>
                       </Nav>
                     </div>
@@ -317,8 +317,8 @@ const HeaderStyle1 = (props) => {
                           <Card className="shadow-none m-0">
                             <Card.Body className="p-0 pl-3 pr-3">
                               <Link
-                                to="#"
-                                onClick={handleprofileClick}
+                                to="/home/setting"
+                                // onClick={handleprofileClick}
                                 className="iq-sub-card setting-dropdown"
                               >
                                 <div className="media align-items-center">
@@ -344,10 +344,11 @@ const HeaderStyle1 = (props) => {
                                 </div>
                               </Link>
                               <Link
-                                to="/extra-pages/login"
+                                to="/"
                                 className="iq-sub-card setting-dropdown"
                                 onClick={() => {
                                   localStorage.removeItem("token");
+                                  localStorage.removeItem("session");
                                 }}
                               >
                                 <div className="media align-items-center">

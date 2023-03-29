@@ -119,7 +119,7 @@ const SignUp = (props) => {
         });
         const decrypt = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
         console.log(decrypt);
-        history.push("/extra-pages/login");
+        history.push("/");
       })
       .catch((error) => {
         console.error(error);

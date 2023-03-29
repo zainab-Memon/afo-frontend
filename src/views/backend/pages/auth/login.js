@@ -73,13 +73,13 @@ const Login = (props) => {
   const [showError, setShowError] = useState(false);
   const [emptyObj, setEmptyObj] = useState(false);
   function login(obj) {
-    if (Object.keys(obj).length === 0) {
-      setEmptyObj(true);
-      setTimeout(() => {
-        setEmptyObj(false);
-      }, 3000);
-      return;
-    }
+    // if (Object.keys(obj).length === 0) {
+    //   setEmptyObj(true);
+    //   setTimeout(() => {
+    //     setEmptyObj(false);
+    //   }, 3000);
+    //   return;
+    // }
     let msg = JSON.stringify(obj);
     const i = generateRandomIv(16);
     const key = CryptoJS.enc.Utf8.parse("ED6C504C24FD3140D42E3BFE9F92E4A1");
@@ -112,11 +112,11 @@ const Login = (props) => {
         const Authtoken = decrypt.token;
         localStorage.setItem("token", Authtoken);
         // session request
-        const result = await AuthSession(history);
+        const result = await AuthSession();
         if (result) {
-          history.push("/");
+          history.push("/home");
         } else {
-          history.push("/extra-pages/login");
+          history.push("/");
         }
       })
       .catch((error) => {
@@ -158,6 +158,15 @@ const Login = (props) => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (Object.keys(loginInput).length === 0) {
+      setEmptyObj(true);
+      setTimeout(() => {
+        setEmptyObj(false);
+      }, 3000);
+      return;
+    }
+
     login(loginInput);
   };
   return (
@@ -233,18 +242,7 @@ const Login = (props) => {
                 <div className="sign-in-page-data">
                   <div className="sign-in-from w-100 m-auto">
                     <h3 className="mb-3 text-center">{t("sign in")}</h3>
-                    {/* {error && (
-                      <p
-                        style={{
-                          backgroundColor: "red",
-                          padding: "4px",
-                          textAlign: "center",
-                        }}
-                      >
-                        {" "}
-                        {error}
-                      </p>
-                    )} */}
+
                     <div
                       className={`alert alert-danger ${
                         showError ? "" : "d-none"
