@@ -14,11 +14,11 @@ const Layout1Route = () => {
         timeout={300}
       >
         <Switch location={location}>
-          <PrivateRoute
+          {/* <PrivateRoute
             path="/home/setting"
             component={UserAccountSettingList}
-          />
-          {/* <Route path="/home/setting" component={UserAccountSettingList} /> */}
+          /> */}
+          <Route path="/home/setting" component={UserAccountSettingList} />
         </Switch>
       </CSSTransition>
     </TransitionGroup>

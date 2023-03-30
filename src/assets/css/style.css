@@ -4566,9 +4566,13 @@ object {
 /* multi lang select list */
 .select-list {
   padding: 9px;
-  border: 2px solid var(--iq-primary);
+  border: none;
+  /* border: 2px solid var(--iq-primary); */
   color: var(--iq-body-text);
   background-color: transparent;
+}
+.select-list:hover {
+  color: var(--iq-primary);
 }
 
 .select-list > option {
@@ -4637,18 +4641,19 @@ object {
   text-transform: uppercase;
   transition: transform 80ms ease-in;
   margin-top: 8px;
+  transition: 0.3s;
 }
 
 .button:active {
   transform: scale(0.95);
 }
 
-.button:focus {
+/* .button:focus {
   outline: none;
   background: var(--iq-primary);
-}
+} */
 .button:hover {
-  /* background: var(--iq-primary); */
+  background: var(--iq-primary);
 }
 
 .button.ghost {
@@ -4815,3 +4820,138 @@ object {
   gap: 0.5rem;
 }
 /* when on page > 1 hide overlay and signin form */
+/* form2 for subscription and otp */
+.form2 {
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  background: rgba(0, 0, 0, 0.6);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  width: 700px;
+}
+.Subscription {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.subscriptionCards {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  align-items: center;
+  margin: auto;
+  margin: 30px 0;
+}
+.sub-btn {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  align-items: center;
+  margin: auto;
+  margin-bottom: 20px;
+}
+.subCard {
+  background-image: linear-gradient(45deg, #1171b6, #1075bd, #21a6e0);
+  width: 15rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-clip: border-box;
+  border-radius: 1.6rem;
+  transition: transform 0.2s;
+  min-height: 320px;
+  transition: "transform 0.2s ease";
+}
+
+.subCard:hover {
+  transform: scale(1.1);
+}
+
+.subCardBody {
+  flex: 1 1 auto;
+  padding: 1.25rem;
+}
+.btn-price {
+  display: flex;
+  flex-direction: column;
+}
+.subBtn {
+  border-radius: 18px;
+  border: 1px solid #1c75bc;
+  background-color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 40px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: 0.3s;
+  /* margin-top: 8px; */
+  color: #1c75bc;
+  opacity: 0.6;
+  margin: 10px 20px;
+}
+.cardText {
+  margin-bottom: 30px;
+}
+/* .subBtn:hover {
+  border: 1px solid #27aae1;
+  background-color: #27aae1;
+  color: #ffffff;
+  opacity: 1;
+}
+.subBtn:focus {
+  border: 1px solid #27aae1;
+  background-color: #27aae1;
+  color: #ffffff;
+  opacity: 1;
+} */
+.subBtn-active {
+  border: 1px solid #27aae1;
+  background-color: #27aae1;
+  color: #ffffff;
+  opacity: 1;
+}
+
+.heading-icon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
+
+  width: 90%;
+}
+.heading-icon .heading {
+  font-size: medium;
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: var(--iq-white);
+  font-family: "Roboto", Sans-serif;
+  text-align: center;
+  width: 100%;
+}
+.prev-icon {
+  color: var(--iq-primary);
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+.otp-body {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.select-lang .dropdown-menu {
+  background: transparent;
+  opacity: 0.8;
+}
+.select-lang .dropdown-item {
+  color: var(--iq-white);
+}
+.select-lang .dropdown-item:hover {
+  color: var(--iq-bg1);
+}

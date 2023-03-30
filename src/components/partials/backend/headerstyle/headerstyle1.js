@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Navbar, Dropdown, Nav } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
@@ -15,19 +15,44 @@ import thumb1 from "../../../../assets/images/notify/thumb-1.jpg";
 import thumb2 from "../../../../assets/images/notify/thumb-2.jpg";
 import thumb3 from "../../../../assets/images/notify/thumb-3.jpg";
 import user from "../../../../assets/images/user/user.jpg";
+// flags
+import spain from "../../../../assets/images/flags/spain.png";
+import uk from "../../../../assets/images/flags/uk.png";
+import france from "../../../../assets/images/flags/france.png";
+import german from "../../../../assets/images/flags/german.png";
+import italy from "../../../../assets/images/flags/italy.png";
+import poland from "../../../../assets/images/flags/poland.png";
+const languages = [
+  { code: "en", name: "English", icon: uk },
+  { code: "fr", name: "French", icon: france },
+  { code: "de", name: "Deutsch", icon: german },
+  { code: "es", name: "Espanol", icon: spain },
+  { code: "it", name: "Italiano", icon: italy },
+  { code: "pl", name: "Polski", icon: poland },
+  // add more languages here...
+];
 
 const HeaderStyle1 = (props) => {
+  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
+
+  const handleLanguageSelect = (eventKey) => {
+    const selectedLang = languages.find((lang) => lang.name === eventKey);
+    setSelectedLanguage(selectedLang);
+
+    i18n.changeLanguage(selectedLang.code);
+    localStorage.setItem("lang", selectedLang.code);
+  };
+
   //Calling t and i18n method from useTranslation hook
   const { t, i18n } = useTranslation();
 
   //Creating a method to change the language onChnage from select box
-  const changeLanguageHandler = (e) => {
-    const languageValue = e.target.value;
-
-    i18n.changeLanguage(languageValue);
-    // setting to local storage
-    localStorage.setItem("lang", languageValue);
-  };
+  // const changeLanguageHandler = (e) => {
+  //   const languageValue = e.target.value;
+  //   i18n.changeLanguage(languageValue);
+  //   // setting to local storage
+  //   localStorage.setItem("lang", languageValue);
+  // };
   let history = useHistory("");
   // handle click
   const handleprofileClick = async () => {
@@ -364,20 +389,48 @@ const HeaderStyle1 = (props) => {
                           </Card>
                         </Dropdown.Menu>
                       </Dropdown>
-                      <Form>
+                      <div className="select-lang">
+                        <Dropdown className="nav-item nav-icon">
+                          <Dropdown.Toggle as={CustomToggle}>
+                            {/* <img
+                              src={selectedLanguage.icon}
+                              alt="flag"
+                              style={{ width: "20%", marginRight: "11px" }}
+                            /> */}
+                            {selectedLanguage.name}
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu c>
+                            {languages.map((lang) => (
+                              <Dropdown.Item
+                                key={lang.code}
+                                eventKey={lang.name}
+                                onSelect={handleLanguageSelect}
+                              >
+                                <img
+                                  src={lang.icon}
+                                  alt="flag"
+                                  style={{ width: "20%", marginRight: "11px" }}
+                                />
+                                {lang.name}
+                              </Dropdown.Item>
+                            ))}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
+
+                      {/* <Form>
                         <select
                           onChange={changeLanguageHandler}
                           className="select-list"
                         >
-                          <option>Switch Language</option>
-                          <option value="en">English</option>
+                          <option value="en">English </option>
                           <option value="fr">French</option>
                           <option value="de">Deutsch</option>
                           <option value="pl">Polski</option>
                           <option value="it">Italiano</option>
                           <option value="es">Espanol</option>
                         </select>
-                      </Form>
+                      </Form> */}
                     </ul>
                   </div>
                 </Navbar>
