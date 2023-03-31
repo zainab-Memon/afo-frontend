@@ -7,8 +7,19 @@ import OtpInput from "react-otp-input";
 import { FcPrevious } from "react-icons/fc";
 // multi lang
 import { useTranslation } from "react-i18next";
-
+import LoginMob from "./Login_mb";
 const Loginsignup = (props) => {
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    function handleResize() {
+      setWidth(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   // switch language
   const { t } = useTranslation();
 
@@ -28,7 +39,7 @@ const Loginsignup = (props) => {
   const [otp, setOtp] = useState(false);
   let history = useHistory("");
   // cards
-  const [activeCard, setActiveCard] = useState(false);
+  const [activeCard, setActiveCard] = useState(true);
   const handleCardClick = (cardIndex) => {
     setActiveCard(cardIndex);
   };
@@ -52,14 +63,13 @@ const Loginsignup = (props) => {
   return (
     <>
       <section className="sign-in-page">
-        <div className="signinlogo" style={{ paddingTop: "2rem" }}>
-          <Col md="3" xs="12">
-            <img src={logo} alt="Logo" style={{ width: "50%" }} />
-          </Col>
-        </div>
-
-        <Container>
-          <Row>
+        {width > 820 ? (
+          <>
+            <div className="signinlogo">
+              <Col md="3" xs="12">
+                <img src={logo} alt="Logo" style={{ width: "50%" }} />
+              </Col>
+            </div>
             <div className="maincontainer">
               {!subscriptionForm ? (
                 <div
@@ -135,7 +145,7 @@ const Loginsignup = (props) => {
                       <button
                         className="button"
                         onClick={() => {
-                          history.push("/home");
+                          history.push("/");
                         }}
                       >
                         Sign In
@@ -191,7 +201,11 @@ const Loginsignup = (props) => {
                       </div>
 
                       <div className="subscriptionCards">
-                        <div>
+                        <div
+                          className={`${
+                            !activeCard ? "activeCard" : "inActiveCard"
+                          }`}
+                        >
                           <div className="subCard">
                             <div className="subCardBody">
                               <h4>Free</h4>
@@ -211,7 +225,7 @@ const Loginsignup = (props) => {
 
                               <button
                                 className={`subBtn ${
-                                  activeCard ? "subBtn-active" : ""
+                                  !activeCard ? "subBtn-active" : ""
                                 }`}
                                 value="free"
                                 onClick={(e) => {
@@ -220,7 +234,7 @@ const Loginsignup = (props) => {
                                     ...formData,
                                     subscriptionType: e.target.value,
                                   });
-                                  handleCardClick(true);
+                                  handleCardClick(false);
                                   setOtp(true);
                                 }}
                               >
@@ -229,7 +243,11 @@ const Loginsignup = (props) => {
                             </div>
                           </div>
                         </div>
-                        <div>
+                        <div
+                          className={`${
+                            activeCard ? "activeCard" : "inActiveCard"
+                          }`}
+                        >
                           <div className="subCard">
                             <div className="subCardBody">
                               <h4>Premium</h4>
@@ -249,7 +267,7 @@ const Loginsignup = (props) => {
 
                               <button
                                 className={`subBtn ${
-                                  !activeCard ? "subBtn-active" : ""
+                                  activeCard ? "subBtn-active" : ""
                                 }`}
                                 value="paid"
                                 onClick={(e) => {
@@ -258,7 +276,7 @@ const Loginsignup = (props) => {
                                     ...formData,
                                     subscriptionType: e.target.value,
                                   });
-                                  handleCardClick(false);
+                                  handleCardClick(true);
                                   setOtp(true);
                                 }}
                               >
@@ -305,56 +323,65 @@ const Loginsignup = (props) => {
                           account
                         </div>
                       </div>
-                      <div className="otp-body">
-                        <span style={{ marginBottom: "2rem" }}>
-                          A one-Time Password has been sent to {formData.email}
-                        </span>
-                        <OtpInput
-                          value={otpValue}
-                          onChange={handleOtpChange}
-                          numInputs={4}
-                          isInputNum
-                          renderInput={(inputProps) => (
-                            <input {...inputProps} />
-                          )}
-                          renderSeparator={<span>-</span>}
-                          inputStyle={{
-                            width: "4rem",
-                            height: "3rem",
-                            margin: "0 1rem",
+                      <div className="otpbody">
+                        <div className="otp-body">
+                          <span style={{ marginBottom: "2rem" }}>
+                            A one-Time Password has been sent to{" "}
+                            {formData.email}
+                          </span>
+                          <OtpInput
+                            value={otpValue}
+                            onChange={handleOtpChange}
+                            numInputs={4}
+                            isInputNum
+                            renderInput={(inputProps) => (
+                              <input {...inputProps} />
+                            )}
+                            renderSeparator={<span>-</span>}
+                            inputStyle={{
+                              width: "4rem",
+                              height: "3rem",
+                              margin: "0 1rem",
 
-                            borderRadius: 4,
+                              borderRadius: 4,
 
-                            outline: "none",
-                            textAlign: "center",
-                          }}
-                        />
-                      </div>
-                      <div className="sub-btn">
+                              outline: "none",
+                              textAlign: "center",
+                            }}
+                          />
+                        </div>
+
                         <button className="button" onClick={handleSubmit}>
                           Validate
                         </button>
-                      </div>
-                      <div className="otp-body">
-                        <h4>Resend One Time Password</h4>
-                        <span style={{ marginBottom: "2rem" }}>
-                          <Link
-                            onClick={() => {
-                              setSubscriptionForm(false);
-                              setOtp(false);
-                            }}
-                          >
-                            Entered a Wrong Email?
-                          </Link>
-                        </span>
+
+                        <div className="otp-body">
+                          <h4>
+                            <Link>Resend One Time Password</Link>
+                          </h4>
+                          <span style={{ marginBottom: "2rem" }}>
+                            <Link
+                              onClick={() => {
+                                setSubscriptionForm(false);
+                                setOtp(false);
+                              }}
+                            >
+                              Entered a Wrong Email?
+                            </Link>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   )}
                 </div>
               )}
-            </div>
-          </Row>
-        </Container>
+            </div>{" "}
+          </>
+        ) : (
+          <div>
+            <LoginMob />
+          </div>
+        )}
       </section>
     </>
   );

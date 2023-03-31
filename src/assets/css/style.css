@@ -2391,6 +2391,9 @@ span.flatpickr-weekday,
   position: relative;
   background: url(../images/login/bg-login.jpg) no-repeat scroll 0 0;
   background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .sign-in-page .height-self-center {
   /* height: 100vh; */
@@ -4582,9 +4585,11 @@ object {
 
 /* sign in page logo and switch lang container */
 .signinlogo {
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; */
+  position: absolute;
+  top: 2rem;
 }
 
 /* gender dropdown width */
@@ -4606,8 +4611,8 @@ object {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  /* margin: auto; */
-  margin: auto auto;
+  margin: auto;
+  /* margin: auto auto; */
 }
 
 .maincontainer h3 {
@@ -4674,13 +4679,12 @@ object {
 }
 
 .maincontainer input {
-  /* background: var(--iq-body-bg);
+  background: var(--iq-body-bg);
   border: 1px solid #404043;
   padding: 12px 15px;
   margin: 8px 0;
   width: 100%;
-  height: 48px; */
-  margin-bottom: 1rem;
+  height: 48px;
 }
 
 .login-signup-container {
@@ -4827,14 +4831,15 @@ object {
   background: rgba(0, 0, 0, 0.6);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  width: 700px;
+  width: 768px;
 }
 .Subscription {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  min-height: 480px;
 }
 .subscriptionCards {
   display: flex;
@@ -4867,10 +4872,22 @@ object {
   transition: "transform 0.2s ease";
 }
 
-.subCard:hover {
+/* .subCard:hover {
+  transform: scale(1.1);
+} */
+.premium-card {
+  transform: scale(1.1);
+  transition: "transform 0.2s ease";
+}
+.free-card {
+  transition: "transform 0.2s ease";
+}
+.free-card:hover {
   transform: scale(1.1);
 }
-
+.free-card:hover ~ .premium-card {
+  transform: scale(1);
+}
 .subCardBody {
   flex: 1 1 auto;
   padding: 1.25rem;
@@ -4897,7 +4914,7 @@ object {
 .cardText {
   margin-bottom: 30px;
 }
-/* .subBtn:hover {
+.subBtn:hover {
   border: 1px solid #27aae1;
   background-color: #27aae1;
   color: #ffffff;
@@ -4908,12 +4925,26 @@ object {
   background-color: #27aae1;
   color: #ffffff;
   opacity: 1;
-} */
+}
 .subBtn-active {
   border: 1px solid #27aae1;
   background-color: #27aae1;
   color: #ffffff;
   opacity: 1;
+}
+.activeCard {
+  transition: "transform 0.2s ease";
+  transform: scale(1.1);
+}
+.inActiveCard {
+  transition: "transform 0.2s ease";
+  transform: scale(1);
+}
+.inActiveCard:hover {
+  transform: scale(1.1);
+}
+.inActiveCard:hover ~ .activeCard {
+  transform: scale(1);
 }
 
 .heading-icon {
@@ -4939,7 +4970,14 @@ object {
   cursor: pointer;
   margin-right: 1rem;
 }
-
+.otpbody {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  align-items: center;
+  margin: 30px 0;
+  flex-direction: column;
+}
 .otp-body {
   display: flex;
   align-items: center;
@@ -4954,4 +4992,14 @@ object {
 }
 .select-lang .dropdown-item:hover {
   color: var(--iq-bg1);
+}
+.select-lang {
+  margin-right: 10px;
+}
+
+/* mobile form */
+.mobForm{
+  display:flex;
+  align-items: center;
+  justify-content: center;
 }

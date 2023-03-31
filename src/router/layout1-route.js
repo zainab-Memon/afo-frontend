@@ -18,7 +18,7 @@ const Layout1Route = () => {
             path="/home/setting"
             component={UserAccountSettingList}
           /> */}
-          <Route path="/home/setting" component={UserAccountSettingList} />
+          <Route path="/profile/setting" component={UserAccountSettingList} />
         </Switch>
       </CSSTransition>
     </TransitionGroup>

@@ -11,8 +11,9 @@ const ExtraPages = () => {
     <Switch>
       {/* <Route path="/extra-pages/sign-up" component={SignUp} /> */}
       {/* <Route path="/extra-pages/login" component={Login} /> */}
-      <Route path="/extra-pages/recover-pswd" component={RecoverPswd} />
-      <Route path="/extra-pages/login-signup" component={Loginsignup} />
+      <Route path="/extra-pages/login" component={Loginsignup} />
+
+      {/* <Route path="/extra-pages/login-signup" component={Loginsignup} /> */}
     </Switch>
   );
 };

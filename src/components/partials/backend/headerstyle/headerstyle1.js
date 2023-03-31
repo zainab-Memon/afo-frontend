@@ -29,7 +29,6 @@ const languages = [
   { code: "es", name: "Espanol", icon: spain },
   { code: "it", name: "Italiano", icon: italy },
   { code: "pl", name: "Polski", icon: poland },
-  // add more languages here...
 ];
 
 const HeaderStyle1 = (props) => {
@@ -195,25 +194,25 @@ const HeaderStyle1 = (props) => {
                     <div className="menu-main-menu-container">
                       <Nav as="ul" id="top-menu" className="ml-auto">
                         <li className="menu-item">
-                          <Link to="/home">Home</Link>
+                          <Link to="/">Home</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/home">Genre</Link>
+                          <Link to="/">Genre</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/home">Movies</Link>
+                          <Link to="/">Movies</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/home">Videos</Link>
+                          <Link to="/">Videos</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/home">Podcast</Link>
+                          <Link to="/">Podcast</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/home">Tv Shows</Link>
+                          <Link to="/">Tv Shows</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/home">Live Channels</Link>
+                          <Link to="/">Live Channels</Link>
                         </li>
                       </Nav>
                     </div>
@@ -318,6 +317,100 @@ const HeaderStyle1 = (props) => {
                           </Card>
                         </Dropdown.Menu>
                       </Dropdown>
+                      <div className="select-lang">
+                        <Dropdown className="nav-item nav-icon">
+                          <Dropdown.Toggle as={CustomToggle}>
+                            <img
+                              src={selectedLanguage.icon}
+                              alt="flag"
+                              className="img-fluid rounded-circle"
+                              style={{
+                                width: "20px",
+                                height: "20px",
+                                marginRight: "0.6rem",
+                              }}
+                            />
+                            {selectedLanguage.code}
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu
+                            className="iq-sub-dropdown "
+                            align="right"
+                            style={{ color: "white" }}
+                          >
+                            {languages.map((lang) => (
+                              <Dropdown.Item
+                                key={lang.code}
+                                eventKey={lang.name}
+                                onSelect={handleLanguageSelect}
+                              >
+                                <img
+                                  src={lang.icon}
+                                  alt="flag"
+                                  style={{ width: "20%", marginRight: "11px" }}
+                                />
+                                {lang.name}
+                              </Dropdown.Item>
+                            ))}
+                          </Dropdown.Menu>
+                          {/* <Dropdown.Menu
+                          className="iq-sub-dropdown "
+                          align="right"
+                        >
+                          {languages.map((lang) => (
+                            <Dropdown.Item
+                              key={lang.code}
+                              eventKey={lang.name}
+                              onSelect={handleLanguageSelect}
+                            >
+                              <img
+                                src={lang.icon}
+                                alt="flag"
+                                style={{ width: "20%", marginRight: "11px" }}
+                              />
+                              {lang.name}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu> */}
+                        </Dropdown>
+                      </div>
+                      {/* <div className="select-lang">
+                        <Dropdown as="li" className="line-height pt-2 ">
+                          <Dropdown.Toggle
+                            href="#"
+                            as={CustomToggle}
+                            variant="search-toggle iq-waves-effect d-flex align-items-center"
+                          >
+                            <img
+                              src={selectedLanguage.icon}
+                              alt="flag"
+                              className="img-fluid rounded-circle"
+                              style={{
+                                width: "20px",
+                                height: "20px",
+                                marginRight: "0.6rem",
+                              }}
+                            />
+                            {selectedLanguage.code}
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            {languages.map((lang) => (
+                              <Dropdown.Item
+                                key={lang.code}
+                                eventKey={lang.name}
+                                onSelect={handleLanguageSelect}
+                              >
+                                <img
+                                  src={lang.icon}
+                                  alt="flag"
+                                  style={{ width: "20%", marginRight: "11px" }}
+                                />
+                                {lang.name}
+                              </Dropdown.Item>
+                            ))}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div> */}
+
                       <Dropdown as="li" className="nav-item nav-icon">
                         <Dropdown.Toggle
                           href="#"
@@ -342,7 +435,7 @@ const HeaderStyle1 = (props) => {
                           <Card className="shadow-none m-0">
                             <Card.Body className="p-0 pl-3 pr-3">
                               <Link
-                                to="/home/setting"
+                                to="/profile/setting"
                                 // onClick={handleprofileClick}
                                 className="iq-sub-card setting-dropdown"
                               >
@@ -369,7 +462,7 @@ const HeaderStyle1 = (props) => {
                                 </div>
                               </Link>
                               <Link
-                                to="/"
+                                to="/extra-pages/login"
                                 className="iq-sub-card setting-dropdown"
                                 onClick={() => {
                                   localStorage.removeItem("token");
@@ -389,34 +482,6 @@ const HeaderStyle1 = (props) => {
                           </Card>
                         </Dropdown.Menu>
                       </Dropdown>
-                      <div className="select-lang">
-                        <Dropdown className="nav-item nav-icon">
-                          <Dropdown.Toggle as={CustomToggle}>
-                            {/* <img
-                              src={selectedLanguage.icon}
-                              alt="flag"
-                              style={{ width: "20%", marginRight: "11px" }}
-                            /> */}
-                            {selectedLanguage.name}
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu c>
-                            {languages.map((lang) => (
-                              <Dropdown.Item
-                                key={lang.code}
-                                eventKey={lang.name}
-                                onSelect={handleLanguageSelect}
-                              >
-                                <img
-                                  src={lang.icon}
-                                  alt="flag"
-                                  style={{ width: "20%", marginRight: "11px" }}
-                                />
-                                {lang.name}
-                              </Dropdown.Item>
-                            ))}
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </div>
 
                       {/* <Form>
                         <select
