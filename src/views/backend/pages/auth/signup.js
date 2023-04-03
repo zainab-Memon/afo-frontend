@@ -183,7 +183,7 @@ const SignUp = (props) => {
     setSelectedOption(event.target.id);
     // setFormData({ ...formData, subscriptType: event.target.id });
   };
-  // handlesignin
+  // handle signup
   const handleSubmit = async (event) => {
     event.preventDefault();
     signinAuth(formData);

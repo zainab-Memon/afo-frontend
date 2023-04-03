@@ -7,7 +7,7 @@ import Card from "../../../../components/Card";
 import CustomToggle from "../../../../components/dropdowns";
 // MULTI LANG HOOK
 import { useTranslation } from "react-i18next";
-import AuthSession from "../../../../getSessionAuth";
+import AuthSession from "../../../../Services/getSessionAuth";
 //img
 
 import logo from "../../../../assets/images/logo.png";
@@ -186,6 +186,138 @@ const HeaderStyle1 = (props) => {
                               </Card>
                             </Dropdown.Menu>
                           </Dropdown>
+                          <div className="select-lang">
+                            <Dropdown as="li" className="nav-item nav-icon">
+                              <Dropdown.Toggle as={CustomToggle}>
+                                <img
+                                  src={selectedLanguage.icon}
+                                  alt="flag"
+                                  className="img-fluid rounded-circle"
+                                  style={{
+                                    width: "20px",
+                                    height: "20px",
+                                    marginRight: "0.6rem",
+                                  }}
+                                />
+                                {selectedLanguage.code}
+                              </Dropdown.Toggle>
+                              <Dropdown.Menu
+                                className="iq-sub-dropdown "
+                                align="right"
+                                style={{ color: "white", width: "170px" }}
+                              >
+                                {languages.map((lang) => (
+                                  <Dropdown.Item
+                                    key={lang.code}
+                                    eventKey={lang.name}
+                                    onSelect={handleLanguageSelect}
+                                  >
+                                    <img
+                                      src={lang.icon}
+                                      alt="flag"
+                                      style={{
+                                        width: "20%",
+                                        marginRight: "11px",
+                                      }}
+                                    />
+                                    {lang.name}
+                                  </Dropdown.Item>
+                                ))}
+                              </Dropdown.Menu>
+                              {/* <Dropdown.Menu
+                          className="iq-sub-dropdown "
+                          align="right"
+                        >
+                          {languages.map((lang) => (
+                            <Dropdown.Item
+                              key={lang.code}
+                              eventKey={lang.name}
+                              onSelect={handleLanguageSelect}
+                            >
+                              <img
+                                src={lang.icon}
+                                alt="flag"
+                                style={{ width: "20%", marginRight: "11px" }}
+                              />
+                              {lang.name}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu> */}
+                            </Dropdown>
+                          </div>
+                          <Dropdown as="li" className="nav-item nav-icon">
+                            <Dropdown.Toggle
+                              href="#"
+                              as={CustomToggle}
+                              variant="search-toggle"
+                            >
+                              <div
+                                className="iq-user-dropdown search-toggle p-0 d-flex align-items-center active"
+                                data-toggle="search-toggle"
+                              >
+                                <img
+                                  src={user}
+                                  className="img-fluid avatar-40 rounded-circle"
+                                  alt="user"
+                                />
+                              </div>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu
+                              className="iq-sub-dropdown iq-user-dropdown"
+                              align="right"
+                            >
+                              <Card className="shadow-none m-0">
+                                <Card.Body className="p-0 pl-3 pr-3">
+                                  <Link
+                                    to="/profile/setting"
+                                    // onClick={handleprofileClick}
+                                    className="iq-sub-card setting-dropdown"
+                                  >
+                                    <div className="media align-items-center">
+                                      <div className="right-icon">
+                                        <i className="ri-file-user-line text-primary"></i>
+                                      </div>
+                                      <div className="media-body ml-3">
+                                        <h6 className="my-0 ">
+                                          Manage Profile
+                                        </h6>
+                                      </div>
+                                    </div>
+                                  </Link>
+                                  <Link
+                                    to="#"
+                                    className="iq-sub-card setting-dropdown"
+                                  >
+                                    <div className="media align-items-center">
+                                      <div className="right-icon">
+                                        <i className="ri-settings-4-line text-primary"></i>
+                                      </div>
+                                      <div className="media-body ml-3">
+                                        <h6 className="my-0 ">Pricing Plan</h6>
+                                      </div>
+                                    </div>
+                                  </Link>
+                                  <Link
+                                    to="/extra-pages/login"
+                                    className="iq-sub-card setting-dropdown"
+                                    onClick={() => {
+                                      localStorage.removeItem("token");
+                                      localStorage.removeItem("session");
+                                    }}
+                                  >
+                                    <div className="media align-items-center">
+                                      <div className="right-icon">
+                                        <i className="ri-logout-circle-line text-primary"></i>
+                                      </div>
+                                      <div className="media-body ml-3">
+                                        <h6 className="my-0 ">Logout</h6>
+                                      </div>
+                                    </div>
+                                  </Link>
+                                </Card.Body>
+                              </Card>
+                            </Dropdown.Menu>
+                          </Dropdown>
                         </ul>
                       </div>
                     </Dropdown.Menu>
@@ -335,7 +467,7 @@ const HeaderStyle1 = (props) => {
                           <Dropdown.Menu
                             className="iq-sub-dropdown "
                             align="right"
-                            style={{ color: "white" }}
+                            style={{ color: "white", width: "170px" }}
                           >
                             {languages.map((lang) => (
                               <Dropdown.Item

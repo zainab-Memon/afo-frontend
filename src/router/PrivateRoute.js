@@ -33,7 +33,7 @@
 
 // export default PrivateRoute;
 import React, { useState, useEffect } from "react";
-import AuthSession from "../getSessionAuth";
+import AuthSession from "../Services/getSessionAuth";
 import { Redirect, Route } from "react-router-dom";
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import AuthSession from "../../../../getSessionAuth";
+// import AuthSession from "../../../../getSessionAuth";
 
 import user from "../../../../assets/images/user/user.jpg";
 import { useTranslation } from "react-i18next";

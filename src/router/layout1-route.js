@@ -2,7 +2,8 @@ import { Switch, Route, useLocation } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import PrivateRoute from "./PrivateRoute";
 import UserAccountSettingList from "../views/backend/app/usermanagement/useraccountsetting";
-
+// Home
+import Homepage from "../views/backend/home/home";
 const Layout1Route = () => {
   let location = useLocation();
 
@@ -19,6 +20,8 @@ const Layout1Route = () => {
             component={UserAccountSettingList}
           /> */}
           <Route path="/profile/setting" component={UserAccountSettingList} />
+          {/* homepage */}
+          <Route path="/" exact component={Homepage} />
         </Switch>
       </CSSTransition>
     </TransitionGroup>

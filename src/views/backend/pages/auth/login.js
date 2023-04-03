@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import AuthSession from "../../../../getSessionAuth";
+import AuthSession from "../../../../Services/getSessionAuth";
 
 // rtl
 import { connect } from "react-redux";
