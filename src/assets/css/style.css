@@ -32,7 +32,7 @@ header#main-header {
   background: rgba(20, 20, 20, 0.5) !important;
 }
 header .navbar-light .navbar-brand img.logo {
-  width: 160px;
+  width: 100px;
 }
 .iq-search-bar .search-input {
   width: 100%;
@@ -4997,27 +4997,32 @@ object {
   margin-right: 10px;
 }
 
-/* mobile form */
+/* mobile form===================================================================================== */
 .sign-in-mob {
   height: 100vh;
   position: relative;
   background: rgb(16, 117, 189);
+  /* background: linear-gradient(to bottom left, #1c75bc, black, #27aae1); */
+
   background: linear-gradient(
-    150deg,
-    rgba(16, 117, 189, 1) 0%,
-    rgba(39, 170, 225, 1) 43%
+    45deg,
+    #27aae1 0%,
+    #040107 37%,
+    #0f051e 63%,
+    #1c75bc 99%
   );
+
   background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .mobForm {
-  border-radius: 10px;
+  /* border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   background: rgba(0, 0, 0, 0.6);
 
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px); */
   width: 400px;
 }
 .signIn-Form {
@@ -5025,9 +5030,9 @@ object {
   align-items: center;
   /* justify-content: center; */
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   margin: 30px;
-  height: 570px;
+  /* height: 570px; */
 }
 .logo {
   width: 60%;
@@ -5043,15 +5048,17 @@ object {
 }
 .inputFields {
   /* margin-top: 5px; */
+  padding: 0 5px;
 }
 .no-account {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   justify-content: space-between;
   gap: 0.5rem;
-  margin-top: 0.5rem;
+  margin-top: 5.5rem;
   margin-bottom: 1rem;
+  padding-left: 16px;
 }
 
 .signinForm .heading-icon {
@@ -5241,4 +5248,33 @@ header .slider {
     width: 90%;
     margin: 0;
   }
+}
+
+/* new input */
+.inputFields input,
+input[type="email"] input[type="password"] {
+  border: none;
+  background-color: transparent;
+  border-bottom: 2px solid var(--iq-secondary);
+  padding: 0;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+.inputFields input::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder {
+  color: var(--iq-secondary) !important;
+  font-size: 14px;
+}
+.inputFields input[type="email"] :hover {
+  border-bottom-color: #27aae1;
+}
+
+.signinForm .button {
+  margin-top: 0px;
+}
+
+.sign-in-mob .maincontainer {
+  margin: 0 !important;
 }

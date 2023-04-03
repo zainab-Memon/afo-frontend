@@ -80,14 +80,14 @@ const LoginMob = () => {
     <div className="sign-in-mob">
       <div className="maincontainer">
         <div className="mobForm">
-          <div className="signIn-Form">
-            {signIn ? (
-              <>
+          {signIn ? (
+            <>
+              <div className="signIn-Form">
                 <div className="logo">
                   <img src={Logo} alt="logo"></img>
                 </div>
                 <div className="signinForm">
-                  <h3>Sign In</h3>
+                  <h3>Sign in</h3>
                   <div className="inputFields">
                     <div
                       className={`alert alert-danger ${
@@ -105,17 +105,19 @@ const LoginMob = () => {
                     >
                       Enter email and password
                     </div>
+                    <label htmlFor="email">E-Mail</label>
                     <input
                       type="email"
-                      placeholder="Email"
+                      placeholder="yourname@example.com"
                       required
                       name="email"
                       value={loginInput.email || ""}
                       onChange={handleInputChange}
                     />
+                    <label htmlFor="password">Password</label>
                     <input
                       type="password"
-                      placeholder="Password"
+                      placeholder="Your Password"
                       required
                       name="password"
                       value={loginInput.password || ""}
@@ -125,16 +127,18 @@ const LoginMob = () => {
                   <button className="button" onClick={loginSubmit}>
                     Sign In
                   </button>
-                  <div className="no-account">
-                    <span>Dont' have an account yet?</span>
-                    <h6 onClick={() => setSignIn(false)}>Signup &#8594;</h6>
-                  </div>
                 </div>
-              </>
-            ) : (
-              <>
-                {!subType ? (
-                  <>
+              </div>
+              <div className="no-account">
+                <span>Dont' have an account yet?</span>
+                <h6 onClick={() => setSignIn(false)}>Signup &#8594;</h6>
+              </div>
+            </>
+          ) : (
+            <>
+              {!subType ? (
+                <>
+                  <div className="signIn-Form">
                     <div className="logo">
                       <img src={Logo} alt="logo"></img>
                     </div>
@@ -150,18 +154,20 @@ const LoginMob = () => {
                         >
                           {userExistError}
                         </div>
+                        <label htmlFor="text">Name</label>
                         <input
                           type="text"
-                          placeholder="Name"
+                          placeholder="Your name"
                           value={formData.name} //setting the value of the form to the props value
                           onChange={
                             (e) =>
                               setFormData({ ...formData, name: e.target.value }) //setting the formData to the value input of the textfield
                           }
                         />
+                        <label htmlFor="email">Email</label>
                         <input
                           type="email"
-                          placeholder="Email"
+                          placeholder="yourname@example.com"
                           value={formData.email} //setting the value of the form to the props value
                           onChange={
                             (e) =>
@@ -171,9 +177,10 @@ const LoginMob = () => {
                               }) //setting the formData to the value input of the textfield
                           }
                         />
+                        <label htmlFor="password">Password</label>
                         <input
                           type="password"
-                          placeholder="Password"
+                          placeholder="Your Password"
                           value={formData.password} //setting the value of the form to the props value
                           onChange={
                             (e) =>
@@ -192,13 +199,15 @@ const LoginMob = () => {
                       >
                         Next
                       </button>
-                      <div className="no-account">
-                        <span>Already have an account?</span>
-                        <h6 onClick={() => setSignIn(true)}>Sign In &#8594;</h6>
-                      </div>
                     </div>
-                  </>
-                ) : (
+                  </div>
+                  <div className="no-account" style={{ marginTop: "2rem" }}>
+                    <span>Already have an account?</span>
+                    <h6 onClick={() => setSignIn(true)}>Sign In &#8594;</h6>
+                  </div>
+                </>
+              ) : (
+                <div className="signIn-Form">
                   <div className="signinForm">
                     {!otpForm ? (
                       <>
@@ -301,6 +310,7 @@ const LoginMob = () => {
                           <div className="otp-body">
                             <span style={{ marginBottom: "2rem" }}>
                               A one-Time Password has been sent to{" "}
+                              {formData.email}
                             </span>
                             <OtpInput
                               value={otpValue}
@@ -327,11 +337,18 @@ const LoginMob = () => {
                             />
                           </div>
 
-                          <button className="button" onClick={handleSignUp}>
+                          <button
+                            className="button"
+                            onClick={handleSignUp}
+                            style={{ marginTop: "2rem" }}
+                          >
                             Validate
                           </button>
 
-                          <div className="otp-body">
+                          <div
+                            className="otp-body"
+                            style={{ marginTop: "3rem" }}
+                          >
                             <h4>
                               <Link to="">Resend One Time Password</Link>
                             </h4>
@@ -350,10 +367,10 @@ const LoginMob = () => {
                       </>
                     )}
                   </div>
-                )}
-              </>
-            )}
-          </div>
+                </div>
+              )}
+            </>
+          )}
         </div>
         {/* <div className="mobForm">
         <div className="login-signup-form-container sign-in-container">

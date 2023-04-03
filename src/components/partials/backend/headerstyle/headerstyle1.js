@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import AuthSession from "../../../../Services/getSessionAuth";
 //img
 
-import logo from "../../../../assets/images/logo.png";
+import logoicon from "../../../../assets/images/logoicon.png";
 import thumb1 from "../../../../assets/images/notify/thumb-1.jpg";
 import thumb2 from "../../../../assets/images/notify/thumb-2.jpg";
 import thumb3 from "../../../../assets/images/notify/thumb-3.jpg";
@@ -79,7 +79,7 @@ const HeaderStyle1 = (props) => {
                     </div>
                   </Navbar.Toggle>
                   <Navbar.Brand className="navbar-brand" href="/">
-                    <img className="img-fluid logo" src={logo} alt="streamit" />
+                    <img className="img-fluid logo" src={logoicon} alt="AFO" />
                   </Navbar.Brand>
                   <Dropdown className="mobile-more-menu">
                     <Dropdown.Toggle
