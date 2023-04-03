@@ -5032,7 +5032,7 @@ object {
   /* justify-content: center; */
   flex-direction: column;
   gap: 1rem;
-  margin: 30px;
+  margin: 10px;
   /* height: 570px; */
 }
 .logo {
