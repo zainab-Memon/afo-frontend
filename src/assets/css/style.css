@@ -5059,7 +5059,7 @@ object {
   gap: 0.5rem;
   margin-top: 5.5rem;
   margin-bottom: 1rem;
-  padding-left: 16px;
+  padding-left: 34px;
 }
 
 .signinForm .heading-icon {
@@ -5248,6 +5248,9 @@ header .slider {
   .wrapper {
     width: 90%;
     margin: 0;
+  }
+  .no-account {
+    padding-left: 15px;
   }
 }
 
