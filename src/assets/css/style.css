@@ -32,7 +32,8 @@ header#main-header {
   background: rgba(20, 20, 20, 0.5) !important;
 }
 header .navbar-light .navbar-brand img.logo {
-  width: 100px;
+  width: 80px;
+  margin: 0px;
 }
 .iq-search-bar .search-input {
   width: 100%;
