@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Navbar, Dropdown, Nav } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
@@ -32,6 +32,12 @@ const languages = [
 ];
 
 const HeaderStyle1 = (props) => {
+  const [isLoggedIn, setIsLoggedIn] = useState();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
 
   const handleLanguageSelect = (eventKey) => {
@@ -224,100 +230,87 @@ const HeaderStyle1 = (props) => {
                                   </Dropdown.Item>
                                 ))}
                               </Dropdown.Menu>
-                              {/* <Dropdown.Menu
-                          className="iq-sub-dropdown "
-                          align="right"
-                        >
-                          {languages.map((lang) => (
-                            <Dropdown.Item
-                              key={lang.code}
-                              eventKey={lang.name}
-                              onSelect={handleLanguageSelect}
-                            >
-                              <img
-                                src={lang.icon}
-                                alt="flag"
-                                style={{ width: "20%", marginRight: "11px" }}
-                              />
-                              {lang.name}
-                            </Dropdown.Item>
-                          ))}
-                        </Dropdown.Menu> */}
                             </Dropdown>
                           </div>
-                          <Dropdown as="li" className="nav-item nav-icon">
-                            <Dropdown.Toggle
-                              href="#"
-                              as={CustomToggle}
-                              variant="search-toggle"
-                            >
-                              <div
-                                className="iq-user-dropdown search-toggle p-0 d-flex align-items-center active"
-                                data-toggle="search-toggle"
+                          {isLoggedIn ? (
+                            <Dropdown as="li" className="nav-item nav-icon">
+                              <Dropdown.Toggle
+                                href="#"
+                                as={CustomToggle}
+                                variant="search-toggle"
                               >
-                                <img
-                                  src={user}
-                                  className="img-fluid avatar-40 rounded-circle"
-                                  alt="user"
-                                />
-                              </div>
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu
-                              className="iq-sub-dropdown iq-user-dropdown"
-                              align="right"
-                            >
-                              <Card className="shadow-none m-0">
-                                <Card.Body className="p-0 pl-3 pr-3">
-                                  <Link
-                                    to="/profile/setting"
-                                    // onClick={handleprofileClick}
-                                    className="iq-sub-card setting-dropdown"
-                                  >
-                                    <div className="media align-items-center">
-                                      <div className="right-icon">
-                                        <i className="ri-file-user-line text-primary"></i>
+                                <div
+                                  className="iq-user-dropdown search-toggle p-0 d-flex align-items-center active"
+                                  data-toggle="search-toggle"
+                                >
+                                  <img
+                                    src={user}
+                                    className="img-fluid avatar-40 rounded-circle"
+                                    alt="user"
+                                  />
+                                </div>
+                              </Dropdown.Toggle>
+                              <Dropdown.Menu
+                                className="iq-sub-dropdown iq-user-dropdown"
+                                align="right"
+                              >
+                                <Card className="shadow-none m-0">
+                                  <Card.Body className="p-0 pl-3 pr-3">
+                                    <Link
+                                      to="/profile/setting"
+                                      // onClick={handleprofileClick}
+                                      className="iq-sub-card setting-dropdown"
+                                    >
+                                      <div className="media align-items-center">
+                                        <div className="right-icon">
+                                          <i className="ri-file-user-line text-primary"></i>
+                                        </div>
+                                        <div className="media-body ml-3">
+                                          <h6 className="my-0 ">
+                                            Manage Profile
+                                          </h6>
+                                        </div>
                                       </div>
-                                      <div className="media-body ml-3">
-                                        <h6 className="my-0 ">
-                                          Manage Profile
-                                        </h6>
+                                    </Link>
+                                    <Link
+                                      to="#"
+                                      className="iq-sub-card setting-dropdown"
+                                    >
+                                      <div className="media align-items-center">
+                                        <div className="right-icon">
+                                          <i className="ri-settings-4-line text-primary"></i>
+                                        </div>
+                                        <div className="media-body ml-3">
+                                          <h6 className="my-0 ">
+                                            Pricing Plan
+                                          </h6>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    className="iq-sub-card setting-dropdown"
-                                  >
-                                    <div className="media align-items-center">
-                                      <div className="right-icon">
-                                        <i className="ri-settings-4-line text-primary"></i>
+                                    </Link>
+                                    <Link
+                                      to="/extra-pages/login"
+                                      className="iq-sub-card setting-dropdown"
+                                      onClick={() => {
+                                        localStorage.removeItem("token");
+                                        localStorage.removeItem("session");
+                                      }}
+                                    >
+                                      <div className="media align-items-center">
+                                        <div className="right-icon">
+                                          <i className="ri-logout-circle-line text-primary"></i>
+                                        </div>
+                                        <div className="media-body ml-3">
+                                          <h6 className="my-0 ">Logout</h6>
+                                        </div>
                                       </div>
-                                      <div className="media-body ml-3">
-                                        <h6 className="my-0 ">Pricing Plan</h6>
-                                      </div>
-                                    </div>
-                                  </Link>
-                                  <Link
-                                    to="/extra-pages/login"
-                                    className="iq-sub-card setting-dropdown"
-                                    onClick={() => {
-                                      localStorage.removeItem("token");
-                                      localStorage.removeItem("session");
-                                    }}
-                                  >
-                                    <div className="media align-items-center">
-                                      <div className="right-icon">
-                                        <i className="ri-logout-circle-line text-primary"></i>
-                                      </div>
-                                      <div className="media-body ml-3">
-                                        <h6 className="my-0 ">Logout</h6>
-                                      </div>
-                                    </div>
-                                  </Link>
-                                </Card.Body>
-                              </Card>
-                            </Dropdown.Menu>
-                          </Dropdown>
+                                    </Link>
+                                  </Card.Body>
+                                </Card>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          ) : (
+                            <Link to={"/extra-pages/login"}>login</Link>
+                          )}
                         </ul>
                       </div>
                     </Dropdown.Menu>
@@ -542,78 +535,81 @@ const HeaderStyle1 = (props) => {
                           </Dropdown.Menu>
                         </Dropdown>
                       </div> */}
-
-                      <Dropdown as="li" className="nav-item nav-icon">
-                        <Dropdown.Toggle
-                          href="#"
-                          as={CustomToggle}
-                          variant="search-toggle"
-                        >
-                          <div
-                            className="iq-user-dropdown search-toggle p-0 d-flex align-items-center active"
-                            data-toggle="search-toggle"
+                      {isLoggedIn ? (
+                        <Dropdown as="li" className="nav-item nav-icon">
+                          <Dropdown.Toggle
+                            href="#"
+                            as={CustomToggle}
+                            variant="search-toggle"
                           >
-                            <img
-                              src={user}
-                              className="img-fluid avatar-40 rounded-circle"
-                              alt="user"
-                            />
-                          </div>
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu
-                          className="iq-sub-dropdown iq-user-dropdown"
-                          align="right"
-                        >
-                          <Card className="shadow-none m-0">
-                            <Card.Body className="p-0 pl-3 pr-3">
-                              <Link
-                                to="/profile/setting"
-                                // onClick={handleprofileClick}
-                                className="iq-sub-card setting-dropdown"
-                              >
-                                <div className="media align-items-center">
-                                  <div className="right-icon">
-                                    <i className="ri-file-user-line text-primary"></i>
+                            <div
+                              className="iq-user-dropdown search-toggle p-0 d-flex align-items-center active"
+                              data-toggle="search-toggle"
+                            >
+                              <img
+                                src={user}
+                                className="img-fluid avatar-40 rounded-circle"
+                                alt="user"
+                              />
+                            </div>
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu
+                            className="iq-sub-dropdown iq-user-dropdown"
+                            align="right"
+                          >
+                            <Card className="shadow-none m-0">
+                              <Card.Body className="p-0 pl-3 pr-3">
+                                <Link
+                                  to="/profile/setting"
+                                  // onClick={handleprofileClick}
+                                  className="iq-sub-card setting-dropdown"
+                                >
+                                  <div className="media align-items-center">
+                                    <div className="right-icon">
+                                      <i className="ri-file-user-line text-primary"></i>
+                                    </div>
+                                    <div className="media-body ml-3">
+                                      <h6 className="my-0 ">Manage Profile</h6>
+                                    </div>
                                   </div>
-                                  <div className="media-body ml-3">
-                                    <h6 className="my-0 ">Manage Profile</h6>
+                                </Link>
+                                <Link
+                                  to="#"
+                                  className="iq-sub-card setting-dropdown"
+                                >
+                                  <div className="media align-items-center">
+                                    <div className="right-icon">
+                                      <i className="ri-settings-4-line text-primary"></i>
+                                    </div>
+                                    <div className="media-body ml-3">
+                                      <h6 className="my-0 ">Pricing Plan</h6>
+                                    </div>
                                   </div>
-                                </div>
-                              </Link>
-                              <Link
-                                to="#"
-                                className="iq-sub-card setting-dropdown"
-                              >
-                                <div className="media align-items-center">
-                                  <div className="right-icon">
-                                    <i className="ri-settings-4-line text-primary"></i>
+                                </Link>
+                                <Link
+                                  to="/extra-pages/login"
+                                  className="iq-sub-card setting-dropdown"
+                                  onClick={() => {
+                                    localStorage.removeItem("token");
+                                    localStorage.removeItem("session");
+                                  }}
+                                >
+                                  <div className="media align-items-center">
+                                    <div className="right-icon">
+                                      <i className="ri-logout-circle-line text-primary"></i>
+                                    </div>
+                                    <div className="media-body ml-3">
+                                      <h6 className="my-0 ">Logout</h6>
+                                    </div>
                                   </div>
-                                  <div className="media-body ml-3">
-                                    <h6 className="my-0 ">Pricing Plan</h6>
-                                  </div>
-                                </div>
-                              </Link>
-                              <Link
-                                to="/extra-pages/login"
-                                className="iq-sub-card setting-dropdown"
-                                onClick={() => {
-                                  localStorage.removeItem("token");
-                                  localStorage.removeItem("session");
-                                }}
-                              >
-                                <div className="media align-items-center">
-                                  <div className="right-icon">
-                                    <i className="ri-logout-circle-line text-primary"></i>
-                                  </div>
-                                  <div className="media-body ml-3">
-                                    <h6 className="my-0 ">Logout</h6>
-                                  </div>
-                                </div>
-                              </Link>
-                            </Card.Body>
-                          </Card>
-                        </Dropdown.Menu>
-                      </Dropdown>
+                                </Link>
+                              </Card.Body>
+                            </Card>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      ) : (
+                        <Link to={"/extra-pages/login"}>Login</Link>
+                      )}
 
                       {/* <Form>
                         <select

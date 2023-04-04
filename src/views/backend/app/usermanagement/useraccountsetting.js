@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 // import AuthSession from "../../../../getSessionAuth";
 
 import user from "../../../../assets/images/user/user.jpg";
 import { useTranslation } from "react-i18next";
-
+import BootstrapSwitchButton from "bootstrap-switch-button-react";
 // img
 // favorite img
 import fav1 from "../../../../assets/images/favorite/01.jpg";
@@ -13,13 +13,30 @@ import fav2 from "../../../../assets/images/favorite/02.jpg";
 import fav3 from "../../../../assets/images/favorite/03.jpg";
 import fav4 from "../../../../assets/images/favorite/04.png";
 import fav5 from "../../../../assets/images/favorite/05.jpg";
-
+import Modal from "react-bootstrap/Modal";
 // swipper
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { EffectFade, Navigation, Thumbs, Pagination } from "swiper";
 import "swiper/swiper-bundle.css";
+import Enable2FA from "./2FA/Enable2FA";
+import Disable2FA from "./2FA/Disable2FA";
 SwiperCore.use([EffectFade, Navigation, Thumbs, Pagination]);
 const UserAccountSetting = () => {
+  // 2fa active/inactive toggle
+  const [switchState, setSwitchState] = useState(false);
+  // enable 2fa modal
+  const [show, setShow] = useState(false);
+  // disable 2fa modal
+  const [inactiveshow, setInactiveShow] = useState(false);
+
+  const handleSwitchChange = (checked) => {
+    setSwitchState(checked);
+    if (checked) {
+      setShow(true);
+    } else {
+      setInactiveShow(true);
+    }
+  };
   const { t } = useTranslation();
   // history:
   const userhistory = [
@@ -194,13 +211,48 @@ const UserAccountSetting = () => {
                     </Link>
                   </Col>
                 </Row>
+                {/* 2fa */}
+                <h5 className="mb-3 mt-4 pb-3 a-border">
+                  Two-Factor Authentication
+                </h5>
+                <Row className="justify-content-between mb-3">
+                  <Col md="8" className="r-mb-15">
+                    <p>
+                      Setup your account to receive authentication codes via sms
+                    </p>
+                  </Col>
+                  <div className="col-md-4 text-md-right text-left">
+                    <div className="fa-btn">
+                      <BootstrapSwitchButton
+                        checked={switchState}
+                        onlabel="Active"
+                        offlabel="Inactive"
+                        onChange={handleSwitchChange}
+                        width={120}
+                        offstyle="outline-secondary"
+                        // onSwitchChange={handleSwitchChange}
+                      />
+                    </div>
+                  </div>
+                  <Enable2FA
+                    show={show}
+                    setShow={setShow}
+                    setSwitchState={setSwitchState}
+                  />
+                  <Disable2FA
+                    show={inactiveshow}
+                    setShow={setInactiveShow}
+                    setSwitchState={setSwitchState}
+                  />
+                </Row>
+                {/* billing */}
                 <h5 className="mb-3 mt-4 pb-3 a-border">
                   {t("billing details")}
                 </h5>
                 <Row className="justify-content-between mb-3">
                   <Col md="8" className="r-mb-15">
                     <p>Your next billing date is 19 September 2020.</p>
-                    <Link to="#" className="btn btn-hover">
+                    <Link to="#" className="btn btn-typ btn-hover">
                       {t("cancel membership")}
                     </Link>
                   </Col>
@@ -770,7 +822,7 @@ const UserAccountSetting = () => {
                           <Link
                             to="/show-details"
                             role="button"
-                            className="btn btn-hover iq-button"
+                            className="btn btn-typ btn-hover iq-button"
                           >
                             <i
                               className="fa fa-play mr-1"
@@ -801,7 +853,7 @@ const UserAccountSetting = () => {
                           <Link
                             to="/show-details"
                             role="button"
-                            className="btn btn-hover iq-button"
+                            className="btn btn-typ btn-hover iq-button"
                           >
                             <i
                               className="fa fa-play mr-1"
@@ -832,7 +884,7 @@ const UserAccountSetting = () => {
                           <Link
                             to="/show-details"
                             role="button"
-                            className="btn btn-hover iq-button"
+                            className="btn btn-typ btn-hover iq-button"
                           >
                             <i
                               className="fa fa-play mr-1"
@@ -863,7 +915,7 @@ const UserAccountSetting = () => {
                           <Link
                             to="/show-details"
                             role="button"
-                            className="btn btn-hover iq-button"
+                            className="btn btn-typ btn-hover iq-button"
                           >
                             <i
                               className="fa fa-play mr-1"
@@ -894,7 +946,7 @@ const UserAccountSetting = () => {
                           <Link
                             to="/show-details"
                             role="button"
-                            className="btn btn-hover iq-button"
+                            className="btn btn-typ btn-hover iq-button"
                           >
                             <i
                               className="fa fa-play mr-1"
@@ -959,7 +1011,7 @@ const UserAccountSetting = () => {
                           <Link
                             to="/show-details"
                             role="button"
-                            className="btn btn-hover iq-button"
+                            className="btn btn-hover btn-typ iq-button"
                           >
                             <i
                               className="fa fa-play mr-1"
@@ -990,7 +1042,7 @@ const UserAccountSetting = () => {
                           <Link
                             to="/show-details"
                             role="button"
-                            className="btn btn-hover iq-button"
+                            className="btn btn-hover btn-typ iq-button"
                           >
                             <i
                               className="fa fa-play mr-1"
@@ -1021,7 +1073,7 @@ const UserAccountSetting = () => {
                           <Link
                             to="/show-details"
                             role="button"
-                            className="btn btn-hover iq-button"
+                            className="btn btn-hover btn-typ iq-button"
                           >
                             <i
                               className="fa fa-play mr-1"
@@ -1052,7 +1104,7 @@ const UserAccountSetting = () => {
                           <Link
                             to="/show-details"
                             role="button"
-                            className="btn btn-hover iq-button"
+                            className="btn btn-hover btn-typ iq-button"
                           >
                             <i
                               className="fa fa-play mr-1"
@@ -1083,7 +1135,7 @@ const UserAccountSetting = () => {
                           <Link
                             to="/show-details"
                             role="button"
-                            className="btn btn-hover iq-button"
+                            className="btn btn-typ btn-hover iq-button"
                           >
                             <i
                               className="fa fa-play mr-1"
@@ -1138,7 +1190,7 @@ const UserAccountSetting = () => {
                                 <Link
                                   to="/show-details"
                                   role="button"
-                                  className="btn btn-hover iq-button"
+                                  className="btn btn-hover iq-button btn-typ"
                                 >
                                   <i
                                     className="fa fa-play mr-1"
@@ -1154,7 +1206,7 @@ const UserAccountSetting = () => {
                   </ul>
                   {!load && (
                     <button
-                      className="btn btn-hover "
+                      className="btn btn-hover btn-typ "
                       type="button"
                       onClick={handlLoadMore}
                     >
@@ -1194,7 +1246,7 @@ const UserAccountSetting = () => {
                                   <Link
                                     to="/show-details"
                                     role="button"
-                                    className="btn btn-hover iq-button"
+                                    className="btn btn-hover iq-button btn-typ "
                                   >
                                     <i
                                       className="fa fa-play mr-1"

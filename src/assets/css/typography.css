@@ -91,7 +91,7 @@ body {
   background: var(--iq-body-bg);
 }
 a,
-.btn {
+.btn-typ {
   -webkit-transition: all 0.5s ease-out 0s;
   -moz-transition: all 0.5s ease-out 0s;
   -ms-transition: all 0.5s ease-out 0s;
@@ -272,7 +272,7 @@ Border Color
 /*----------------------------------------------
  Buttons Design
 ------------------------------------------------*/
-.btn {
+.btn-typ {
   padding: 9px 30px;
   position: relative;
   display: inline-block;

@@ -300,7 +300,7 @@
 }
 
 .btn-primary1:hover {
-  background: #bf000a;
+  background: var(--iq-primary-hover);
   border: none !important;
 }
 /* #movieshow .swiper-container{

@@ -1,6 +1,7 @@
 import axios from "axios";
 import CryptoJS from "crypto-js";
 import generateRandomIv from "./generateRandomIv";
+import AuthSession from "./getSessionAuth";
 import { Buffer } from "buffer";
 
 const btoa = (text) => {
@@ -45,12 +46,12 @@ function postLoginData(obj, setError, setShowError, history) {
       localStorage.setItem("token", Authtoken);
       history.push("/");
       // session request
-      // const result = await AuthSession();
-      // if (result) {
-      //   history.push("/home");
-      // } else {
-      //   history.push("/");
-      // }
+      const result = await AuthSession();
+      if (result) {
+        history.push("/");
+      } else {
+        history.push("/extra-pages/login");
+      }
     })
     .catch((error) => {
       console.error(error);
