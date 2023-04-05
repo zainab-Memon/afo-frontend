@@ -6,6 +6,8 @@ import { FcPrevious } from "react-icons/fc";
 import OtpInput from "react-otp-input";
 import postLoginData from "../../../../Services/postLoginData";
 import postSignUpData from "../../../../Services/postSignUpData";
+import sendEmailVerification from "../../../../Services/sendEmailVerification";
+import verifyEmailCode from "../../../../Services/verifiyEmailCode";
 const LoginMob = () => {
   let history = useHistory("");
   const [signIn, setSignIn] = useState(true);
@@ -15,12 +17,18 @@ const LoginMob = () => {
   // login form data
   const [error, setError] = useState("");
   const [showError, setShowError] = useState(false);
+  const [showLoginError, setShowLoginError] = useState(false);
   const [emptyObj, setEmptyObj] = useState(false);
   const [loginInput, setLoginInput] = useState({});
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setLoginInput({ ...loginInput, [name]: value });
+  };
+  const isValidEmail = (email) => {
+    // regular expression to validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
   const loginSubmit = async (event) => {
     event.preventDefault();
@@ -32,14 +40,9 @@ const LoginMob = () => {
       return;
     }
 
-    const isValidEmail = (email) => {
-      // regular expression to validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    };
     if (!isValidEmail(loginInput.email)) {
       setError("Invalid email address");
-      setShowError(true);
+      setShowLoginError(true);
       return;
     }
     // if (Object.keys(loginInput).length === 0) {
@@ -70,11 +73,62 @@ const LoginMob = () => {
   //    setFormData({ ...formData, otp: otp }); // Update the formData object with the new OTP value
   //  };
 
+  //  this is for handling the signup data (works on validate button) - giving it break for a while for email verification code api
   const [userExistError, setuserExistError] = useState("");
   // const [showError, setShowError] = useState(false);
   const handleSignUp = async (event) => {
     event.preventDefault();
     postSignUpData(formData, history, setuserExistError, setShowError);
+  };
+
+  // handle user exist on next button of signup form
+  // const handleSignUpNext = () ={
+
+  // }
+
+  // SIGN UP : EMAIL VERIFICATION ==================================================================================
+  const obj = {
+    subject: "email verification",
+    email: formData.email,
+  };
+  // when user clicks on next button send the email on emailverficiation api
+  const handleEmailVerification = () => {
+    if (!isValidEmail(formData.email)) {
+      setError("Invalid email address");
+      setShowError(true);
+      setTimeout(() => {
+        setShowError(false);
+      }, 3000);
+      return;
+    }
+    sendEmailVerification(obj);
+    setSubType(true);
+  };
+  // when user enters the received code validate the code using email code and token from email verification API
+  const verifyCode = {
+    email: formData.email,
+    code: otpValue,
+    token: localStorage.getItem("email verification token"),
+  };
+  //  used to show error on otp page
+  const [wrongEmailCode, setWrongEmailCode] = useState(false);
+  const handleEmailCodeVerification = () => {
+    verifyEmailCode(verifyCode)
+      .then((result) => {
+        if (result) {
+          // Email code is correct, redirect to another page
+          localStorage.removeItem("email verification token");
+          history.push("/");
+        } else {
+          setWrongEmailCode(true);
+          setTimeout(() => {
+            setWrongEmailCode(false);
+          }, 3000);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
     <div className="sign-in-mob">
@@ -91,7 +145,7 @@ const LoginMob = () => {
                   <div className="inputFields">
                     <div
                       className={`alert alert-danger ${
-                        showError ? "" : "d-none"
+                        showLoginError ? "" : "d-none"
                       }`}
                       role="alert"
                     >
@@ -146,13 +200,21 @@ const LoginMob = () => {
                       <h3>Sign Up</h3>
 
                       <div className="inputFields">
-                        <div
+                        {/* <div
                           className={`alert alert-danger ${
                             showError ? "" : "d-none"
                           }`}
                           role="alert"
                         >
                           {userExistError}
+                        </div> */}
+                        <div
+                          className={`alert alert-danger ${
+                            showError ? "" : "d-none"
+                          }`}
+                          role="alert"
+                        >
+                          {error}
                         </div>
                         <label htmlFor="text">Name</label>
                         <input
@@ -193,9 +255,7 @@ const LoginMob = () => {
                       </div>
                       <button
                         className="button"
-                        onClick={() => {
-                          setSubType(true);
-                        }}
+                        onClick={handleEmailVerification}
                       >
                         Next
                       </button>
@@ -315,7 +375,7 @@ const LoginMob = () => {
                             <OtpInput
                               value={otpValue}
                               onChange={handleOtpChange}
-                              numInputs={4}
+                              numInputs={6}
                               isInputNum
                               renderInput={(inputProps) => (
                                 <input
@@ -328,18 +388,24 @@ const LoginMob = () => {
                                 width: "4rem",
                                 height: "3rem",
                                 margin: "0 1rem",
-
+                                padding: 0,
                                 borderRadius: 4,
-
+                                background: "white",
                                 outline: "none",
                                 textAlign: "center",
                               }}
                             />
                           </div>
-
+                          {wrongEmailCode && (
+                            <span style={{ color: "red" }}>
+                              Entered wrong code, please enter the code sent on{" "}
+                              {formData.email}{" "}
+                            </span>
+                          )}
                           <button
                             className="button"
-                            onClick={handleSignUp}
+                            // onClick={handleSignUp}
+                            onClick={handleEmailCodeVerification}
                             style={{ marginTop: "2rem" }}
                           >
                             Validate

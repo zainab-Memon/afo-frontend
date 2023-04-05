@@ -10,6 +10,8 @@ import postSignUpData from "../../../../Services/postSignUpData";
 // multi lang
 import { useTranslation } from "react-i18next";
 import LoginMob from "./Login_mb";
+import sendEmailVerification from "../../../../Services/sendEmailVerification";
+import verifyEmailCode from "../../../../Services/verifiyEmailCode";
 const Loginsignup = (props) => {
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -49,11 +51,17 @@ const Loginsignup = (props) => {
   // login form data
   const [error, setError] = useState("");
   const [showError, setShowError] = useState(false);
+  const [showLoginError, setShowLoginError] = useState(false);
   const [emptyObj, setEmptyObj] = useState(false);
   const [loginInput, setLoginInput] = useState({});
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setLoginInput({ ...loginInput, [name]: value });
+  };
+  const isValidEmail = (email) => {
+    // regular expression to validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
   const loginSubmit = async (event) => {
     event.preventDefault();
@@ -65,14 +73,9 @@ const Loginsignup = (props) => {
       return;
     }
 
-    const isValidEmail = (email) => {
-      // regular expression to validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    };
     if (!isValidEmail(loginInput.email)) {
       setError("Invalid email address");
-      setShowError(true);
+      setShowLoginError(true);
       return;
     }
     postLoginData(loginInput, setError, setShowError, history);
@@ -88,15 +91,17 @@ const Loginsignup = (props) => {
     //  subscriptionType: "",
     //  otp: "",
   });
-  //  const handleOtpChange = (otp) => {
-  //    setOtpValue(otp);
-  //    setFormData({ ...formData, otp: otp }); // Update the formData object with the new OTP value
-  //  };
-
+  const handleOtpChange = (otp) => {
+    setOtpValue(otp);
+    //  setFormData({ ...formData, otp: otp }); // Update the formData object with the new OTP value
+  };
+  console.log(otpValue);
   //  const handleSubmit = () => {
   //    console.log(formData);
   //  };
 
+  //
+  //  this is for handling the signup data (works on validate button) - giving it break for a while for email verification code api
   const [userExistError, setuserExistError] = useState("");
   // const [showError, setShowError] = useState(false);
   const handleSignUp = async (event) => {
@@ -108,6 +113,52 @@ const Loginsignup = (props) => {
   // const handleSignUpNext = () ={
 
   // }
+
+  // SIGN UP : EMAIL VERIFICATION ==================================================================================
+  const obj = {
+    subject: "email verification",
+    email: formData.email,
+  };
+  // when user clicks on next button send the email on emailverficiation api
+  const handleEmailVerification = () => {
+    if (!isValidEmail(formData.email)) {
+      setError("Invalid email address");
+      setShowError(true);
+      setTimeout(() => {
+        setShowError(false);
+      }, 3000);
+      return;
+    }
+    sendEmailVerification(obj);
+    setPage(page + 1);
+    setSubscriptionForm(true);
+  };
+  // when user enters the received code validate the code using email code and token from email verification API
+  const verifyCode = {
+    email: formData.email,
+    code: otpValue,
+    token: localStorage.getItem("email verification token"),
+  };
+  //  used to show error on otp page
+  const [wrongEmailCode, setWrongEmailCode] = useState(false);
+  const handleEmailCodeVerification = () => {
+    verifyEmailCode(verifyCode)
+      .then((result) => {
+        if (result) {
+          // Email code is correct, redirect to another page
+          localStorage.removeItem("email verification token");
+          history.push("/");
+        } else {
+          setWrongEmailCode(true);
+          setTimeout(() => {
+            setWrongEmailCode(false);
+          }, 3000);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <>
       {width >= 800 ? (
@@ -129,13 +180,21 @@ const Loginsignup = (props) => {
                   <div className="login-signup-form">
                     <h3>Create Account</h3>
                     <h4>Personal Details</h4>
-                    <div
+                    {/* <div
                       className={`alert alert-danger ${
                         showError ? "" : "d-none"
                       }`}
                       role="alert"
                     >
                       {userExistError}
+                    </div> */}
+                    <div
+                      className={`alert alert-danger ${
+                        showError ? "" : "d-none"
+                      }`}
+                      role="alert"
+                    >
+                      {error}
                     </div>
                     <input
                       type="text"
@@ -170,8 +229,7 @@ const Loginsignup = (props) => {
                     <button
                       className="button"
                       onClick={() => {
-                        setPage(page + 1);
-                        setSubscriptionForm(true);
+                        handleEmailVerification();
                       }}
                     >
                       Next
@@ -183,7 +241,7 @@ const Loginsignup = (props) => {
                     <h3>Sign in</h3>
                     <div
                       className={`alert alert-danger ${
-                        showError ? "" : "d-none"
+                        showLoginError ? "" : "d-none"
                       }`}
                       role="alert"
                     >
@@ -406,17 +464,17 @@ const Loginsignup = (props) => {
                         </span>
                         <OtpInput
                           value={otpValue}
-                          // onChange={handleOtpChange}
-                          numInputs={4}
+                          onChange={handleOtpChange}
+                          numInputs={6}
                           isInputNum
                           renderInput={(inputProps) => (
                             <input {...inputProps} />
                           )}
                           renderSeparator={<span>-</span>}
                           inputStyle={{
-                            width: "4rem",
+                            width: "3rem",
                             height: "3rem",
-                            margin: "0 1rem",
+                            margin: "0 0.5rem",
 
                             borderRadius: 4,
 
@@ -425,8 +483,18 @@ const Loginsignup = (props) => {
                           }}
                         />
                       </div>
+                      {wrongEmailCode && (
+                        <span style={{ color: "red" }}>
+                          Entered wrong code, please enter the code sent on{" "}
+                          {formData.email}{" "}
+                        </span>
+                      )}
 
-                      <button className="button" onClick={handleSignUp}>
+                      <button
+                        className="button"
+                        // onClick={handleSignUp} used for posting the signup details
+                        onClick={handleEmailCodeVerification}
+                      >
                         Validate
                       </button>
 

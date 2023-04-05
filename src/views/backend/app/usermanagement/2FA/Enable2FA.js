@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { MdError } from "react-icons/md";
 import { AiOutlineCheckCircle } from "react-icons/ai";
@@ -12,6 +12,18 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
   const [form2, setForm2] = useState(false);
   const [form3, setForm3] = useState(false);
   const [form4, setForm4] = useState(false);
+
+  // screen width for otp input
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    function handleResize() {
+      setWidth(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   // phone number
   const [value, setValue] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -194,27 +206,56 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
                     </p>
                     <Form>
                       <div className="otp-code">
-                        {" "}
-                        <OtpInput
-                          value={verificationCode}
-                          onChange={setVerificationCode}
-                          numInputs={6}
-                          renderInput={(inputProps) => (
-                            <input {...inputProps} />
-                          )}
-                          renderSeparator={<span>-</span>}
-                          inputStyle={{
-                            width: "3rem",
-                            height: "3rem",
-                            margin: "0 0.2rem",
+                        {width > 425 ? (
+                          <OtpInput
+                            value={verificationCode}
+                            onChange={setVerificationCode}
+                            numInputs={6}
+                            renderInput={(inputProps) => (
+                              <input
+                                {...inputProps}
+                                className="OtpInput__input" // add class here
+                              />
+                            )}
+                            renderSeparator={<span>-</span>}
+                            inputStyle={{
+                              width: "3rem",
+                              height: "3rem",
+                              margin: "0 0.2rem",
 
-                            borderRadius: 2,
+                              borderRadius: 2,
 
-                            outline: "none",
-                            textAlign: "center",
-                            fontWeight: "400",
-                          }}
-                        />
+                              outline: "none",
+                              textAlign: "center",
+                              fontWeight: "400",
+                            }}
+                          />
+                        ) : (
+                          <OtpInput
+                            value={verificationCode}
+                            onChange={setVerificationCode}
+                            numInputs={6}
+                            renderInput={(inputProps) => (
+                              <input
+                                {...inputProps}
+                                className="OtpInput__input" // add class here
+                              />
+                            )}
+                            renderSeparator={<span>-</span>}
+                            inputStyle={{
+                              width: "2.2rem",
+                              height: "2.2rem",
+                              margin: "0 0.2rem",
+
+                              borderRadius: 2,
+                              padding: 0,
+                              outline: "none",
+                              textAlign: "center",
+                              fontWeight: "400",
+                            }}
+                          />
+                        )}
+
                         {wrongCode && (
                           <div>
                             <MdError style={{ color: "red" }} />{" "}

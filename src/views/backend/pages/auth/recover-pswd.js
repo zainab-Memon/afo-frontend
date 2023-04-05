@@ -33,7 +33,18 @@ const RecoverPswd = (props) => {
       props.rtlModeAction(rtlMode);
     }
   });
-
+  // api call
+  const [resetFormData, setResetFormData] = useState({});
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setResetFormData({ ...resetFormData, [name]: value });
+  };
+  const loginSubmit = async (event) => {
+    event.preventDefault();
+    if (resetFormData.email) {
+      return;
+    }
+  };
   return (
     <>
       <div className={`rtl-box ${show === true ? "show" : ""}`}>
@@ -101,6 +112,9 @@ const RecoverPswd = (props) => {
                           placeholder="Enter email"
                           autoComplete="off"
                           required
+                          name="email"
+                          value={resetFormData.email || ""}
+                          onChange={handleInputChange}
                         />
                       </div>
                       <div className="sign-info">

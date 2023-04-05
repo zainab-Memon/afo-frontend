@@ -20,6 +20,7 @@ import SwiperCore, { EffectFade, Navigation, Thumbs, Pagination } from "swiper";
 import "swiper/swiper-bundle.css";
 import Enable2FA from "./2FA/Enable2FA";
 import Disable2FA from "./2FA/Disable2FA";
+import { HmacSHA256 } from "crypto-js";
 SwiperCore.use([EffectFade, Navigation, Thumbs, Pagination]);
 const UserAccountSetting = () => {
   // 2fa active/inactive toggle
@@ -139,26 +140,99 @@ const UserAccountSetting = () => {
           <h4 className="main-title mb-4">{t("account setting")}</h4>
           <Row>
             <Col lg="4" className="mb-3">
-              <div className="sign-user_card text-center">
-                <img
-                  src={user}
-                  className="rounded-circle img-fluid d-block mx-auto mb-3"
-                  alt="user"
-                />
-                <h4 className="mb-3">John Doe</h4>
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s.
-                </p>
-                <Link to="#" className="edit-icon text-primary">
-                  {t("edit")}
-                </Link>
+              <div className="sign-user_card ">
+                <div className="text-center">
+                  <img
+                    src={user}
+                    className="rounded-circle img-fluid d-block mx-auto mb-3"
+                    alt="user"
+                  />
+                  <h4 className="mb-3 a-border pb-3">John Doe</h4>
+
+                  <Link to="#" className="edit-icon text-primary">
+                    {t("edit")}
+                  </Link>
+                </div>
+
+                <Row className="row align-items-center justify-content-between mb-3">
+                  <Col md="8">
+                    <span className="text-light font-size-13">
+                      {t("email")}
+                    </span>
+                    <p className="mb-0">{t("example@gmail.com")}</p>
+                  </Col>
+                  {/* <Col md="4" className="text-md-right text-left">
+                    <Link to="#" className="text-primary">
+                      {t("change")}
+                    </Link>
+                  </Col> */}
+                </Row>
+                <Row className="align-items-center justify-content-between mb-3">
+                  <Col md="8">
+                    <span className="text-light font-size-13">
+                      {t("password")}
+                    </span>
+                    <p className="mb-0">**********</p>
+                  </Col>
+                  {/* <Col md="4" className="text-md-right text-left">
+                    <Link to="#" className="text-primary">
+                      {t("change")}
+                    </Link>
+                  </Col> */}
+                </Row>
+                <Row className="align-items-center justify-content-between mb-3">
+                  <Col md="8">
+                    <span className="text-light font-size-13">
+                      {t("date of birth")}
+                    </span>
+                    <p className="mb-0">08-03-1995</p>
+                  </Col>
+                  <Col md="4" className="text-md-right text-left">
+                    <Link to="#" className="text-primary">
+                      {t("change")}
+                    </Link>
+                  </Col>
+                </Row>
+                <Row className="align-items-center justify-content-between mb-3">
+                  <Col md="8">
+                    <span className="text-light font-size-13">
+                      {t("language")}
+                    </span>
+                    <p className="mb-0">English</p>
+                  </Col>
+                  <Col md="4" className="text-md-right text-left">
+                    <Link to="#" className="text-primary">
+                      {t("change")}
+                    </Link>
+                  </Col>
+                </Row>
+                <Row className="align-items-center justify-content-between mb-3">
+                  <Col md="8">
+                    <span className="text-light font-size-13">Gender</span>
+                    <p className="mb-0">Male</p>
+                  </Col>
+                  <Col md="4" className="text-md-right text-left">
+                    <Link to="#" className="text-primary">
+                      {t("change")}
+                    </Link>
+                  </Col>
+                </Row>
+                <Row className="align-items-center justify-content-between mb-3">
+                  <Col md="8">
+                    <span className="text-light font-size-13">Country</span>
+                    <p className="mb-0">UK</p>
+                  </Col>
+                  <Col md="4" className="text-md-right text-left">
+                    <Link to="#" className="text-primary">
+                      {t("change")}
+                    </Link>
+                  </Col>
+                </Row>
               </div>
             </Col>
             <Col lg="8">
               <div className="sign-user_card">
-                <h5 className="mb-3 pb-3 a-border">{t("personal details")}</h5>
+                {/* <h5 className="mb-3 pb-3 a-border">{t("personal details")}</h5>
                 <Row className="row align-items-center justify-content-between mb-3">
                   <Col md="8">
                     <span className="text-light font-size-13">
@@ -210,7 +284,7 @@ const UserAccountSetting = () => {
                       {t("change")}
                     </Link>
                   </Col>
-                </Row>
+                </Row> */}
                 {/* 2fa */}
                 <h5 className="mb-3 mt-4 pb-3 a-border">
                   Two-Factor Authentication
@@ -245,6 +319,17 @@ const UserAccountSetting = () => {
                     setSwitchState={setSwitchState}
                   />
                 </Row>
+                <h5 className="mb-3 mt-4 pb-3 a-border">{t("plan details")}</h5>
+                <Row className="justify-content-between mb-3">
+                  <Col md="8">
+                    <p>{t("premium")}</p>
+                  </Col>
+                  <Col md="4" className="text-md-right text-left">
+                    <Link to="#" className="text-primary">
+                      {t("change plan")}
+                    </Link>
+                  </Col>
+                </Row>
                 {/* billing */}
                 <h5 className="mb-3 mt-4 pb-3 a-border">
                   {t("billing details")}
@@ -262,15 +347,62 @@ const UserAccountSetting = () => {
                     </Link>
                   </div>
                 </Row>
-                <h5 className="mb-3 mt-4 pb-3 a-border">{t("plan details")}</h5>
-                <Row className="justify-content-between mb-3">
-                  <Col md="8">
-                    <p>{t("premium")}</p>
-                  </Col>
-                  <Col md="4" className="text-md-right text-left">
-                    <Link to="#" className="text-primary">
-                      {t("change plan")}
-                    </Link>
+                <h6 className="mb-3 mt-4 ">Billing History</h6>
+                <Row className="justify-content-between mb-3 bill-history">
+                  <Col md="12" className="r-mb-15">
+                    <div className="table-view">
+                      <table
+                        className="data-tables table movie_table "
+                        style={{ width: "100%" }}
+                      >
+                        <thead>
+                          <tr>
+                            <th>Date</th>
+
+                            <th>Service Period</th>
+                            <th>Payment Method</th>
+                            <th>Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>05/04/2023</td>
+
+                            <td>05/04/2023—04/05/2023</td>
+                            <td>•••• •••• •••• 9098</td>
+                            <td>10$</td>
+                          </tr>
+                          <tr>
+                            <td>05/04/2023</td>
+
+                            <td>05/04/2023—04/05/2023</td>
+                            <td>•••• •••• •••• 9098</td>
+                            <td>10$</td>
+                          </tr>
+                          <tr>
+                            <td>05/04/2023</td>
+
+                            <td>05/04/2023—04/05/2023</td>
+                            <td>•••• •••• •••• 9098</td>
+                            <td>10$</td>
+                          </tr>
+                          <tr>
+                            <td>05/04/2023</td>
+
+                            <td>05/04/2023—04/05/2023</td>
+                            <td>•••• •••• •••• 9098</td>
+                            <td>10$</td>
+                          </tr>
+                          <tr>
+                            <td>05/04/2023</td>
+
+                            <td>05/04/2023—04/05/2023</td>
+                            <td>•••• •••• •••• 9098</td>
+                            <td>10$</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </Col>
                 </Row>
               </div>
@@ -777,7 +909,9 @@ const UserAccountSetting = () => {
           <Row>
             <Col sm="12" className="overflow-hidden">
               <div className="d-flex align-items-center justify-content-between">
-                <h4 className="main-title">{t("my favourites")}</h4>
+                <h4 className="main-title" style={{ paddingTop: "2rem" }}>
+                  {t("my favourites")}
+                </h4>
               </div>
               <div id="favorites-contens">
                 <div id="prev" className="swiper-button swiper-button-prev">
