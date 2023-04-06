@@ -88,24 +88,18 @@ const Loginsignup = (props) => {
     name: "",
     email: "",
     password: "",
-    //  subscriptionType: "",
+    subscriptionType: "",
     //  otp: "",
   });
   const handleOtpChange = (otp) => {
     setOtpValue(otp);
     //  setFormData({ ...formData, otp: otp }); // Update the formData object with the new OTP value
   };
-  console.log(otpValue);
-  //  const handleSubmit = () => {
-  //    console.log(formData);
-  //  };
-
   //
   //  this is for handling the signup data (works on validate button) - giving it break for a while for email verification code api
   const [userExistError, setuserExistError] = useState("");
   // const [showError, setShowError] = useState(false);
   const handleSignUp = async (event) => {
-    event.preventDefault();
     postSignUpData(formData, history, setuserExistError, setShowError);
   };
 
@@ -145,9 +139,9 @@ const Loginsignup = (props) => {
     verifyEmailCode(verifyCode)
       .then((result) => {
         if (result) {
-          // Email code is correct, redirect to another page
           localStorage.removeItem("email verification token");
-          history.push("/");
+          handleSignUp();
+          // history.push("/");
         } else {
           setWrongEmailCode(true);
           setTimeout(() => {
@@ -180,14 +174,14 @@ const Loginsignup = (props) => {
                   <div className="login-signup-form">
                     <h3>Create Account</h3>
                     <h4>Personal Details</h4>
-                    {/* <div
+                    <div
                       className={`alert alert-danger ${
                         showError ? "" : "d-none"
                       }`}
                       role="alert"
                     >
                       {userExistError}
-                    </div> */}
+                    </div>
                     <div
                       className={`alert alert-danger ${
                         showError ? "" : "d-none"

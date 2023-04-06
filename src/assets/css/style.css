@@ -2462,7 +2462,7 @@ span.flatpickr-weekday,
   -moz-box-shadow: 0px 0 20px 0 rgba(0, 0, 0, 0.5);
   display: block;
   margin: 0 auto;
-  height: 700px !important;
+  height: 800px !important;
 }
 .sign-user_logo {
   position: absolute;
@@ -5351,7 +5351,7 @@ input[type="text"]::placeholder {
 
 .bill-history {
   overflow-y: scroll;
-  height: 150px;
+  height: 200px;
 }
 
 /* width */
@@ -5380,4 +5380,23 @@ input[type="text"]::placeholder {
   background-color: white;
   padding: 0 9px !important;
   color: var(--iq-body-text);
+}
+.image-upload > input {
+  display: none;
+}
+.user-profile-img {
+  cursor: pointer;
+}
+.user-update-info input {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  padding-right: 20px;
+  width: fit-content;
+}
+.user-update-info .gender-dropdown .dropdown-toggle {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  padding-top: 8px;
 }

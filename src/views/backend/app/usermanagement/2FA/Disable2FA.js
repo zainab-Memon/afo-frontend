@@ -84,7 +84,15 @@ const Disable2FA = ({ show, setShow, setSwitchState }) => {
     }
   };
   return (
-    <Modal show={show} onHide={handleClose} className="enable-modal">
+    <Modal
+      show={show}
+      onHide={handleClose}
+      className="enable-modal"
+      backdrop="static"
+      keyboard={false}
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
       <Modal.Header>
         <Modal.Title style={{ color: "black" }}>
           Disable Two-Step Authentication

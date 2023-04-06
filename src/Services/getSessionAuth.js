@@ -19,6 +19,7 @@ async function AuthSession() {
       const decrypt = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
 
       localStorage.setItem("session", JSON.stringify(decrypt));
+      console.log(decrypt);
       return true;
     } catch (authError) {
       console.error(authError);

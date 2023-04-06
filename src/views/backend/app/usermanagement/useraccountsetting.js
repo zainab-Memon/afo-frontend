@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 // import AuthSession from "../../../../getSessionAuth";
-
+import { Dropdown } from "react-bootstrap";
 import user from "../../../../assets/images/user/user.jpg";
 import { useTranslation } from "react-i18next";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
@@ -21,6 +21,8 @@ import "swiper/swiper-bundle.css";
 import Enable2FA from "./2FA/Enable2FA";
 import Disable2FA from "./2FA/Disable2FA";
 import { HmacSHA256 } from "crypto-js";
+import updateUserDetails from "../../../../Services/updateUserDetails";
+import AuthSession from "../../../../Services/getSessionAuth";
 SwiperCore.use([EffectFade, Navigation, Thumbs, Pagination]);
 const UserAccountSetting = () => {
   // 2fa active/inactive toggle
@@ -38,6 +40,53 @@ const UserAccountSetting = () => {
       setInactiveShow(true);
     }
   };
+
+  // user details from session api
+  const userDetails_Session = JSON.parse(localStorage.getItem("session"));
+  const [userDetails, setUserDetails] = useState({
+    email: userDetails_Session.email,
+    dob: userDetails_Session.dob
+      ? userDetails_Session.dob.substring(0, 10)
+      : "2021-09-02",
+    lang: userDetails_Session.lang ? userDetails_Session.dob : "unknown",
+    gender: userDetails_Session.gender ? userDetails_Session.gender : "unknown",
+    country: userDetails_Session.country ? userDetails_Session.country : "N/A",
+  });
+
+  const [editInfo, setEditInfo] = useState(false);
+  // email
+  // const [email, setEmail] = useState(
+  //   localStorage.getItem("session")
+  //     ? JSON.parse(localStorage.getItem("session")).email
+  //     : "name@example.com"
+  // );
+  const handleEdit = () => {
+    setEditInfo(true);
+  };
+  // gender dropdown
+  const [selectedGender, setSelectedGender] = useState();
+  const handleGender = (e) => {
+    setSelectedGender(e);
+    setUserInfo({ ...userInfo, gender: e });
+  };
+  // language dropdown
+  const [selectedlang, setSelectedlang] = useState();
+  const handleLang = (e) => {
+    setSelectedlang(e);
+    setUserInfo({ ...userInfo, lang: e });
+  };
+  // NEW USER INFO
+  const [userInfo, setUserInfo] = useState({
+    dob: userDetails.dob,
+    _id: userDetails_Session._id,
+    // country: "",
+  });
+  const handleSave = async () => {
+    await updateUserDetails(userInfo);
+    setEditInfo(false);
+    AuthSession();
+  };
+  console.log(userInfo);
   const { t } = useTranslation();
   // history:
   const userhistory = [
@@ -142,16 +191,35 @@ const UserAccountSetting = () => {
             <Col lg="4" className="mb-3">
               <div className="sign-user_card ">
                 <div className="text-center">
-                  <img
-                    src={user}
-                    className="rounded-circle img-fluid d-block mx-auto mb-3"
-                    alt="user"
-                  />
-                  <h4 className="mb-3 a-border pb-3">John Doe</h4>
+                  <div class="image-upload">
+                    <label for="file-input">
+                      <img
+                        src={user}
+                        className="rounded-circle img-fluid d-block mx-auto mb-3 user-profile-img"
+                        alt="user"
+                      />
+                    </label>
 
-                  <Link to="#" className="edit-icon text-primary">
-                    {t("edit")}
-                  </Link>
+                    <input id="file-input" type="file" />
+                  </div>
+                  <h4 className="mb-3 a-border pb-3">John Doe</h4>
+                  {!editInfo ? (
+                    <Link
+                      to="#"
+                      className="edit-icon text-primary"
+                      onClick={handleEdit}
+                    >
+                      {t("edit")}
+                    </Link>
+                  ) : (
+                    <Link
+                      to="#"
+                      className="edit-icon text-primary"
+                      onClick={handleSave}
+                    >
+                      Save
+                    </Link>
+                  )}
                 </div>
 
                 <Row className="row align-items-center justify-content-between mb-3">
@@ -159,7 +227,7 @@ const UserAccountSetting = () => {
                     <span className="text-light font-size-13">
                       {t("email")}
                     </span>
-                    <p className="mb-0">{t("example@gmail.com")}</p>
+                    <p className="mb-0">{userDetails.email}</p>
                   </Col>
                   {/* <Col md="4" className="text-md-right text-left">
                     <Link to="#" className="text-primary">
@@ -180,54 +248,128 @@ const UserAccountSetting = () => {
                     </Link>
                   </Col> */}
                 </Row>
-                <Row className="align-items-center justify-content-between mb-3">
-                  <Col md="8">
-                    <span className="text-light font-size-13">
-                      {t("date of birth")}
-                    </span>
-                    <p className="mb-0">08-03-1995</p>
-                  </Col>
-                  <Col md="4" className="text-md-right text-left">
-                    <Link to="#" className="text-primary">
-                      {t("change")}
-                    </Link>
-                  </Col>
-                </Row>
-                <Row className="align-items-center justify-content-between mb-3">
-                  <Col md="8">
-                    <span className="text-light font-size-13">
-                      {t("language")}
-                    </span>
-                    <p className="mb-0">English</p>
-                  </Col>
-                  <Col md="4" className="text-md-right text-left">
-                    <Link to="#" className="text-primary">
-                      {t("change")}
-                    </Link>
-                  </Col>
-                </Row>
-                <Row className="align-items-center justify-content-between mb-3">
-                  <Col md="8">
-                    <span className="text-light font-size-13">Gender</span>
-                    <p className="mb-0">Male</p>
-                  </Col>
-                  <Col md="4" className="text-md-right text-left">
-                    <Link to="#" className="text-primary">
-                      {t("change")}
-                    </Link>
-                  </Col>
-                </Row>
-                <Row className="align-items-center justify-content-between mb-3">
-                  <Col md="8">
-                    <span className="text-light font-size-13">Country</span>
-                    <p className="mb-0">UK</p>
-                  </Col>
-                  <Col md="4" className="text-md-right text-left">
-                    <Link to="#" className="text-primary">
-                      {t("change")}
-                    </Link>
-                  </Col>
-                </Row>
+                {!editInfo ? (
+                  <>
+                    <Row className="align-items-center justify-content-between mb-3 ">
+                      <Col md="8">
+                        <span className="text-light font-size-13">
+                          {t("date of birth")}
+                        </span>
+                        <p className="mb-0">{userDetails.dob}</p>
+                      </Col>
+                      {/* <Col md="4" className="text-md-right text-left">
+                        <Link to="#" className="text-primary">
+                          {t("change")}
+                        </Link>
+                      </Col> */}
+                    </Row>
+                    <Row className="align-items-center justify-content-between mb-3">
+                      <Col md="8">
+                        <span className="text-light font-size-13">
+                          {t("language")}
+                        </span>
+                        <p className="mb-0">{userDetails.lang}</p>
+                      </Col>
+                    </Row>
+                    <Row className="align-items-center justify-content-between mb-3">
+                      <Col md="8">
+                        <span className="text-light font-size-13">Gender</span>
+                        <p className="mb-0">{userDetails.gender}</p>
+                      </Col>
+                    </Row>
+                    <Row className="align-items-center justify-content-between mb-3">
+                      <Col md="8">
+                        <span className="text-light font-size-13">Country</span>
+                        <p className="mb-0">{userDetails.country}</p>
+                      </Col>
+                    </Row>
+                  </>
+                ) : (
+                  <>
+                    <Row className="align-items-center justify-content-between mb-3 user-update-info">
+                      <Col md="8">
+                        <span className="text-light font-size-13">
+                          {t("date of birth")}
+                        </span>
+                        <input
+                          type="date"
+                          value={userInfo.dob}
+                          onChange={
+                            (e) =>
+                              setUserInfo({ ...userInfo, dob: e.target.value }) //setting the formData to the value input of the textfield
+                          }
+                        />
+                      </Col>
+                    </Row>
+                    <Row className="align-items-center justify-content-between mb-3 user-update-info">
+                      <Col md="8">
+                        <span className="text-light font-size-13">
+                          {t("language")}
+                        </span>
+                        <Form.Group>
+                          <Dropdown
+                            className="gender-dropdown"
+                            name="gender"
+                            onSelect={handleLang}
+                          >
+                            <Dropdown.Toggle id="dropdown-basic">
+                              {selectedlang ? selectedlang : "Choose Language"}
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                              <Dropdown.Item eventKey="english">
+                                English
+                              </Dropdown.Item>
+                              <Dropdown.Item eventKey="spanish">
+                                Spanish
+                              </Dropdown.Item>
+                              <Dropdown.Item eventKey="french">
+                                French
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                    <Row className="align-items-center justify-content-between mb-3 user-update-info">
+                      <Col md="8">
+                        <span className="text-light font-size-13">Gender</span>
+                        {/* <p className="mb-0">{userDetails.gender}</p> */}
+                        <Form.Group>
+                          <Dropdown
+                            className="gender-dropdown"
+                            name="gender"
+                            onSelect={handleGender}
+                          >
+                            <Dropdown.Toggle id="dropdown-basic">
+                              {selectedGender
+                                ? selectedGender
+                                : "Choose Gender"}
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                              <Dropdown.Item eventKey="Male">
+                                Male
+                              </Dropdown.Item>
+                              <Dropdown.Item eventKey="Female">
+                                Female
+                              </Dropdown.Item>
+                              <Dropdown.Item eventKey="Other">
+                                Other
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                    <Row className="align-items-center justify-content-between mb-3">
+                      <Col md="8">
+                        <span className="text-light font-size-13">Country</span>
+                        <p className="mb-0">{userDetails.country}</p>
+                      </Col>
+                    </Row>
+                  </>
+                )}
               </div>
             </Col>
             <Col lg="8">

@@ -53,15 +53,15 @@ function postSignUpData(obj, history, setuserExistError, setShowError) {
         iv: CryptoJS.enc.Utf8.parse(atob(jsn.iv)),
       });
       const decrypt = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-      // console.log(decrypt);
+      console.log(decrypt);
       history.push("/");
     })
     .catch((error) => {
       console.error(error);
       setuserExistError("User Already Exists");
-      setShowError(true);
+      // setShowError(true);
       setTimeout(() => {
-        setShowError(false);
+        setuserExistError(false);
       }, 3000);
     });
 }
