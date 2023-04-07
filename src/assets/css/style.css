@@ -5401,7 +5401,7 @@ input[type="text"]::placeholder {
   width: fit-content;
 }
 .user-update-info .gender-dropdown .dropdown-toggle {
-  background-color: transparent;
+  background-color: transparent !important;
   border: none;
   padding: 0;
   padding-top: 8px;

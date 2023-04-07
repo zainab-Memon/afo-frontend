@@ -8,6 +8,10 @@ import postLoginData from "../../../../Services/postLoginData";
 import postSignUpData from "../../../../Services/postSignUpData";
 import sendEmailVerification from "../../../../Services/sendEmailVerification";
 import verifyEmailCode from "../../../../Services/verifiyEmailCode";
+import Lottie from "lottie-react";
+import premium from "../../../../assets/premium.json";
+import free from "../../../../assets/free.json";
+import final from "../../../../assets/Final.json";
 const LoginMob = () => {
   let history = useHistory("");
   const [signIn, setSignIn] = useState(true);
@@ -307,12 +311,17 @@ const LoginMob = () => {
                                   <p>Perfect for starters</p>
                                 </div>
                               </div>
-                              <div>
+                              <Lottie
+                                animationData={final}
+                                loop={true}
+                                style={{ width: "106px" }}
+                              />
+                              {/* <div>
                                 <ul className="subcard-ul">
                                   <li>Limited Content</li>
                                   <li>Contains Ads</li>
                                 </ul>
-                              </div>
+                              </div> */}
                             </div>
                           </div>
                           <div className="premium-card-mob">
@@ -330,11 +339,16 @@ const LoginMob = () => {
                                   <p>Perfect for fun</p>
                                 </div>
                               </div>
+                              <Lottie
+                                animationData={premium}
+                                loop={true}
+                                style={{ width: "106px" }}
+                              />
                               <div>
-                                <ul className="subcard-ul">
+                                {/* <ul className="subcard-ul">
                                   <li>Unlimited Content</li>
                                   <li>No Ads</li>
-                                </ul>
+                                </ul> */}
                               </div>
                             </div>
                           </div>
@@ -427,7 +441,12 @@ const LoginMob = () => {
                         </div>
                         <div className="otpbody">
                           <div className="otp-body">
-                            <span style={{ marginBottom: "2rem" }}>
+                            <span
+                              style={{
+                                marginBottom: "2rem",
+                                textAlign: "center",
+                              }}
+                            >
                               A one-Time Password has been sent to{" "}
                               {formData.email}
                             </span>

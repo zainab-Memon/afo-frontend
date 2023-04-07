@@ -107,7 +107,6 @@ const UserAccountSetting = () => {
     await AuthSession();
     const updatedUserDetails = getSessionData();
     setUserDetails(updatedUserDetails);
-    // setUserInfo(updatedUserDetails);
   };
   // const [editInfo, setEditInfo] = useState(false);
   // email
@@ -349,6 +348,7 @@ const UserAccountSetting = () => {
                         <span className="text-light font-size-13">
                           {t("date of birth")}
                         </span>
+                        <br />
                         <input
                           type="date"
                           value={userInfo.dob}

@@ -66,11 +66,11 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
       phone: phoneNumber,
     };
     await updateUserDetails(userInfo);
-    console.log(userInfo);
+
     const updatedUserDetails = getSessionData();
 
     setUserDetails(updatedUserDetails);
-    console.log(userDetails);
+
     FACodeSend(codeObj);
   };
 
