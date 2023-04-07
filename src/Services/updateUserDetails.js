@@ -30,15 +30,7 @@ async function updateUserDetails(obj) {
     data: transitmessage,
   };
   console.log(request);
-  // decryption of my input
-  let res = atob(request.data);
-  let jsn = JSON.parse(res);
-  const decrypted = CryptoJS.AES.decrypt(jsn.value, key, {
-    mode: CryptoJS.mode.CBC,
-    iv: CryptoJS.enc.Utf8.parse(atob(jsn.iv)),
-  });
-  const decrypt = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-  console.log(decrypt);
+
   const url = "http://54.221.169.56:3004/api/user";
 
   try {

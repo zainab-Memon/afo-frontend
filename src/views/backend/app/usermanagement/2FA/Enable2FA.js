@@ -2,12 +2,17 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { MdError } from "react-icons/md";
 import { AiOutlineCheckCircle } from "react-icons/ai";
-import confirmPassword from "../../../../../Services/confirmPass";
+
 // import PhoneInput from "react-phone-number-input";
 import { PhoneInput } from "react-contact-number-input";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import OtpInput from "react-otp-input";
 import { Link } from "react-router-dom";
+// SERVICES
+import confirmPassword from "../../../../../Services/confirmPass";
+import FACodeSend from "../../../../../Services/FACodeSend";
+import verifyFACode from "../../../../../Services/verifyFACode";
+import updateUserDetails from "../../../../../Services/updateUserDetails";
 const Enable2FA = ({ show, setShow, setSwitchState }) => {
   const [form2, setForm2] = useState(false);
   const [form3, setForm3] = useState(false);
@@ -31,21 +36,83 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
     setValue(newValue);
     if (newValue && newValue.countryCode && newValue.phoneNumber) {
       setPhoneNumber(newValue.countryCode.concat(newValue.phoneNumber));
+      setUserInfo({
+        ...userInfo,
+        phone: newValue.countryCode.concat(newValue.phoneNumber),
+      });
     } else {
       setPhoneNumber("");
     }
   };
-  // console.log(value);
-  // console.log(phoneNumber);
-  // verfification code
+  // session data
+  const getSessionData = () => {
+    const userDetails_Session = JSON.parse(localStorage.getItem("session"));
+    return {
+      _id: userDetails_Session._id,
+      phone: userDetails_Session.phone,
+    };
+  };
+  const [userDetails, setUserDetails] = useState(getSessionData());
+
+  // USER INFO
+  const [userInfo, setUserInfo] = useState({
+    _id: userDetails._id,
+  });
+
+  // SEND 2FA CODE ON PHONE NUMBER
+  const sendCode = async () => {
+    const codeObj = {
+      email: email,
+      phone: phoneNumber,
+    };
+    await updateUserDetails(userInfo);
+    console.log(userInfo);
+    const updatedUserDetails = getSessionData();
+
+    setUserDetails(updatedUserDetails);
+    console.log(userDetails);
+    FACodeSend(codeObj);
+  };
+
+  // verfification code - OTP
   const [verificationCode, setVerificationCode] = useState("");
   const [wrongCode, setWrongCode] = useState(false);
+
+  const verifyCode = async () => {
+    const verifyObj = {
+      email: email,
+      code: verificationCode,
+      token: localStorage.getItem("2fatoken"),
+    };
+    try {
+      const result = await verifyFACode(verifyObj);
+      if (result) {
+        const FaStatus = {
+          _id: userDetails._id,
+          tfa: true,
+        };
+        await updateUserDetails(FaStatus);
+        const updatedUserDetails = getSessionData();
+        setUserDetails(updatedUserDetails);
+        setForm4(true);
+        setWrongCode(false);
+        setVerificationCode(""); // Clear the password field
+        localStorage.removeItem("2fatoken");
+      }
+    } catch (error) {
+      setWrongCode(true);
+      setTimeout(() => {
+        setWrongCode(false);
+      }, 3000);
+    }
+  };
+
   const handleClose = () => {
     setShow(false);
     setForm2(false);
     setForm3(false);
     setForm4(false);
-    setSwitchState(false);
+    setSwitchState(userDetails.tfa);
     setConfirmPass("");
     setWrongPass(false);
   };
@@ -54,6 +121,7 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
     setForm2(false);
     setForm3(false);
     setForm4(false);
+    setSwitchState(userDetails.tfa);
   };
 
   // email
@@ -153,9 +221,6 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
               disabled={confirmPass.length < 5 ? true : false}
               variant="primary"
               onClick={verifyPass}
-              // onClick={() => {
-              //   setForm2(true);
-              // }}
             >
               Continue
             </Button>
@@ -196,6 +261,7 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
                   variant="primary"
                   onClick={() => {
                     setForm3(true);
+                    sendCode();
                   }}
                 >
                   Verify
@@ -272,7 +338,7 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
                             </span>
                           </div>
                         )}
-                        <p>Resend Code</p>
+                        <p onClick={sendCode}>Resend Code</p>
                       </div>
                     </Form>
                   </Modal.Body>
@@ -281,12 +347,7 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
                       Cancel
                     </Button>
                     {/* CHECK THE code if its wrong show error else setForm4(true) */}
-                    <Button
-                      variant="primary"
-                      onClick={() => {
-                        setForm4(true);
-                      }}
-                    >
+                    <Button variant="primary" onClick={verifyCode}>
                       Verify
                     </Button>
                   </Modal.Footer>

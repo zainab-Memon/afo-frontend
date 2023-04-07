@@ -2,12 +2,17 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { MdError } from "react-icons/md";
 import { AiOutlineCheckCircle } from "react-icons/ai";
+// services
 import confirmPassword from "../../../../../Services/confirmPass";
+import FACodeSend from "../../../../../Services/FACodeSend";
+import verifyFACode from "../../../../../Services/verifyFACode.js";
 // import PhoneInput from "react-phone-number-input";
 import { PhoneInput } from "react-contact-number-input";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import OtpInput from "react-otp-input";
 import { Link } from "react-router-dom";
+import updateUserDetails from "../../../../../Services/updateUserDetails";
+
 const Disable2FA = ({ show, setShow, setSwitchState }) => {
   const [form2, setForm2] = useState(false);
   const [form3, setForm3] = useState(false);
@@ -36,13 +41,22 @@ const Disable2FA = ({ show, setShow, setSwitchState }) => {
   // console.log(value);
   // console.log(phoneNumber);
   // verfification code
-  const [verificationCode, setVerificationCode] = useState("");
-  const [wrongCode, setWrongCode] = useState(false);
+
+  // session data
+  const getSessionData = () => {
+    const userDetails_Session = JSON.parse(localStorage.getItem("session"));
+    return {
+      _id: userDetails_Session._id,
+      phone: userDetails_Session.phone,
+      tfa: userDetails_Session.tfa,
+    };
+  };
+  const [userDetails, setUserDetails] = useState(getSessionData());
   const handleClose = () => {
     setShow(false);
     setForm2(false);
     setForm3(false);
-    setSwitchState(true);
+    setSwitchState(userDetails.tfa);
     setConfirmPass("");
     setWrongPass(false);
   };
@@ -50,7 +64,7 @@ const Disable2FA = ({ show, setShow, setSwitchState }) => {
     setShow(false);
     setForm2(false);
     setForm3(false);
-    setSwitchState(false);
+    setSwitchState(userDetails.tfa);
   };
   // email
   const [email, setEmail] = useState(
@@ -75,6 +89,13 @@ const Disable2FA = ({ show, setShow, setSwitchState }) => {
         setForm2(true);
         setWrongPass(false);
         setConfirmPass(""); // Clear the password field
+        // send otp
+        const codeObj = {
+          email: session.email,
+          phone: userDetails.phone,
+        };
+        console.log(codeObj);
+        FACodeSend(codeObj);
       }
     } catch (error) {
       setWrongPass(true);
@@ -83,6 +104,50 @@ const Disable2FA = ({ show, setShow, setSwitchState }) => {
       }, 3000);
     }
   };
+  // resend code
+  const resendCode = () => {
+    const codeObj = {
+      email: session.email,
+      phone: userDetails.phone,
+    };
+    FACodeSend(codeObj);
+  };
+  // verify otp
+  // verfification code - OTP
+  const [verificationCode, setVerificationCode] = useState("");
+  const [wrongCode, setWrongCode] = useState(false);
+
+  const verifyCode = async () => {
+    const verifyObj = {
+      email: session.email,
+      code: verificationCode,
+      token: localStorage.getItem("2fatoken"),
+    };
+
+    try {
+      const result = await verifyFACode(verifyObj);
+      if (result) {
+        // sending 2fa status
+        const FaStatus = {
+          _id: userDetails._id,
+          tfa: false,
+        };
+        await updateUserDetails(FaStatus);
+        const updatedUserDetails = getSessionData();
+        setUserDetails(updatedUserDetails);
+        setForm3(true);
+        setWrongCode(false);
+        setVerificationCode("");
+        localStorage.removeItem("2fatoken");
+      }
+    } catch (error) {
+      setWrongCode(true);
+      setTimeout(() => {
+        setWrongCode(false);
+      }, 3000);
+    }
+  };
+
   return (
     <Modal
       show={show}
@@ -223,7 +288,7 @@ const Disable2FA = ({ show, setShow, setSwitchState }) => {
                         </span>
                       </div>
                     )}
-                    <p>Resend Code</p>
+                    <p onClick={resendCode}>Resend Code</p>
                   </div>
                 </Form>
               </Modal.Body>
@@ -232,12 +297,7 @@ const Disable2FA = ({ show, setShow, setSwitchState }) => {
                   Cancel
                 </Button>
                 {/* CHECK THE code if its wrong show error else setForm4(true) */}
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    setForm3(true);
-                  }}
-                >
+                <Button variant="primary" onClick={verifyCode}>
                   Verify
                 </Button>
               </Modal.Footer>

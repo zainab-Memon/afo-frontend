@@ -118,7 +118,7 @@ const LoginMob = () => {
         if (result) {
           // Email code is correct, redirect to another page
           localStorage.removeItem("email verification token");
-          history.push("/");
+          handleSignUp();
         } else {
           setWrongEmailCode(true);
           setTimeout(() => {
@@ -129,6 +129,15 @@ const LoginMob = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+  // handle subscription type
+  const handleSubscription = () => {
+    // setFormData({
+    //   ...formData,
+    //   subscriptionType: selectedOption,
+    // });
+    console.log(selectedOption);
+    setOtpForm(true);
   };
   return (
     <div className="sign-in-mob">
@@ -271,7 +280,6 @@ const LoginMob = () => {
                   <div className="signinForm">
                     {!otpForm ? (
                       <>
-                        {" "}
                         <div className="heading-icon">
                           <FcPrevious
                             className="prev-icon"
@@ -285,7 +293,58 @@ const LoginMob = () => {
                           </div>
                         </div>
                         <div className="sub-Card">
-                          <div className="wrapper">
+                          <div className="premium-card-mob">
+                            <div
+                              className="sub-card-free"
+                              onClick={() => {
+                                setSelectedOption("free");
+                              }}
+                            >
+                              <div className="card-plan">
+                                <h6>Free Plan</h6>
+                                <div className="price-details">
+                                  <span className="price">0</span>
+                                  <p>Perfect for starters</p>
+                                </div>
+                              </div>
+                              <div>
+                                <ul className="subcard-ul">
+                                  <li>Limited Content</li>
+                                  <li>Contains Ads</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="premium-card-mob">
+                            <span className="recommended">Recommended</span>
+                            <div
+                              className="sub-card-free"
+                              onClick={() => {
+                                setSelectedOption("premium");
+                              }}
+                            >
+                              <div className="card-plan">
+                                <h6>Premium Plan</h6>
+                                <div className="price-details">
+                                  <span className="price">20</span>
+                                  <p>Perfect for fun</p>
+                                </div>
+                              </div>
+                              <div>
+                                <ul className="subcard-ul">
+                                  <li>Unlimited Content</li>
+                                  <li>No Ads</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            onClick={handleSubscription}
+                            className="card-button"
+                          >
+                            Choose plan
+                          </button>
+                          {/* <div className="wrapper">
                             <input
                               type="radio"
                               name="slider"
@@ -349,7 +408,7 @@ const LoginMob = () => {
                             <button onClick={() => setOtpForm(true)}>
                               Choose plan
                             </button>
-                          </div>
+                          </div> */}
                         </div>
                       </>
                     ) : (

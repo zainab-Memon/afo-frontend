@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
+import countryList from "react-select-country-list";
+import Select from "react-select";
 // import AuthSession from "../../../../getSessionAuth";
 import { Dropdown } from "react-bootstrap";
 import user from "../../../../assets/images/user/user.jpg";
@@ -25,8 +27,32 @@ import updateUserDetails from "../../../../Services/updateUserDetails";
 import AuthSession from "../../../../Services/getSessionAuth";
 SwiperCore.use([EffectFade, Navigation, Thumbs, Pagination]);
 const UserAccountSetting = () => {
+  // user details from session api
+
+  const getSessionData = () => {
+    const userDetails_Session = JSON.parse(localStorage.getItem("session"));
+    return {
+      _id: userDetails_Session._id,
+      email: userDetails_Session.email,
+      tfa: userDetails_Session.tfa,
+      dob: userDetails_Session.dob
+        ? userDetails_Session.dob.substring(0, 10)
+        : "2021-09-02",
+      language: userDetails_Session.language
+        ? userDetails_Session.language
+        : "unknown",
+      gender: userDetails_Session.gender
+        ? userDetails_Session.gender
+        : "unknown",
+      country: userDetails_Session.country
+        ? userDetails_Session.country
+        : "N/A",
+    };
+  };
+
+  const [userDetails, setUserDetails] = useState(getSessionData());
   // 2fa active/inactive toggle
-  const [switchState, setSwitchState] = useState(false);
+  const [switchState, setSwitchState] = useState(userDetails.tfa);
   // enable 2fa modal
   const [show, setShow] = useState(false);
   // disable 2fa modal
@@ -41,52 +67,84 @@ const UserAccountSetting = () => {
     }
   };
 
-  // user details from session api
-  const userDetails_Session = JSON.parse(localStorage.getItem("session"));
-  const [userDetails, setUserDetails] = useState({
-    email: userDetails_Session.email,
-    dob: userDetails_Session.dob
-      ? userDetails_Session.dob.substring(0, 10)
-      : "2021-09-02",
-    lang: userDetails_Session.lang ? userDetails_Session.dob : "unknown",
-    gender: userDetails_Session.gender ? userDetails_Session.gender : "unknown",
-    country: userDetails_Session.country ? userDetails_Session.country : "N/A",
-  });
-
   const [editInfo, setEditInfo] = useState(false);
-  // email
-  // const [email, setEmail] = useState(
-  //   localStorage.getItem("session")
-  //     ? JSON.parse(localStorage.getItem("session")).email
-  //     : "name@example.com"
-  // );
   const handleEdit = () => {
     setEditInfo(true);
   };
+  // USER INFO
+  const [userInfo, setUserInfo] = useState({
+    dob: userDetails.dob,
+    _id: userDetails._id,
+  });
   // gender dropdown
   const [selectedGender, setSelectedGender] = useState();
   const handleGender = (e) => {
     setSelectedGender(e);
     setUserInfo({ ...userInfo, gender: e });
   };
+
   // language dropdown
+
   const [selectedlang, setSelectedlang] = useState();
   const handleLang = (e) => {
     setSelectedlang(e);
-    setUserInfo({ ...userInfo, lang: e });
+    setUserInfo({ ...userInfo, language: e });
   };
-  // NEW USER INFO
-  const [userInfo, setUserInfo] = useState({
-    dob: userDetails.dob,
-    _id: userDetails_Session._id,
-    // country: "",
-  });
+  // country dropdown
+  const options = useMemo(() => countryList().getData(), []);
+
+  const optionLabels = options.map((option) => option.label);
+
+  const [selectedCountry, setSelectedCountry] = useState();
+  const handleCountry = (e) => {
+    setSelectedCountry(e);
+    setUserInfo({ ...userInfo, country: e });
+  };
+
   const handleSave = async () => {
     await updateUserDetails(userInfo);
     setEditInfo(false);
-    AuthSession();
+    await AuthSession();
+    const updatedUserDetails = getSessionData();
+    setUserDetails(updatedUserDetails);
+    // setUserInfo(updatedUserDetails);
   };
-  console.log(userInfo);
+  // const [editInfo, setEditInfo] = useState(false);
+  // email
+  // const [email, setEmail] = useState(
+  //   localStorage.getItem("session")
+  //     ? JSON.parse(localStorage.getItem("session")).email
+  //     : "name@example.com"
+  // );
+  // const handleEdit = () => {
+  //   setEditInfo(true);
+  // };
+  // // gender dropdown
+  // const [selectedGender, setSelectedGender] = useState();
+  // const handleGender = (e) => {
+  //   setSelectedGender(e);
+  //   setUserInfo({ ...userInfo, gender: e });
+  // };
+  // // language dropdown
+  // const [selectedlang, setSelectedlang] = useState();
+  // const handleLang = (e) => {
+  //   setSelectedlang(e);
+  //   setUserInfo({ ...userInfo, language: e });
+  // };
+  // // NEW USER INFO
+  // const [userInfo, setUserInfo] = useState({
+  //   dob: userDetails.dob,
+  //   _id: userDetails_Session._id,
+  //   // country: "",
+  // });
+  // const handleSave = async () => {
+  //   await updateUserDetails(userInfo);
+  //   setEditInfo(false);
+  //   AuthSession();
+  //   const updatedUserDetails = getSessionData();
+  //   setUserDetails(updatedUserDetails);
+  // };
+  // console.log(userInfo);
   const { t } = useTranslation();
   // history:
   const userhistory = [
@@ -268,7 +326,7 @@ const UserAccountSetting = () => {
                         <span className="text-light font-size-13">
                           {t("language")}
                         </span>
-                        <p className="mb-0">{userDetails.lang}</p>
+                        <p className="mb-0">{userDetails.language}</p>
                       </Col>
                     </Row>
                     <Row className="align-items-center justify-content-between mb-3">
@@ -316,7 +374,7 @@ const UserAccountSetting = () => {
                               {selectedlang ? selectedlang : "Choose Language"}
                             </Dropdown.Toggle>
 
-                            <Dropdown.Menu>
+                            <Dropdown.Menu className="user-info-dropdown-menu">
                               <Dropdown.Item eventKey="english">
                                 English
                               </Dropdown.Item>
@@ -325,6 +383,15 @@ const UserAccountSetting = () => {
                               </Dropdown.Item>
                               <Dropdown.Item eventKey="french">
                                 French
+                              </Dropdown.Item>
+                              <Dropdown.Item eventKey="english">
+                                Italian
+                              </Dropdown.Item>
+                              <Dropdown.Item eventKey="spanish">
+                                Hindi
+                              </Dropdown.Item>
+                              <Dropdown.Item eventKey="french">
+                                Polski
                               </Dropdown.Item>
                             </Dropdown.Menu>
                           </Dropdown>
@@ -347,7 +414,7 @@ const UserAccountSetting = () => {
                                 : "Choose Gender"}
                             </Dropdown.Toggle>
 
-                            <Dropdown.Menu>
+                            <Dropdown.Menu className="user-info-dropdown-menu">
                               <Dropdown.Item eventKey="Male">
                                 Male
                               </Dropdown.Item>
@@ -362,10 +429,48 @@ const UserAccountSetting = () => {
                         </Form.Group>
                       </Col>
                     </Row>
-                    <Row className="align-items-center justify-content-between mb-3">
+                    <Row className="align-items-center justify-content-between mb-3 user-update-info">
                       <Col md="8">
                         <span className="text-light font-size-13">Country</span>
-                        <p className="mb-0">{userDetails.country}</p>
+                        {/* <Select
+                          options={options}
+                          value={value}
+                          onChange={changeHandler}
+                          className="gender-dropdown"
+                        /> */}
+                        <Form.Group>
+                          <Dropdown
+                            className="gender-dropdown"
+                            name="gender"
+                            onSelect={handleCountry}
+                          >
+                            <Dropdown.Toggle id="dropdown-basic">
+                              {selectedCountry
+                                ? selectedCountry
+                                : "Select Country"}
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu className="user-info-dropdown-menu">
+                              {optionLabels.map((country) => {
+                                return (
+                                  <Dropdown.Item eventKey={country}>
+                                    {country}
+                                  </Dropdown.Item>
+                                );
+                              })}
+                              {/* <Dropdown.Item eventKey="UK">Uk</Dropdown.Item>
+                              <Dropdown.Item eventKey="USA">USA</Dropdown.Item>
+                              <Dropdown.Item eventKey="Pakistan">
+                                Pakistan
+                              </Dropdown.Item>
+                              <Dropdown.Item eventKey="UK">Uk</Dropdown.Item>
+                              <Dropdown.Item eventKey="USA">USA</Dropdown.Item>
+                              <Dropdown.Item eventKey="Pakistan">
+                                Pakistan
+                              </Dropdown.Item> */}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </Form.Group>
                       </Col>
                     </Row>
                   </>
