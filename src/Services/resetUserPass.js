@@ -29,7 +29,7 @@ function resetUserPass(obj) {
   let request = {
     data: transitmessage,
   };
-  // console.log(request);
+
   const url = "http://54.221.169.56:3004/api/user/resetPassword";
 
   axios

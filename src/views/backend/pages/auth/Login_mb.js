@@ -22,6 +22,7 @@ const LoginMob = () => {
   const [error, setError] = useState("");
   const [showError, setShowError] = useState(false);
   const [showLoginError, setShowLoginError] = useState(false);
+  const [loginError, setLoginError] = useState("");
   const [emptyObj, setEmptyObj] = useState(false);
   const [loginInput, setLoginInput] = useState({});
 
@@ -56,7 +57,7 @@ const LoginMob = () => {
     //   }, 3000);
     //   return;
     // }
-    postLoginData(loginInput, setError, setShowError, history);
+    postLoginData(loginInput, setShowLoginError, history, setLoginError);
   };
 
   // signup form data
@@ -162,6 +163,7 @@ const LoginMob = () => {
                       }`}
                       role="alert"
                     >
+                      {loginError}
                       {error}
                     </div>
                     <div
@@ -194,6 +196,9 @@ const LoginMob = () => {
                   <button className="button" onClick={loginSubmit}>
                     Sign In
                   </button>
+                  <Link to="/extra-pages/recover-pswd" className="f-link">
+                    Forgot your password?
+                  </Link>
                 </div>
               </div>
               <div className="no-account">

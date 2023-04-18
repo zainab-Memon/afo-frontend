@@ -12,6 +12,8 @@ import { useTranslation } from "react-i18next";
 import LoginMob from "./Login_mb";
 import sendEmailVerification from "../../../../Services/sendEmailVerification";
 import verifyEmailCode from "../../../../Services/verifiyEmailCode";
+// stripe
+import Stripe from "./stripe";
 const Loginsignup = (props) => {
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -52,6 +54,7 @@ const Loginsignup = (props) => {
   const [error, setError] = useState("");
   const [showError, setShowError] = useState(false);
   const [showLoginError, setShowLoginError] = useState(false);
+  const [loginError, setLoginError] = useState("");
   const [emptyObj, setEmptyObj] = useState(false);
   const [loginInput, setLoginInput] = useState({});
   const handleInputChange = (event) => {
@@ -78,7 +81,7 @@ const Loginsignup = (props) => {
       setShowLoginError(true);
       return;
     }
-    postLoginData(loginInput, setError, setShowError, history);
+    postLoginData(loginInput, setShowLoginError, history, setLoginError);
   };
 
   // signup form data
@@ -153,6 +156,8 @@ const Loginsignup = (props) => {
         console.log(error);
       });
   };
+  // stripe state
+  const [showStripe, setShowStripe] = useState(false);
   return (
     <>
       {width >= 800 ? (
@@ -174,20 +179,20 @@ const Loginsignup = (props) => {
                   <div className="login-signup-form">
                     <h3>Create Account</h3>
                     <h4>Personal Details</h4>
+                    {/* <div
+                      className={`alert alert-danger ${
+                        showError ? "" : "d-none"
+                      }`}
+                      role="alert"
+                    ></div> */}
                     <div
                       className={`alert alert-danger ${
                         showError ? "" : "d-none"
                       }`}
                       role="alert"
                     >
+                      {" "}
                       {userExistError}
-                    </div>
-                    <div
-                      className={`alert alert-danger ${
-                        showError ? "" : "d-none"
-                      }`}
-                      role="alert"
-                    >
                       {error}
                     </div>
                     <input
@@ -239,6 +244,7 @@ const Loginsignup = (props) => {
                       }`}
                       role="alert"
                     >
+                      {loginError}
                       {error}
                     </div>
                     <div
@@ -406,6 +412,7 @@ const Loginsignup = (props) => {
                                 });
                                 handleCardClick(true);
                                 setOtp(true);
+                                setShowStripe(true);
                               }}
                             >
                               Buy Premium
@@ -435,6 +442,84 @@ const Loginsignup = (props) => {
                         </button>
                       </div> */}
                   </div>
+                ) : !showStripe ? (
+                  <div className="Subscription">
+                    <div className="heading-icon">
+                      <FcPrevious
+                        className="prev-icon"
+                        size={30}
+                        onClick={() => {
+                          setPage(page - 1);
+                          setOtp(false);
+                        }}
+                      />
+                      <div className="heading">
+                        Please enter the One-Time Password to verify your
+                        account
+                      </div>
+                    </div>
+                    <div className="otpbody">
+                      <div className="otp-body">
+                        <span style={{ marginBottom: "2rem" }}>
+                          A one-Time Password has been sent to {formData.email}
+                        </span>
+                        <OtpInput
+                          value={otpValue}
+                          onChange={handleOtpChange}
+                          numInputs={6}
+                          isInputNum
+                          renderInput={(inputProps) => (
+                            <input {...inputProps} />
+                          )}
+                          renderSeparator={<span>-</span>}
+                          inputStyle={{
+                            width: "3rem",
+                            height: "3rem",
+                            margin: "0 0.5rem",
+
+                            borderRadius: 4,
+
+                            outline: "none",
+                            textAlign: "center",
+                          }}
+                        />
+                      </div>
+                      {wrongEmailCode && (
+                        <span style={{ color: "red" }}>
+                          Entered wrong code, please enter the code sent on{" "}
+                          {formData.email}{" "}
+                        </span>
+                      )}
+
+                      <button
+                        className="button"
+                        // onClick={handleSignUp} used for posting the signup details
+                        onClick={handleEmailCodeVerification}
+                      >
+                        Validate
+                      </button>
+
+                      <div className="otp-body">
+                        <h4>
+                          <Link onClick={sendEmailVerification(obj)}>
+                            Resend One Time Password
+                          </Link>
+                        </h4>
+                        <span style={{ marginBottom: "2rem" }}>
+                          <Link
+                            onClick={() => {
+                              setSubscriptionForm(false);
+                              setOtp(false);
+                            }}
+                          >
+                            Entered a Wrong Email?
+                          </Link>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ) : showStripe ? (
+                  <Stripe />
                 ) : (
                   <div className="Subscription">
                     <div className="heading-icon">
@@ -494,7 +579,9 @@ const Loginsignup = (props) => {
 
                       <div className="otp-body">
                         <h4>
-                          <Link>Resend One Time Password</Link>
+                          <Link onClick={sendEmailVerification(obj)}>
+                            Resend One Time Password
+                          </Link>
                         </h4>
                         <span style={{ marginBottom: "2rem" }}>
                           <Link

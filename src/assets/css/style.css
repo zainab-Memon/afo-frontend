@@ -2971,11 +2971,7 @@ ul.f-link li a:hover {
 .widget-container p {
   border-left: 4px solid var(--iq-primary);
   background: transparent
-    linear-gradient(
-      270deg,
-      var(--iq-form-gradient-color) 0%,
-      var(--iq-to-gradient-color) 100%
-    );
+    linear-gradient(270deg, var(--iq-primary) 0%, var(--iq-primary-hover) 100%);
   padding: 5px;
   position: relative;
   overflow: hidden;
@@ -3047,7 +3043,7 @@ ul.f-link li a:hover {
 }
 
 .counter {
-  color: #e50914;
+  color: var(--iq-primary);
   font-family: "Roboto", Sans-serif;
   font-size: 40px;
   font-weight: 600;
@@ -3669,7 +3665,7 @@ ul.f-link li a:hover {
   flex-grow: 1;
 }
 .icon-box-content .icon-box-title {
-  color: #e50914;
+  color: var(--iq-primary);
   font-family: var(--e-global-typography-primary-font-family), Sans-serif;
   font-weight: var(--e-global-typography-primary-font-weight);
 }
@@ -5357,7 +5353,7 @@ input[type="text"]::placeholder {
 
 .bill-history {
   overflow-y: scroll;
-  height: 200px;
+  height: 240px;
 }
 
 /* width */
@@ -5499,4 +5495,327 @@ input[type="text"]::placeholder {
 }
 .card-button:hover {
   background-color: var(--iq-primary-hover);
+}
+@media screen and (max-width: 770px) {
+  .bill-history {
+    height: 150px;
+    overflow-y: scroll;
+  }
+}
+@media screen and (max-width: 420px) {
+  .bill-history {
+    height: 130px;
+    overflow-y: scroll;
+  }
+}
+/* user forgot password */
+.sign-user_card-reset-pass {
+  position: relative;
+  background: rgba(0, 0, 0, 0.6);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  box-shadow: 0px 0 20px 0 rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0px 0 20px 0 rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 0 20px 0 rgba(0, 0, 0, 0.5);
+  display: block;
+  margin: 0 auto;
+}
+/* otp parent div on reset password */
+.otp-parent-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.css-13cymwt-control {
+  background: transparent !important;
+  height: 40px;
+  padding: 0;
+  margin: 0;
+  border: none !important;
+  color: #d9d5d5 !important;
+}
+.css-1fdsijx-ValueContainer {
+  padding: 0 !important;
+  height: 40px;
+  color: #d9d5d5 !important;
+  font-size: 14px;
+  width: 100%;
+}
+.css-1u9des2-indicatorSeparator {
+  display: none !important;
+}
+.css-1jqq78o-placeholder {
+  color: #d9d5d5 !important;
+}
+.css-1hb7zxy-IndicatorsContainer {
+  display: none !important;
+}
+.css-1hb7zxy-IndicatorsContainer {
+}
+.css-qbdosj-Input {
+  width: 100px;
+  color: #d9d5d5 !important;
+}
+.css-1fdsijx-ValueContainer .css-166bipr-Input {
+  color: #d9d5d5 !important;
+}
+.css-qbdosj-Input input {
+  width: 100px !important;
+  color: #d9d5d5 !important;
+  min-width: 100px !important;
+}
+.css-t3ipsp-control:hover {
+  border: none !important;
+}
+.css-t3ipsp-control {
+  border: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+.css-1fdsijx-ValueContainer ::after {
+  display: inline-block;
+  /* width: 0;
+  height: 0; */
+  margin-left: 15px;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
+  border-bottom: 0;
+  border-left: 0.3em solid transparent;
+}
+.css-1nmdiq5-menu {
+  height: 100px;
+  overflow-y: scroll;
+  color: black;
+}
+.css-1dimb5e-singleValue {
+  color: #d9d5d5 !important;
+}
+
+/* vertical slider home page */
+/* .slider {
+  color: white;
+}
+.verticle-slider .slider__flex {
+  display: flex;
+  align-items: flex-start;
+}
+.swiper-button-prev {
+  left: 25px;
+  right: auto;
+} */
+/* ----------------vericle slider---------- */
+.slider {
+  color: var(--white);
+}
+.slider .swiper-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.verticle-slider h4.main-title {
+  position: absolute;
+  left: 1.875em;
+  top: 1.875em;
+}
+.verticle-slider .slider-flex {
+  display: flex;
+  align-items: flex-start;
+}
+.verticle-slider .slider--col {
+  margin: 7.625em 2em 0px;
+}
+.verticle-slider .slider-prev,
+.verticle-slider .slider-next {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  font-size: 1.875em;
+  display: flex;
+  justify-content: center;
+}
+.verticle-slider .slider-next {
+  bottom: 0;
+}
+.verticle-slider i.vertical-aerrow {
+  background: rgba(0, 0, 0, 0.5);
+  width: 4.375em;
+  text-align: center;
+}
+.verticle-slider .slider-prev:focus,
+.verticle-slider .slider-next:focus {
+  outline: none;
+}
+.verticle-slider .slider-thumbs {
+  height: 53.125em;
+  width: 21.875em;
+}
+.verticle-slider .slider-thumbs .slider-image {
+  transition: 0.25s;
+}
+.verticle-slider .slider-thumbs .slider-image:hover {
+  opacity: 1;
+}
+.verticle-slider .slider-images {
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+.verticle-slider .slider-images .slider-image img {
+  transition: 3s;
+}
+.verticle-slider .slider-image {
+  height: 100%;
+  overflow: hidden;
+}
+.verticle-slider .slider-image img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+  overflow: hidden;
+}
+.verticle-slider .hover-buttons {
+  opacity: 0;
+}
+.slider-thumbs .swiper-slide.swiper-slide-active .hover-buttons {
+  opacity: 1;
+}
+.slider-thumbs .swiper-slide .block-images::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transition: all 0.45s ease 0s;
+  -webkit-transition: all 0.45s ease 0s;
+  -moz-transition: all 0.45s ease 0s;
+  -o-transition: all 0.45s ease 0s;
+  border-left: 4px solid var(--iq-primary);
+  z-index: 9;
+} /* ----------------vericle slider---------- */
+.slider {
+  color: var(--white);
+}
+.slider .swiper-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.verticle-slider h4.main-title {
+  position: absolute;
+  left: 1.875em;
+  top: 1.875em;
+}
+.verticle-slider .slider-flex {
+  display: flex;
+  align-items: flex-start;
+}
+.verticle-slider .slider--col {
+  margin: 7.625em 2em 0px;
+}
+.verticle-slider .slider-prev,
+.verticle-slider .slider-next {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  font-size: 1.875em;
+  display: flex;
+  justify-content: center;
+}
+.verticle-slider .slider-next {
+  bottom: 0;
+}
+.verticle-slider i.vertical-aerrow {
+  background: rgba(0, 0, 0, 0.5);
+  width: 4.375em;
+  text-align: center;
+}
+.verticle-slider .slider-prev:focus,
+.verticle-slider .slider-next:focus {
+  outline: none;
+}
+.verticle-slider .slider-thumbs {
+  height: 53.125em;
+  width: 21.875em;
+}
+.verticle-slider .slider-thumbs .slider--image {
+  transition: 0.25s;
+}
+.verticle-slider .slider-thumbs .slider--image:hover {
+  opacity: 1;
+}
+.verticle-slider .slider-images {
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+.verticle-slider .slider-images .slider--image img {
+  transition: 3s;
+}
+.verticle-slider .slider--image {
+  height: 100%;
+  overflow: hidden;
+}
+.verticle-slider .slider--image img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+  overflow: hidden;
+}
+.verticle-slider .hover-buttons {
+  opacity: 0;
+}
+.slider-thumbs .swiper-slide.swiper-slide-active .hover-buttons {
+  opacity: 1;
+}
+.slider-thumbs .swiper-slide .block-images::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transition: all 0.45s ease 0s;
+  -webkit-transition: all 0.45s ease 0s;
+  -moz-transition: all 0.45s ease 0s;
+  -o-transition: all 0.45s ease 0s;
+  border-left: 4px solid var(--iq-primary);
+  z-index: 9;
+}
+.slider-thumbs .swiper-slide.swiper-slide-active .block-images::before {
+  opacity: 1;
+  transition: all 0.45s ease 0s;
+  -webkit-transition: all 0.45s ease 0s;
+  -moz-transition: all 0.45s ease 0s;
+  -o-transition: all 0.45s ease 0s;
+}
+
+.slider-images .top-ten-slider-nav .swiper-bg:before {
+  z-index: 0;
+}
+.swiper-slide-thumb-active .hover-buttons {
+  opacity: 1;
+}
+.verticle-slider .block-description .iq-title {
+  font-size: 1.33em;
+}
+.verticle-slider .slider-images .block-images {
+  height: 100%;
+}
+.verticle-slider .slider-images .block-description {
+  left: 0;
+  width: 100%;
+  align-items: center;
 }

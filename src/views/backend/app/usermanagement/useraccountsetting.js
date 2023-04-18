@@ -96,10 +96,22 @@ const UserAccountSetting = () => {
   const optionLabels = options.map((option) => option.label);
 
   const [selectedCountry, setSelectedCountry] = useState();
-  const handleCountry = (e) => {
-    setSelectedCountry(e);
-    setUserInfo({ ...userInfo, country: e });
+  const [country, setCountry] = useState();
+  // const handleCountryChange = (e) => {
+  //   setSelectedCountry(e);
+  //   console.log(selectedCountry);
+  // };
+
+  const handleCountryChange = (selectedOption) => {
+    setSelectedCountry([selectedOption.value, selectedOption.label]);
+    setCountry(selectedOption.label);
+    setUserInfo({ ...userInfo, country: selectedOption.label });
   };
+
+  // const handleCountry = (e) => {
+  //   setSelectedCountry(e);
+  //   setUserInfo({ ...userInfo, country: e });
+  // };
 
   const handleSave = async () => {
     await updateUserDetails(userInfo);
@@ -432,15 +444,43 @@ const UserAccountSetting = () => {
                     <Row className="align-items-center justify-content-between mb-3 user-update-info">
                       <Col md="8">
                         <span className="text-light font-size-13">Country</span>
-                        {/* <Select
+                        <Select
+                          placeholder="Select Country"
+                          className="react-select-country"
                           options={options}
-                          value={value}
-                          onChange={changeHandler}
-                          className="gender-dropdown"
-                        /> */}
-                        <Form.Group>
+                          // value={country}
+                          onChange={handleCountryChange}
+                        />
+
+                        {/* <select
+                          id="country"
+                          name="country"
+                          // className="form-control"
+                          style={{
+                            width: "100%",
+                            border: "none",
+                            background: "transparent",
+                            padding: "0",
+                            paddingTop: "8px",
+                            color: "#D9D5D6",
+                            fontSize: "14px",
+                            WebkitAppearance: "none",
+                          }}
+                        >
+                          {optionLabels.map((country) => {
+                            return (
+                              <option
+                                value={country}
+                                className="dropdown-item user-info-dropdown-menu"
+                              >
+                                {country}
+                              </option>
+                            );
+                          })}
+                        </select> */}
+                        {/* <Form.Group>
                           <Dropdown
-                            className="gender-dropdown"
+                            className="gender-dropdown "
                             name="gender"
                             onSelect={handleCountry}
                           >
@@ -458,19 +498,10 @@ const UserAccountSetting = () => {
                                   </Dropdown.Item>
                                 );
                               })}
-                              {/* <Dropdown.Item eventKey="UK">Uk</Dropdown.Item>
-                              <Dropdown.Item eventKey="USA">USA</Dropdown.Item>
-                              <Dropdown.Item eventKey="Pakistan">
-                                Pakistan
-                              </Dropdown.Item>
-                              <Dropdown.Item eventKey="UK">Uk</Dropdown.Item>
-                              <Dropdown.Item eventKey="USA">USA</Dropdown.Item>
-                              <Dropdown.Item eventKey="Pakistan">
-                                Pakistan
-                              </Dropdown.Item> */}
+                              
                             </Dropdown.Menu>
                           </Dropdown>
-                        </Form.Group>
+                        </Form.Group> */}
                       </Col>
                     </Row>
                   </>
@@ -612,6 +643,27 @@ const UserAccountSetting = () => {
                           </tr>
                         </thead>
                         <tbody>
+                          <tr>
+                            <td>05/04/2023</td>
+
+                            <td>05/04/2023—04/05/2023</td>
+                            <td>•••• •••• •••• 9098</td>
+                            <td>10$</td>
+                          </tr>
+                          <tr>
+                            <td>05/04/2023</td>
+
+                            <td>05/04/2023—04/05/2023</td>
+                            <td>•••• •••• •••• 9098</td>
+                            <td>10$</td>
+                          </tr>
+                          <tr>
+                            <td>05/04/2023</td>
+
+                            <td>05/04/2023—04/05/2023</td>
+                            <td>•••• •••• •••• 9098</td>
+                            <td>10$</td>
+                          </tr>
                           <tr>
                             <td>05/04/2023</td>
 

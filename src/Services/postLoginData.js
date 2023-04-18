@@ -12,7 +12,7 @@ const atob = (base64) => {
   return Buffer.from(base64, "base64").toString("binary");
 };
 
-function postLoginData(obj, setError, setShowError, history) {
+function postLoginData(obj, setShowLoginError, history, setLoginError) {
   let msg = JSON.stringify(obj);
   const i = generateRandomIv(16);
   const key = CryptoJS.enc.Utf8.parse("ED6C504C24FD3140D42E3BFE9F92E4A1");
@@ -44,7 +44,7 @@ function postLoginData(obj, setError, setShowError, history) {
       const decrypt = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
       const Authtoken = decrypt.token;
       localStorage.setItem("token", Authtoken);
-      history.push("/");
+      // history.push("/");
       // session request
       const result = await AuthSession();
       if (result) {
@@ -55,10 +55,10 @@ function postLoginData(obj, setError, setShowError, history) {
     })
     .catch((error) => {
       console.error(error);
-      setError("Invalid Email or password");
-      setShowError(true);
+      setLoginError("Invalid Email Address or Password");
+      setShowLoginError(true);
       setTimeout(() => {
-        setShowError(false);
+        setShowLoginError(false);
       }, 3000);
     });
 }

@@ -13,6 +13,7 @@ import confirmPassword from "../../../../../Services/confirmPass";
 import FACodeSend from "../../../../../Services/FACodeSend";
 import verifyFACode from "../../../../../Services/verifyFACode";
 import updateUserDetails from "../../../../../Services/updateUserDetails";
+import AuthSession from "../../../../../Services/getSessionAuth";
 const Enable2FA = ({ show, setShow, setSwitchState }) => {
   const [form2, setForm2] = useState(false);
   const [form3, setForm3] = useState(false);
@@ -92,6 +93,7 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
           tfa: true,
         };
         await updateUserDetails(FaStatus);
+        await AuthSession();
         const updatedUserDetails = getSessionData();
         setUserDetails(updatedUserDetails);
         setForm4(true);

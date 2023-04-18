@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 // Partials
 import HeaderStyle1 from "../../components/partials/backend/headerstyle/headerstyle1";
-
+import FooterStyle from "../../components/partials/backend/footerstyle/footerstyle";
 // Router Component
 import Layout1Route from "../../router/layout1-route";
 
@@ -41,6 +41,7 @@ const Layout1 = () => {
           <Layout1Route />
         </div>
       </div>
+      <FooterStyle />
     </>
   );
 };

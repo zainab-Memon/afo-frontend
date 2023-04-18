@@ -12,6 +12,7 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import OtpInput from "react-otp-input";
 import { Link } from "react-router-dom";
 import updateUserDetails from "../../../../../Services/updateUserDetails";
+import AuthSession from "../../../../../Services/getSessionAuth";
 
 const Disable2FA = ({ show, setShow, setSwitchState }) => {
   const [form2, setForm2] = useState(false);
@@ -104,6 +105,7 @@ const Disable2FA = ({ show, setShow, setSwitchState }) => {
       }, 3000);
     }
   };
+  console.log(userDetails.phone);
   // resend code
   const resendCode = () => {
     const codeObj = {
@@ -127,12 +129,14 @@ const Disable2FA = ({ show, setShow, setSwitchState }) => {
     try {
       const result = await verifyFACode(verifyObj);
       if (result) {
+        console.log(result);
         // sending 2fa status
         const FaStatus = {
           _id: userDetails._id,
           tfa: false,
         };
         await updateUserDetails(FaStatus);
+        await AuthSession();
         const updatedUserDetails = getSessionData();
         setUserDetails(updatedUserDetails);
         setForm3(true);
@@ -226,7 +230,8 @@ const Disable2FA = ({ show, setShow, setSwitchState }) => {
             <>
               <Modal.Body style={{ marginLeft: "0.5rem" }}>
                 <p style={{ color: "black" }}>
-                  Enter the authentication code below we sent to {phoneNumber} .
+                  Enter the authentication code below we sent to
+                  {userDetails.phone} .
                 </p>
                 <Form>
                   <div className="otp-code">

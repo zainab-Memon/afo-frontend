@@ -148,7 +148,6 @@ const gsapAnimate = {
 };
 
 const Homepage = () => {
-  
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [toggler1, setToggler1] = useState(false);
   const [toggler2, setToggler2] = useState(false);
@@ -715,7 +714,7 @@ const Homepage = () => {
               <Col sm="12" className="overflow-hidden">
                 <div className="d-flex align-items-center justify-content-between">
                   <h4 className="main-title">Latest Movies</h4>
-                  <Link className="iq-view-all" to="/movie-category">
+                  <Link className="iq-view-all" to="/">
                     View All
                   </Link>
                 </div>
@@ -1600,7 +1599,1247 @@ const Homepage = () => {
             </Row>
           </Container>
         </section>
+        {/* vertical slider */}
+        {/* <div className="verticle-slider">
+          <Container fluid>
+            <section className="slider">
+              <div className="slider__flex position-relative">
+                <div
+                  id="prev32"
+                  className="swiper-button swiper-button-prev verticle-btn"
+                >
+                  <i className="fa fa-chevron-left"></i>
+                </div>
+              </div>
+            </section>
+          </Container>
+        </div> */}
+        <div class="verticle-slider">
+          <Container fluid>
+            <section className="slider">
+              <div className="slider-flex position-relative">
+                <div
+                  id="prev31"
+                  class="swiper-button swiper-button-prev verticle-btn"
+                >
+                  <i className="fa fa-chevron-left"></i>
+                </div>
+                <h4 className="main-title ">Top 10 in United States</h4>
+                <div className="slider--col position-relative">
+                  <div id="prev31" className="slider-prev btn-verticle">
+                    <i className="ri-arrow-up-s-line vertical-aerrow"></i>
+                  </div>
+                  <div className="slider-thumbs">
+                    <Swiper
+                      // breakpoints={{
+                      //   320: { slidesPerView: 1 },
+                      //   550: { slidesPerView: 2 },
+                      //   991: { slidesPerView: 3 },
+                      //   1400: { slidesPerView: 4 },
+                      // }}
+                      navigation={{
+                        prevEl: "#prev31",
+                        nextEl: "#next31",
+                      }}
+                      direction={"vertical"}
+                      // loop={true}
+                      slidesPerView={4}
+                      spaceBetween={20}
+                      as="ul"
+                      className="swiper-vertical top-ten-slider-nav"
+                    >
+                      <SwiperSlide
+                        as="li"
+                        style={{
+                          height: "194.5px",
+                          width: "100%",
+                          marginBottom: "24px",
+                        }}
+                      >
+                        {" "}
+                        <div class="block-images position-relative ">
+                          <div class="img-box slider--image">
+                            <img
+                              src={trending1}
+                              class="img-fluid"
+                              alt=""
+                              loading="lazy"
+                            />
+                          </div>
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Shadow Warrior</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                          <div class="block-social-info">
+                            <ul class="list-inline p-0 m-0 music-play-lists">
+                              <li class="share">
+                                <span>
+                                  <i class="ri-share-fill"></i>
+                                </span>
+                                <div class="share-box">
+                                  <div class="d-flex align-items-center">
+                                    <a
+                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-facebook-fill"></i>
+                                    </a>
+                                    <a
+                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-twitter-fill"></i>
+                                    </a>
+                                    <a
+                                      href="#"
+                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      class="share-ico iq-copy-link"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-links-fill"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-heart-fill"></i>
+                                </span>
+                                <span class="count-box">2+</span>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-add-line"></i>
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                      <SwiperSlide
+                        as="li"
+                        style={{
+                          height: "194.5px",
+                          width: "100% !important",
+                          marginBottom: "24px",
+                        }}
+                      >
+                        {" "}
+                        <div class="block-images position-relative ">
+                          <div class="img-box slider--image">
+                            <img
+                              src={trending2}
+                              class="img-fluid"
+                              alt=""
+                              loading="lazy"
+                            />
+                          </div>
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Skull Island</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                          <div class="block-social-info">
+                            <ul class="list-inline p-0 m-0 music-play-lists">
+                              <li class="share">
+                                <span>
+                                  <i class="ri-share-fill"></i>
+                                </span>
+                                <div class="share-box">
+                                  <div class="d-flex align-items-center">
+                                    <a
+                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-facebook-fill"></i>
+                                    </a>
+                                    <a
+                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-twitter-fill"></i>
+                                    </a>
+                                    <a
+                                      href="#"
+                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      class="share-ico iq-copy-link"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-links-fill"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-heart-fill"></i>
+                                </span>
+                                <span class="count-box">2+</span>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-add-line"></i>
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                      <SwiperSlide
+                        as="li"
+                        style={{
+                          height: "194.5px",
+                          width: "100% !important",
+                          marginBottom: "24px",
+                        }}
+                      >
+                        {" "}
+                        <div class="block-images position-relative ">
+                          <div class="img-box slider--image">
+                            <img
+                              src={trending2}
+                              class="img-fluid"
+                              alt=""
+                              loading="lazy"
+                            />
+                          </div>
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Skull Island</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                          <div class="block-social-info">
+                            <ul class="list-inline p-0 m-0 music-play-lists">
+                              <li class="share">
+                                <span>
+                                  <i class="ri-share-fill"></i>
+                                </span>
+                                <div class="share-box">
+                                  <div class="d-flex align-items-center">
+                                    <a
+                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-facebook-fill"></i>
+                                    </a>
+                                    <a
+                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-twitter-fill"></i>
+                                    </a>
+                                    <a
+                                      href="#"
+                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      class="share-ico iq-copy-link"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-links-fill"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-heart-fill"></i>
+                                </span>
+                                <span class="count-box">2+</span>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-add-line"></i>
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                      <SwiperSlide
+                        as="li"
+                        style={{
+                          height: "194.5px",
+                          width: "100% !important",
+                          marginBottom: "24px",
+                        }}
+                      >
+                        {" "}
+                        <div class="block-images position-relative ">
+                          <div class="img-box slider--image">
+                            <img
+                              src={trending2}
+                              class="img-fluid"
+                              alt=""
+                              loading="lazy"
+                            />
+                          </div>
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Skull Island</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                          <div class="block-social-info">
+                            <ul class="list-inline p-0 m-0 music-play-lists">
+                              <li class="share">
+                                <span>
+                                  <i class="ri-share-fill"></i>
+                                </span>
+                                <div class="share-box">
+                                  <div class="d-flex align-items-center">
+                                    <a
+                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-facebook-fill"></i>
+                                    </a>
+                                    <a
+                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-twitter-fill"></i>
+                                    </a>
+                                    <a
+                                      href="#"
+                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      class="share-ico iq-copy-link"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-links-fill"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-heart-fill"></i>
+                                </span>
+                                <span class="count-box">2+</span>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-add-line"></i>
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                      <SwiperSlide
+                        as="li"
+                        style={{
+                          height: "194.5px",
+                          width: "100% !important",
+                          marginBottom: "24px",
+                        }}
+                      >
+                        {" "}
+                        <div class="block-images position-relative ">
+                          <div class="img-box slider--image">
+                            <img
+                              src={trending2}
+                              class="img-fluid"
+                              alt=""
+                              loading="lazy"
+                            />
+                          </div>
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Skull Island</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                          <div class="block-social-info">
+                            <ul class="list-inline p-0 m-0 music-play-lists">
+                              <li class="share">
+                                <span>
+                                  <i class="ri-share-fill"></i>
+                                </span>
+                                <div class="share-box">
+                                  <div class="d-flex align-items-center">
+                                    <a
+                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-facebook-fill"></i>
+                                    </a>
+                                    <a
+                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-twitter-fill"></i>
+                                    </a>
+                                    <a
+                                      href="#"
+                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      class="share-ico iq-copy-link"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-links-fill"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-heart-fill"></i>
+                                </span>
+                                <span class="count-box">2+</span>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-add-line"></i>
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                      <SwiperSlide
+                        as="li"
+                        style={{
+                          height: "194.5px",
+                          width: "100% !important",
+                          marginBottom: "24px",
+                        }}
+                      >
+                        {" "}
+                        <div class="block-images position-relative ">
+                          <div class="img-box slider--image">
+                            <img
+                              src={trending2}
+                              class="img-fluid"
+                              alt=""
+                              loading="lazy"
+                            />
+                          </div>
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Skull Island</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                          <div class="block-social-info">
+                            <ul class="list-inline p-0 m-0 music-play-lists">
+                              <li class="share">
+                                <span>
+                                  <i class="ri-share-fill"></i>
+                                </span>
+                                <div class="share-box">
+                                  <div class="d-flex align-items-center">
+                                    <a
+                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-facebook-fill"></i>
+                                    </a>
+                                    <a
+                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-twitter-fill"></i>
+                                    </a>
+                                    <a
+                                      href="#"
+                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      class="share-ico iq-copy-link"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-links-fill"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-heart-fill"></i>
+                                </span>
+                                <span class="count-box">2+</span>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-add-line"></i>
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                      <SwiperSlide
+                        as="li"
+                        style={{
+                          height: "194.5px",
+                          width: "100% !important",
+                          marginBottom: "24px",
+                        }}
+                      >
+                        {" "}
+                        <div class="block-images position-relative ">
+                          <div class="img-box slider--image">
+                            <img
+                              src={trending2}
+                              class="img-fluid"
+                              alt=""
+                              loading="lazy"
+                            />
+                          </div>
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Skull Island</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                          <div class="block-social-info">
+                            <ul class="list-inline p-0 m-0 music-play-lists">
+                              <li class="share">
+                                <span>
+                                  <i class="ri-share-fill"></i>
+                                </span>
+                                <div class="share-box">
+                                  <div class="d-flex align-items-center">
+                                    <a
+                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-facebook-fill"></i>
+                                    </a>
+                                    <a
+                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-twitter-fill"></i>
+                                    </a>
+                                    <a
+                                      href="#"
+                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      class="share-ico iq-copy-link"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-links-fill"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-heart-fill"></i>
+                                </span>
+                                <span class="count-box">2+</span>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-add-line"></i>
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                      <SwiperSlide
+                        as="li"
+                        style={{
+                          height: "194.5px",
+                          width: "100% !important",
+                          marginBottom: "24px",
+                        }}
+                      >
+                        {" "}
+                        <div class="block-images position-relative ">
+                          <div class="img-box slider--image">
+                            <img
+                              src={trending2}
+                              class="img-fluid"
+                              alt=""
+                              loading="lazy"
+                            />
+                          </div>
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Skull Island</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                          <div class="block-social-info">
+                            <ul class="list-inline p-0 m-0 music-play-lists">
+                              <li class="share">
+                                <span>
+                                  <i class="ri-share-fill"></i>
+                                </span>
+                                <div class="share-box">
+                                  <div class="d-flex align-items-center">
+                                    <a
+                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-facebook-fill"></i>
+                                    </a>
+                                    <a
+                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-twitter-fill"></i>
+                                    </a>
+                                    <a
+                                      href="#"
+                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      class="share-ico iq-copy-link"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-links-fill"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-heart-fill"></i>
+                                </span>
+                                <span class="count-box">2+</span>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-add-line"></i>
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                      <SwiperSlide
+                        as="li"
+                        style={{
+                          height: "194.5px",
+                          width: "100% !important",
+                          marginBottom: "24px",
+                        }}
+                      >
+                        {" "}
+                        <div class="block-images position-relative ">
+                          <div class="img-box slider--image">
+                            <img
+                              src={trending2}
+                              class="img-fluid"
+                              alt=""
+                              loading="lazy"
+                            />
+                          </div>
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Skull Island</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                          <div class="block-social-info">
+                            <ul class="list-inline p-0 m-0 music-play-lists">
+                              <li class="share">
+                                <span>
+                                  <i class="ri-share-fill"></i>
+                                </span>
+                                <div class="share-box">
+                                  <div class="d-flex align-items-center">
+                                    <a
+                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-facebook-fill"></i>
+                                    </a>
+                                    <a
+                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="share-ico"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-twitter-fill"></i>
+                                    </a>
+                                    <a
+                                      href="#"
+                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      class="share-ico iq-copy-link"
+                                      tabindex="0"
+                                    >
+                                      <i class="ri-links-fill"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-heart-fill"></i>
+                                </span>
+                                <span class="count-box">2+</span>
+                              </li>
+                              <li>
+                                <span>
+                                  <i class="ri-add-line"></i>
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                    </Swiper>
+                  </div>
+                  <div class="slider-next btn-verticle" id="next31">
+                    <i class="ri-arrow-down-s-line vertical-aerrow"></i>
+                  </div>
+                </div>
+                <div class="slider-images" data-swiper="slider-images">
+                  <Swiper
+                    // breakpoints={{
+                    //   320: { slidesPerView: 1 },
+                    //   550: { slidesPerView: 2 },
+                    //   991: { slidesPerView: 3 },
+                    //   1400: { slidesPerView: 4 },
+                    // }}
+                    navigation={{
+                      prevEl: "#prev31",
+                      nextEl: "#next31",
+                    }}
+                    direction={"vertical"}
+                    // loop={true}
+                    slidesPerView={1}
+                    spaceBetween={20}
+                    as="ul"
+                    className="swiper-vertical top-ten-slider-nav"
+                  >
+                    <SwiperSlide
+                      as="li"
+                      // style={{
+                      //   height: "194.5px",
+                      //   width: "100%",
+                      //   marginBottom: "24px",
+                      // }}
+                    >
+                      {" "}
+                      <div class="slider--image block-images">
+                        <img src={trending1} alt="" loading="lazy" />
+                        <div className="description">
+                          {" "}
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Shadow Warrior</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                    <SwiperSlide
+                      as="li"
+                      // style={{
+                      //   height: "194.5px",
+                      //   width: "100%",
+                      //   marginBottom: "24px",
+                      // }}
+                    >
+                      {" "}
+                      <div class="slider--image block-images">
+                        <img src={trending1} alt="" loading="lazy" />
+                        <div className="description">
+                          {" "}
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Shadow Warrior 1</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>{" "}
+                    <SwiperSlide
+                      as="li"
+                      // style={{
+                      //   height: "194.5px",
+                      //   width: "100%",
+                      //   marginBottom: "24px",
+                      // }}
+                    >
+                      {" "}
+                      <div class="slider--image block-images">
+                        <img src={trending1} alt="" loading="lazy" />
+                        <div className="description">
+                          {" "}
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Shadow Warrior 2</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>{" "}
+                    <SwiperSlide
+                      as="li"
+                      // style={{
+                      //   height: "194.5px",
+                      //   width: "100%",
+                      //   marginBottom: "24px",
+                      // }}
+                    >
+                      {" "}
+                      <div class="slider--image block-images">
+                        <img src={trending1} alt="" loading="lazy" />
+                        <div className="description">
+                          {" "}
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Shadow Warrior 3</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>{" "}
+                    <SwiperSlide
+                      as="li"
+                      // style={{
+                      //   height: "194.5px",
+                      //   width: "100%",
+                      //   marginBottom: "24px",
+                      // }}
+                    >
+                      {" "}
+                      <div class="slider--image block-images">
+                        <img src={trending1} alt="" loading="lazy" />
+                        <div className="description">
+                          {" "}
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Shadow Warrior 4</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>{" "}
+                    <SwiperSlide
+                      as="li"
+                      // style={{
+                      //   height: "194.5px",
+                      //   width: "100%",
+                      //   marginBottom: "24px",
+                      // }}
+                    >
+                      {" "}
+                      <div class="slider--image block-images">
+                        <img src={trending1} alt="" loading="lazy" />
+                        <div className="description">
+                          {" "}
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Shadow Warrior 5</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>{" "}
+                    <SwiperSlide
+                      as="li"
+                      // style={{
+                      //   height: "194.5px",
+                      //   width: "100%",
+                      //   marginBottom: "24px",
+                      // }}
+                    >
+                      {" "}
+                      <div class="slider--image block-images">
+                        <img src={trending1} alt="" loading="lazy" />
+                        <div className="description">
+                          {" "}
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Shadow Warrior 6</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>{" "}
+                    <SwiperSlide
+                      as="li"
+                      // style={{
+                      //   height: "194.5px",
+                      //   width: "100%",
+                      //   marginBottom: "24px",
+                      // }}
+                    >
+                      {" "}
+                      <div class="slider--image block-images">
+                        <img src={trending1} alt="" loading="lazy" />
+                        <div className="description">
+                          {" "}
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Shadow Warrior 7</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>{" "}
+                    <SwiperSlide
+                      as="li"
+                      // style={{
+                      //   height: "194.5px",
+                      //   width: "100%",
+                      //   marginBottom: "24px",
+                      // }}
+                    >
+                      {" "}
+                      <div class="slider--image block-images">
+                        <img src={trending1} alt="" loading="lazy" />
+                        <div className="description">
+                          {" "}
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html">Shadow Warrior 8</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  </Swiper>
+                </div>
 
+                <div
+                  class="swiper-button-next swiper-button verticle-btn"
+                  id="next31"
+                >
+                  {" "}
+                  <i className="fa fa-chevron-right"></i>
+                </div>
+              </div>
+            </section>
+          </Container>
+        </div>
+        {/* vertical slider end */}
         <section id="iq-suggestede" className="s-margin">
           <Container fluid>
             <Row>
