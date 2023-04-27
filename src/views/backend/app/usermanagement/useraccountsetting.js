@@ -27,6 +27,13 @@ import updateUserDetails from "../../../../Services/updateUserDetails";
 import AuthSession from "../../../../Services/getSessionAuth";
 SwiperCore.use([EffectFade, Navigation, Thumbs, Pagination]);
 const UserAccountSetting = () => {
+  const customStyles = {
+    menu: (provided) => ({
+      ...provided,
+      maxHeight: "100px",
+      overflowY: "scroll",
+    }),
+  };
   // user details from session api
 
   const getSessionData = () => {
@@ -92,8 +99,6 @@ const UserAccountSetting = () => {
   };
   // country dropdown
   const options = useMemo(() => countryList().getData(), []);
-
-  const optionLabels = options.map((option) => option.label);
 
   const [selectedCountry, setSelectedCountry] = useState();
   const [country, setCountry] = useState();
@@ -387,22 +392,22 @@ const UserAccountSetting = () => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu className="user-info-dropdown-menu">
-                              <Dropdown.Item eventKey="english">
+                              <Dropdown.Item eventKey="English">
                                 English
                               </Dropdown.Item>
-                              <Dropdown.Item eventKey="spanish">
+                              <Dropdown.Item eventKey="Spanish">
                                 Spanish
                               </Dropdown.Item>
-                              <Dropdown.Item eventKey="french">
+                              <Dropdown.Item eventKey="French">
                                 French
                               </Dropdown.Item>
-                              <Dropdown.Item eventKey="english">
+                              <Dropdown.Item eventKey="Italian">
                                 Italian
                               </Dropdown.Item>
-                              <Dropdown.Item eventKey="spanish">
+                              <Dropdown.Item eventKey="Hindi">
                                 Hindi
                               </Dropdown.Item>
-                              <Dropdown.Item eventKey="french">
+                              <Dropdown.Item eventKey="Polski">
                                 Polski
                               </Dropdown.Item>
                             </Dropdown.Menu>
@@ -450,6 +455,7 @@ const UserAccountSetting = () => {
                           options={options}
                           // value={country}
                           onChange={handleCountryChange}
+                          styles={customStyles}
                         />
 
                         {/* <select

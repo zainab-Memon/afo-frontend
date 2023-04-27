@@ -5586,11 +5586,13 @@ input[type="text"]::placeholder {
   border-bottom: 0;
   border-left: 0.3em solid transparent;
 }
-.css-1nmdiq5-menu {
+/* .css-1nmdiq5-menu {
   height: 100px;
   overflow-y: scroll;
   color: black;
-}
+  z-index: 1000;
+} */
+
 .css-1dimb5e-singleValue {
   color: #d9d5d5 !important;
 }

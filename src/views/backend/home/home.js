@@ -1642,7 +1642,7 @@ const Homepage = () => {
                         nextEl: "#next31",
                       }}
                       direction={"vertical"}
-                      // loop={true}
+                      loop={true}
                       slidesPerView={4}
                       spaceBetween={20}
                       as="ul"
@@ -1759,7 +1759,7 @@ const Homepage = () => {
                           </div>
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island</a>
+                              <a href="show-detail.html">Skull Island 1</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -1850,7 +1850,7 @@ const Homepage = () => {
                           </div>
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island</a>
+                              <a href="show-detail.html">Skull Island 2</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -1941,7 +1941,7 @@ const Homepage = () => {
                           </div>
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island</a>
+                              <a href="show-detail.html">Skull Island 3</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -2032,7 +2032,7 @@ const Homepage = () => {
                           </div>
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island</a>
+                              <a href="show-detail.html">Skull Island 4</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -2123,7 +2123,7 @@ const Homepage = () => {
                           </div>
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island</a>
+                              <a href="show-detail.html">Skull Island 6</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -2214,7 +2214,7 @@ const Homepage = () => {
                           </div>
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island</a>
+                              <a href="show-detail.html">Skull Island 7</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -2305,7 +2305,7 @@ const Homepage = () => {
                           </div>
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island</a>
+                              <a href="show-detail.html">Skull Island 8</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -2396,7 +2396,7 @@ const Homepage = () => {
                           </div>
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island</a>
+                              <a href="show-detail.html">Skull Island 9</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -2486,7 +2486,7 @@ const Homepage = () => {
                       nextEl: "#next31",
                     }}
                     direction={"vertical"}
-                    // loop={true}
+                    loop={true}
                     slidesPerView={1}
                     spaceBetween={20}
                     as="ul"
@@ -2544,7 +2544,7 @@ const Homepage = () => {
                           {" "}
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Shadow Warrior 1</a>
+                              <a href="show-detail.html">Skull Island 1</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -2581,7 +2581,7 @@ const Homepage = () => {
                           {" "}
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Shadow Warrior 2</a>
+                              <a href="show-detail.html">Skull Island 2</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -2618,7 +2618,7 @@ const Homepage = () => {
                           {" "}
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Shadow Warrior 3</a>
+                              <a href="show-detail.html">Skull Island 3</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -2655,7 +2655,7 @@ const Homepage = () => {
                           {" "}
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Shadow Warrior 4</a>
+                              <a href="show-detail.html">Skull Island 4</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -2692,7 +2692,7 @@ const Homepage = () => {
                           {" "}
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Shadow Warrior 5</a>
+                              <a href="show-detail.html">Skull Island 5</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -2729,7 +2729,7 @@ const Homepage = () => {
                           {" "}
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Shadow Warrior 6</a>
+                              <a href="show-detail.html">Skull Island 6</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -2766,7 +2766,7 @@ const Homepage = () => {
                           {" "}
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Shadow Warrior 7</a>
+                              <a href="show-detail.html">Skull Island 7</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
@@ -2803,7 +2803,44 @@ const Homepage = () => {
                           {" "}
                           <div class="block-description">
                             <h6 class="iq-title">
-                              <a href="show-detail.html">Shadow Warrior 8</a>
+                              <a href="show-detail.html">Skull Island 8</a>
+                            </h6>
+                            <div class="movie-time d-flex align-items-center my-2">
+                              <span class="text-white">1hr : 50mins</span>
+                            </div>
+                            <div class="hover-buttons">
+                              <a
+                                href="show-detail.html"
+                                role="button"
+                                class="btn btn-hover"
+                              >
+                                <i
+                                  class="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                    <SwiperSlide
+                      as="li"
+                      // style={{
+                      //   height: "194.5px",
+                      //   width: "100%",
+                      //   marginBottom: "24px",
+                      // }}
+                    >
+                      {" "}
+                      <div class="slider--image block-images">
+                        <img src={trending1} alt="" loading="lazy" />
+                        <div className="description">
+                          {" "}
+                          <div class="block-description">
+                            <h6 class="iq-title">
+                              <a href="show-detail.html"> 9</a>
                             </h6>
                             <div class="movie-time d-flex align-items-center my-2">
                               <span class="text-white">1hr : 50mins</span>
