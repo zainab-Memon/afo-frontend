@@ -53,6 +53,7 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
       phone: userDetails_Session.phone,
     };
   };
+  // console.log(getSessionData());
   const [userDetails, setUserDetails] = useState(getSessionData());
 
   // USER INFO
@@ -64,7 +65,7 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
   const sendCode = async () => {
     const codeObj = {
       email: email,
-      phone: phoneNumber,
+      phone: userDetails.phone ? userDetails.phone : phoneNumber,
     };
     await updateUserDetails(userInfo);
 
@@ -149,6 +150,10 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
         setForm2(true);
         setWrongPass(false);
         setConfirmPass(""); // Clear the password field
+        // send code if session has phone number
+        if (userDetails.phone.length > 0) {
+          sendCode();
+        }
       }
     } catch (error) {
       setWrongPass(true);
@@ -230,7 +235,7 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
         </>
       ) : (
         <>
-          {!form3 ? (
+          {!form3 && userDetails.phone.length === 0 ? (
             <>
               <Modal.Body style={{ marginLeft: "0.5rem" }}>
                 <p style={{ color: "black" }}>
@@ -278,7 +283,10 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
                   <Modal.Body style={{ marginLeft: "0.5rem" }}>
                     <p style={{ color: "black" }}>
                       Enter the authentication code below we sent to{" "}
-                      {phoneNumber} .
+                      {userDetails.phone.length > 0
+                        ? userDetails.phone
+                        : phoneNumber}{" "}
+                      .
                     </p>
                     <Form>
                       <div className="otp-code">
@@ -366,10 +374,13 @@ const Enable2FA = ({ show, setShow, setSwitchState }) => {
                         Successfully Enabled
                       </span>
 
-                      <span>Your phone number is set to {phoneNumber}</span>
+                      {/* <span>Your phone number is set to {phoneNumber}</span> */}
                       <span>
-                        Authentication Codes will be texted to this number for
-                        logging in.
+                        Authentication Codes will be texted to{" "}
+                        {userDetails.phone.length > 0
+                          ? userDetails.phone
+                          : phoneNumber}{" "}
+                        for logging in.
                       </span>
                     </div>
                   </Modal.Body>

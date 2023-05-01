@@ -42,6 +42,7 @@ const UserAccountSetting = () => {
       _id: userDetails_Session._id,
       email: userDetails_Session.email,
       tfa: userDetails_Session.tfa,
+      phone: userDetails_Session.phone ? userDetails_Session.phone : "N/A",
       dob: userDetails_Session.dob
         ? userDetails_Session.dob.substring(0, 10)
         : "2021-09-02",
@@ -59,7 +60,7 @@ const UserAccountSetting = () => {
 
   const [userDetails, setUserDetails] = useState(getSessionData());
   // 2fa active/inactive toggle
-  const [switchState, setSwitchState] = useState(userDetails.tfa);
+  const [switchState, setSwitchState] = useState(false);
   // enable 2fa modal
   const [show, setShow] = useState(false);
   // disable 2fa modal
@@ -82,6 +83,7 @@ const UserAccountSetting = () => {
   const [userInfo, setUserInfo] = useState({
     dob: userDetails.dob,
     _id: userDetails._id,
+    phone: userDetails.phone,
   });
   // gender dropdown
   const [selectedGender, setSelectedGender] = useState();
@@ -331,11 +333,20 @@ const UserAccountSetting = () => {
                         </span>
                         <p className="mb-0">{userDetails.dob}</p>
                       </Col>
+
                       {/* <Col md="4" className="text-md-right text-left">
                         <Link to="#" className="text-primary">
                           {t("change")}
                         </Link>
                       </Col> */}
+                    </Row>
+                    <Row className="align-items-center justify-content-between mb-3">
+                      <Col md="8">
+                        <span className="text-light font-size-13">
+                          Phone Number
+                        </span>
+                        <p className="mb-0">{userDetails.phone}</p>
+                      </Col>
                     </Row>
                     <Row className="align-items-center justify-content-between mb-3">
                       <Col md="8">
@@ -376,6 +387,27 @@ const UserAccountSetting = () => {
                         />
                       </Col>
                     </Row>
+                    {/* phone number */}
+                    <Row className="align-items-center justify-content-between mb-3 user-update-info">
+                      <Col md="8">
+                        <span className="text-light font-size-13">
+                          Phone Number
+                        </span>
+                        <br />
+                        <input
+                          type="tel"
+                          placeholder="Enter Phone Number"
+                          value={userInfo.phone}
+                          onChange={
+                            (e) =>
+                              setUserInfo({
+                                ...userInfo,
+                                phone: e.target.value,
+                              }) //setting the formData to the value input of the textfield
+                          }
+                        />
+                      </Col>
+                    </Row>
                     <Row className="align-items-center justify-content-between mb-3 user-update-info">
                       <Col md="8">
                         <span className="text-light font-size-13">
@@ -395,17 +427,17 @@ const UserAccountSetting = () => {
                               <Dropdown.Item eventKey="English">
                                 English
                               </Dropdown.Item>
-                              <Dropdown.Item eventKey="Spanish">
-                                Spanish
+                              <Dropdown.Item eventKey="Deutsch">
+                                Deutsch
                               </Dropdown.Item>
                               <Dropdown.Item eventKey="French">
                                 French
                               </Dropdown.Item>
-                              <Dropdown.Item eventKey="Italian">
-                                Italian
+                              <Dropdown.Item eventKey="Italiano">
+                                Italiano
                               </Dropdown.Item>
-                              <Dropdown.Item eventKey="Hindi">
-                                Hindi
+                              <Dropdown.Item eventKey="Espanol">
+                                Espanol
                               </Dropdown.Item>
                               <Dropdown.Item eventKey="Polski">
                                 Polski

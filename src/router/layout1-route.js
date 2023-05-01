@@ -10,6 +10,12 @@ import TermsOfUse from "../views/backend/pages/extrapages/termsOfUse";
 import PrivacyPolicy from "../views/backend/pages/extrapages/privacyPolicy";
 import AboutUs from "../views/backend/pages/about-us";
 import Contact from "../views/backend/pages/contact";
+//Movie
+import AddMovie from "../views/backend/movie/add-movie";
+import MovieList from "../views/backend/movie/movie-list";
+//Show
+import ShowList from "../views/backend/show/show-list";
+
 const Layout1Route = () => {
   let location = useLocation();
 
@@ -33,6 +39,9 @@ const Layout1Route = () => {
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/about-us" component={AboutUs} />
           <Route path="/contact" component={Contact} />
+          <Route path="/movie-details" component={AddMovie} />
+          <Route path="/movie-category" component={MovieList} />
+          <Route path="/show-details" component={ShowList} />
         </Switch>
       </CSSTransition>
     </TransitionGroup>
