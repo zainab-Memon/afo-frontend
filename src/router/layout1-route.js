@@ -15,6 +15,7 @@ import AddMovie from "../views/backend/movie/add-movie";
 import MovieList from "../views/backend/movie/movie-list";
 //Show
 import ShowList from "../views/backend/show/show-list";
+import Video from "../views/videoPage/video";
 
 const Layout1Route = () => {
   let location = useLocation();
@@ -39,9 +40,10 @@ const Layout1Route = () => {
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/about-us" component={AboutUs} />
           <Route path="/contact" component={Contact} />
-          <Route path="/movie-details" component={AddMovie} />
+          <Route path="/movie-details/:id" component={AddMovie} />
           <Route path="/movie-category" component={MovieList} />
           <Route path="/show-details" component={ShowList} />
+          <Route path="/videos" component={Video} />
         </Switch>
       </CSSTransition>
     </TransitionGroup>

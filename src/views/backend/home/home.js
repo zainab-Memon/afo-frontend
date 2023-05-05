@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { gsap } from "gsap";
 import { Link } from "react-router-dom";
 import { Container, Col, Row, Nav, Tab } from "react-bootstrap";
 import FsLightbox from "fslightbox-react";
 import Select from "react-select";
+import axios from "axios";
 
 // img
 import logo from "../../../assets/images/login/logo.png";
@@ -18,10 +19,6 @@ import fav5 from "../../../assets/images/favorite/05.jpg";
 
 // upcoming img
 import upcoming1 from "../../../assets/images/upcoming/01.jpg";
-import upcoming2 from "../../../assets/images/upcoming/02.jpg";
-import upcoming3 from "../../../assets/images/upcoming/03.jpg";
-import upcoming4 from "../../../assets/images/upcoming/04.jpg";
-import upcoming5 from "../../../assets/images/upcoming/05.jpg";
 
 // suggested
 import suggested1 from "../../../assets/images/suggested/01.jpg";
@@ -61,6 +58,16 @@ import tvthrillers5 from "../../../assets/images/tvthrillers/05.jpg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { EffectFade, Navigation, Thumbs, Pagination } from "swiper";
 import "swiper/swiper-bundle.css";
+import {
+  UpComingSliderApi,
+  VerticalSliderApi,
+  MainSliderApi,
+  LatestSliderApi,
+  SuggestedApi,
+  TrendingApi,
+  RecommendedApi,
+} from "../../../Services/SliderApi";
+
 SwiperCore.use([EffectFade, Navigation, Thumbs, Pagination]);
 
 const gsapAnimate = {
@@ -76,6 +83,10 @@ const gsapAnimate = {
       duration: 1,
       delay: 0.4,
       rotate: 0,
+      //---------
+      // infinite: true,
+      // autoplaySpeed: 1000,
+      // pauseOnHover: true,
     };
     if (elem !== undefined) {
       option.position.x = gsapAnimate.validValue(elem.dataset.iqPositionX, 0);
@@ -94,6 +105,10 @@ const gsapAnimate = {
 
       option.ease = gsapAnimate.validValue(elem.dataset.iqEase, "");
 
+      // option.infinite = gsapAnimate.validValue(elem.dataset.iqInfinite, true);
+
+      // option.autoplaySpeed = gsapAnimate.validValue(elem.dataset.iqAutoplaySpeed, 3000);
+
       const setOption = {
         opacity: option.opacity,
         scale: option.scale,
@@ -103,6 +118,10 @@ const gsapAnimate = {
         rotate: option.rotate,
         duration: option.duration,
         delay: option.delay,
+        //------------
+        infinite: option.infinite,
+        autoplaySpeed: option.autoplaySpeed,
+        pauseOnHover: option.pauseOnHover,
       };
 
       return setOption;
@@ -148,10 +167,107 @@ const gsapAnimate = {
 };
 
 const Homepage = () => {
+  const [mainSliderData, setMainSliderData] = useState([]);
+  const [moviesData, setMoviesData] = useState([]);
+  const [upcomingData, setUpcomingData] = useState([]);
+  const [latestData, setLatestData] = useState([]);
+  const [suggestedData, setSuggestedData] = useState([]);
+  const [trendingApiData, setTrendingApiData] = useState([]);
+  const [recommandedData, setRecommandedData] = useState([]);
+
+  useEffect(() => {
+    MainSliderApi()
+      .then((data) => {
+        setMainSliderData(data.allSliders);
+        console.log(data.allSliders, "SLiders ka response");
+      })
+      .catch((error) => {
+        console.log(error, "Main Slider error");
+      });
+  }, []);
+
+  // const ids = mainSliderData
+  //   .map((obj) => (obj.general_content._id ? obj.general_content._id : null))
+  //   .filter((_id) => _id !== null);
+  // console.log("ids", ids);
+
+  // useEffect(() => {
+  //   const url = "http://54.221.169.56:3005/api/general-content/get-top-rated-content/en";
+  //   axios
+  //     .post(url)
+  //     .then((response) => {
+  //       return setMoviesData(response.data.general_contents);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error, "ERRROR AT VERTICAL SLIDER");
+  //     });
+  // }, []);
+
+  useEffect(() => {
+    VerticalSliderApi()
+      .then((data) => {
+        setMoviesData(data.general_contents);
+      })
+      .catch((error) => {
+        console.log(error, "Vertical Slider error");
+      });
+  }, []);
+
+  useEffect(() => {
+    UpComingSliderApi()
+      .then((data) => {
+        setUpcomingData(data.upcomingContent);
+      })
+      .catch((error) => {
+        console.log(error, "Upcoming Slider error");
+      });
+  }, []);
+
+  useEffect(() => {
+    LatestSliderApi()
+      .then((data) => {
+        setLatestData(data.upcomingContent);
+      })
+      .catch((error) => {
+        console.log(error, "Latest Slider error");
+      });
+  }, []);
+
+  useEffect(() => {
+    SuggestedApi()
+      .then((data) => {
+        setSuggestedData(data.upcomingContent);
+        console.log("suggestedData", suggestedData);
+      })
+      .catch((error) => {
+        console.log(error, "Suggested Slider error");
+      });
+  }, []);
+  // Trending data
+  useEffect(() => {
+    TrendingApi()
+      .then((data) => {
+        setTrendingApiData(data.upcomingContent);
+      })
+      .catch((error) => {
+        console.log(error, "TrendingApiData Slider error");
+      });
+  }, []);
+  // Recommanded data
+  useEffect(() => {
+    RecommendedApi()
+      .then((data) => {
+        setRecommandedData(data.upcomingContent);
+      })
+      .catch((error) => {
+        console.log(error, "Recommanded Slider error");
+      });
+  }, []);
+
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [toggler1, setToggler1] = useState(false);
-  const [toggler2, setToggler2] = useState(false);
-  const [toggler3, setToggler3] = useState(false);
+  // const [toggler2, setToggler2] = useState(false);
+  // const [toggler3, setToggler3] = useState(false);
 
   const animationInit = () => {
     if (
@@ -194,35 +310,9 @@ const Homepage = () => {
           />,
         ]}
       />
-      <FsLightbox
-        toggler={toggler2}
-        sources={[
-          <iframe
-            src={icon}
-            title=" "
-            width="500px"
-            height="200px"
-            frameBorder="0"
-            allow="autoplay; fullscreen"
-            allowFullScreen
-          />,
-        ]}
-      />
-      <FsLightbox
-        toggler={toggler3}
-        sources={[
-          <iframe
-            src={icon}
-            title=" "
-            width="500px"
-            height="200px"
-            frameBorder="0"
-            allow="autoplay; fullscreen"
-            allowFullScreen
-          />,
-        ]}
-      />
+
       <section id="home" className="iq-main-slider p-0 iq-rtl-direction">
+        Main Slider Buttons
         <div id="prev5" className="swiper-button swiper-button-prev">
           <i className="fa fa-chevron-left"></i>
         </div>
@@ -245,469 +335,157 @@ const Homepage = () => {
           id="home-slider"
           className="slider m-0 p-0"
         >
-          <SwiperSlide className="slide slick-bg s-bg-1">
-            <Container fluid className="position-relative h-100">
-              <div className="slider-inner h-100">
-                <Row className="align-items-center  iq-ltr-direction h-100 ">
-                  <Col xl="6" lg="12" md="12">
-                    <Link to="#">
-                      <div className="channel-logo" data-iq-delay="0.5">
-                        <img src={logo} className="c-logo" alt="streamit" />
-                      </div>
-                    </Link>
-                    <h1
-                      className="slider-text big-title title text-uppercase"
-                      data-iq-gsap="onStart"
-                      data-iq-position-x="-200"
-                    >
-                      bushland
-                    </h1>
-                    <div className="d-flex flex-wrap align-items-center">
-                      <div
-                        className="slider-ratting d-flex align-items-center mr-4 mt-2 mt-md-3"
+          {mainSliderData.map((mainSlider) => (
+            <SwiperSlide
+              className="slide slick-bg"
+              style={{
+                backgroundImage: `url(${mainSlider?.general_content?.thumbnail?.banner_thumbnail_url})`,
+              }}
+            >
+              <Container fluid className="position-relative h-100">
+                <div className="slider-inner h-100">
+                  <Row className="align-items-center  iq-ltr-direction h-100 ">
+                    <Col xl="7" lg="12" md="12" sm="12">
+                      <Link to="#">
+                        <div className="channel-logo" data-iq-delay="0.5">
+                          <img src={logo} className="c-logo" alt="streamit" />
+                        </div>
+                      </Link>
+                      <h1
+                        className="slider-text big-title title text-uppercase"
                         data-iq-gsap="onStart"
                         data-iq-position-x="-200"
-                        data-iq-delay="-0.5"
+                        style={{
+                          whiteSpace: "nowrap",
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                        }}
                       >
-                        <ul className="ratting-start p-0 m-0 list-inline text-primary d-flex align-items-center justify-content-left">
-                          <li>
-                            <i className="fa fa-star" aria-hidden="true"></i>
-                          </li>
-                          <li>
-                            <i className="fa fa-star" aria-hidden="true"></i>
-                          </li>
-                          <li>
-                            <i className="fa fa-star" aria-hidden="true"></i>
-                          </li>
-                          <li>
-                            <i className="fa fa-star" aria-hidden="true"></i>
-                          </li>
-                          <li>
-                            <i
-                              className="fa fa-star-half"
-                              aria-hidden="true"
-                            ></i>
-                          </li>
-                        </ul>
-                        <span className="text-white ml-2">4.7(lmdb)</span>
+                        {mainSlider?.general_content?.media?.title}
+                      </h1>
+                      <div className="d-flex flex-wrap align-items-center">
+                        <div
+                          className="d-flex align-items-center mt-2 mt-md-3"
+                          data-iq-gsap="onStart"
+                          data-iq-position-x="-200"
+                          data-iq-delay="-0.5"
+                        >
+                          {/* <span className="badge badge-secondary p-2">18+</span> */}
+                          {/* <span className="ml-3">2 Seasons</span> */}
+                        </div>
+                        <p
+                          data-iq-gsap="onStart"
+                          data-iq-position-y="80"
+                          data-iq-delay="0.8"
+                          style={{ WebkitLineClamp: 3 }}
+                        >
+                          Lorem Ipsum is simply dummy text of the printing and
+                          typesetting industry. Lorem Ipsum is simply dummy text
+                          of the printing and typesetting industry.
+                        </p>
                       </div>
                       <div
-                        className="d-flex align-items-center mt-2 mt-md-3"
-                        data-iq-gsap="onStart"
-                        data-iq-position-x="-200"
-                        data-iq-delay="-0.5"
+                        className="trending-list"
+                        data-wp_object-in="fadeInUp"
+                        data-delay-in="1.2"
                       >
-                        <span className="badge badge-secondary p-2">18+</span>
-                        <span className="ml-3">2 Seasons</span>
+                        <div className="text-primary title genres">
+                          Genres:{" "}
+                          <span className="text-body">
+                            {mainSlider?.general_content?.media?.jw_tags}
+                          </span>
+                        </div>
+                        <div className="text-primary title tag">
+                          Tag:{" "}
+                          <span className="text-body">
+                            {/* Action, Adventure, Horror*/}{" "}
+                            {mainSlider?.general_content?.media?.seo_tags}
+                          </span>
+                        </div>
                       </div>
-                      <p
+                      <div
+                        className="d-flex r-mb-23"
                         data-iq-gsap="onStart"
                         data-iq-position-y="80"
                         data-iq-delay="0.8"
                       >
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s.
-                      </p>
-                    </div>
-                    <div
-                      className="trending-list"
-                      data-wp_object-in="fadeInUp"
-                      data-delay-in="1.2"
-                    >
-                      <div className="text-primary title starring">
-                        Starring:{" "}
-                        <span className="text-body">
-                          Karen Gilchrist, James Earl Jones
-                        </span>
+                        <Link
+                          to={`/movie-details/${mainSlider.general_content._id}`}
+                          className="btn btn-hover iq-button"
+                        >
+                          <i className="fa fa-play mr-2" aria-hidden="true"></i>
+                          Play Now
+                        </Link>
+                        <Link
+                          to="/show-details"
+                          className="btn btn-link"
+                          style={{ marginTop: "5px" }}
+                        >
+                          More details
+                        </Link>
                       </div>
-                      <div className="text-primary title genres">
-                        Genres: <span className="text-body">Action</span>
-                      </div>
-                      <div className="text-primary title tag">
-                        Tag:{" "}
-                        <span className="text-body">
-                          Action, Adventure, Horror
-                        </span>
-                      </div>
-                    </div>
-                    <div
-                      className="d-flex align-items-center r-mb-23"
-                      data-iq-gsap="onStart"
-                      data-iq-position-y="80"
-                      data-iq-delay="0.8"
-                    >
-                      <Link
-                        to="/show-details"
-                        className="btn btn-hover iq-button"
+                    </Col>
+
+                    {mainSlider?.general_content?.trailer?.media_id && (
+                      <Col
+                        xl="5"
+                        lg="12"
+                        md="12"
+                        className={"trailor-video text-center"}
                       >
-                        <i className="fa fa-play mr-2" aria-hidden="true"></i>
-                        Play Now
-                      </Link>
-                      <Link to="/show-details" className="btn btn-link">
-                        More details
-                      </Link>
-                    </div>
-                  </Col>
-                  <Col
-                    xl="5"
-                    lg="12"
-                    md="12"
-                    className="trailor-video text-center"
-                  >
-                    <Link
-                      onClick={() => setToggler1(!toggler1)}
-                      to="/"
-                      className="video-open playbtn"
-                    >
-                      <svg
-                        version="1.1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                        x="0px"
-                        y="0px"
-                        width="80px"
-                        height="80px"
-                        viewBox="0 0 213.7 213.7"
-                        enableBackground="new 0 0 213.7 213.7"
-                        xmlSpace="preserve"
-                      >
-                        <polygon
-                          className="triangle"
-                          fill="none"
-                          strokeWidth="7"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeMiterlimit="10"
-                          points="73.5,62.5 148.5,105.8 73.5,149.1 "
-                        />
-                        <circle
-                          className="circle"
-                          fill="none"
-                          strokeWidth="7"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeMiterlimit="10"
-                          cx="106.8"
-                          cy="106.8"
-                          r="103.3"
-                        />
-                      </svg>
-                      <span className="w-trailor">Watch Trailer</span>
-                    </Link>
-                  </Col>
-                </Row>
-              </div>
-            </Container>
-          </SwiperSlide>
-          <SwiperSlide className="slide slick-bg s-bg-2">
-            <Container fluid className="position-relative h-100">
-              <div className="slider-inner h-100">
-                <Row className="row align-items-center  h-100 iq-ltr-direction">
-                  <Col xl="6" lg="12" md="12">
-                    <Link to="#">
-                      <div className="channel-logo">
-                        <img src={logo} className="c-logo" alt="streamit" />
-                      </div>
-                    </Link>
-                    <h1
-                      className="slider-text big-title title text-uppercase"
-                      data-iq-gsap="onStart"
-                      data-iq-position-x="-200"
-                    >
-                      sail coaster
-                    </h1>
-                    <div className="d-flex flex-wrap align-items-center animated">
-                      <div
-                        className="slider-ratting d-flex align-items-center mr-4 mt-2 mt-md-3"
-                        data-iq-gsap="onStart"
-                        data-iq-position-x="-200"
-                        data-iq-delay="-0.5"
-                      >
-                        <ul className="ratting-start p-0 m-0 list-inline text-primary d-flex align-items-center justify-content-left">
-                          <li>
-                            <i className="fa fa-star" aria-hidden="true"></i>
-                          </li>
-                          <li>
-                            <i className="fa fa-star" aria-hidden="true"></i>
-                          </li>
-                          <li>
-                            <i className="fa fa-star" aria-hidden="true"></i>
-                          </li>
-                          <li>
-                            <i className="fa fa-star" aria-hidden="true"></i>
-                          </li>
-                          <li>
-                            <i
-                              className="fa fa-star-half"
-                              aria-hidden="true"
-                            ></i>
-                          </li>
-                        </ul>
-                        <span className="text-white ml-2">4.7(lmdb)</span>
-                      </div>
-                      <div
-                        className="d-flex align-items-center mt-2 mt-md-3"
-                        data-iq-gsap="onStart"
-                        data-iq-position-x="-200"
-                        data-iq-delay="-0.5"
-                      >
-                        <span className="badge badge-secondary p-2">16+</span>
-                        <span className="ml-3">2h 40m</span>
-                      </div>
-                    </div>
-                    <p
-                      data-iq-gsap="onStart"
-                      data-iq-position-y="80"
-                      data-iq-delay="0.8"
-                    >
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s.
-                    </p>
-                    <div
-                      className="trending-list"
-                      data-wp_object-in="fadeInUp"
-                      data-delay-in="1.2"
-                    >
-                      <div className="text-primary title starring">
-                        Starring:{" "}
-                        <span className="text-body">
-                          Karen Gilchrist, James Earl Jones
-                        </span>
-                      </div>
-                      <div className="text-primary title genres">
-                        Genres: <span className="text-body">Action</span>
-                      </div>
-                      <div className="text-primary title tag">
-                        Tag:{" "}
-                        <span className="text-body">
-                          Action, Adventure, Horror
-                        </span>
-                      </div>
-                    </div>
-                    <div
-                      className="d-flex align-items-center r-mb-23"
-                      data-iq-gsap="onStart"
-                      data-iq-position-y="80"
-                      data-iq-delay="0.8"
-                    >
-                      <Link
-                        to="/show-details"
-                        className="btn btn-hover iq-button"
-                      >
-                        <i className="fa fa-play mr-2" aria-hidden="true"></i>
-                        Play Now
-                      </Link>
-                      <Link to="/show-details" className="btn btn-link">
-                        More details
-                      </Link>
-                    </div>
-                  </Col>
-                  <div className="col-xl-5 col-lg-12 col-md-12 trailor-video  text-center">
-                    <Link
-                      onClick={() => setToggler2(!toggler2)}
-                      to="/"
-                      className="video-open playbtn"
-                    >
-                      <svg
-                        version="1.1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                        x="0px"
-                        y="0px"
-                        width="80px"
-                        height="80px"
-                        viewBox="0 0 213.7 213.7"
-                        enableBackground="new 0 0 213.7 213.7"
-                        xmlSpace="preserve"
-                      >
-                        <polygon
-                          className="triangle"
-                          fill="none"
-                          strokeWidth="7"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeMiterlimit="10"
-                          points="73.5,62.5 148.5,105.8 73.5,149.1 "
-                        />
-                        <circle
-                          className="circle"
-                          fill="none"
-                          strokeWidth="7"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeMiterlimit="10"
-                          cx="106.8"
-                          cy="106.8"
-                          r="103.3"
-                        />
-                      </svg>
-                      <span className="w-trailor">Watch Trailer</span>
-                    </Link>
-                  </div>
-                </Row>
-              </div>
-            </Container>
-          </SwiperSlide>
-          <SwiperSlide className="slide slick-bg s-bg-3">
-            <Container fluid className="position-relative h-100">
-              <div className="slider-inner h-100">
-                <Row className="align-items-center  h-100 iq-ltr-direction">
-                  <Col xl="6" lg="12" md="12">
-                    <Link to="#">
-                      <div className="channel-logo">
-                        <img src={logo} className="c-logo" alt="streamit" />
-                      </div>
-                    </Link>
-                    <h1
-                      className="slider-text big-title title text-uppercase"
-                      data-iq-gsap="onStart"
-                      data-iq-position-x="-200"
-                    >
-                      the army
-                    </h1>
-                    <div className="d-flex flex-wrap align-items-center">
-                      <div
-                        className="slider-ratting d-flex align-items-center mr-4 mt-2 mt-md-3"
-                        data-iq-gsap="onStart"
-                        data-iq-position-x="-200"
-                        data-iq-delay="-0.5"
-                      >
-                        <ul className="ratting-start p-0 m-0 list-inline text-primary d-flex align-items-center justify-content-left">
-                          <li>
-                            <i className="fa fa-star" aria-hidden="true"></i>
-                          </li>
-                          <li>
-                            <i className="fa fa-star" aria-hidden="true"></i>
-                          </li>
-                          <li>
-                            <i className="fa fa-star" aria-hidden="true"></i>
-                          </li>
-                          <li>
-                            <i className="fa fa-star" aria-hidden="true"></i>
-                          </li>
-                          <li>
-                            <i
-                              className="fa fa-star-half"
-                              aria-hidden="true"
-                            ></i>
-                          </li>
-                        </ul>
-                        <span className="text-white ml-2">4.7(lmdb)</span>
-                      </div>
-                      <div
-                        className="d-flex align-items-center mt-2 mt-md-3"
-                        data-iq-gsap="onStart"
-                        data-iq-position-x="-200"
-                        data-iq-delay="-0.5"
-                      >
-                        <span className="badge badge-secondary p-2">20+</span>
-                        <span className="ml-3">3h</span>
-                      </div>
-                    </div>
-                    <p
-                      data-iq-gsap="onStart"
-                      data-iq-position-y="80"
-                      data-iq-delay="0.8"
-                    >
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s.
-                    </p>
-                    <div
-                      className="trending-list"
-                      data-wp_object-in="fadeInUp"
-                      data-delay-in="1.2"
-                    >
-                      <div className="text-primary title starring">
-                        Starring:{" "}
-                        <span className="text-body">
-                          Karen Gilchrist, James Earl Jones
-                        </span>
-                      </div>
-                      <div className="text-primary title genres">
-                        Genres: <span className="text-body">Action</span>
-                      </div>
-                      <div className="text-primary title tag">
-                        Tag:{" "}
-                        <span className="text-body">
-                          Action, Adventure, Horror
-                        </span>
-                      </div>
-                    </div>
-                    <div
-                      className="d-flex align-items-center r-mb-23"
-                      data-iq-gsap="onStart"
-                      data-iq-position-y="80"
-                      data-iq-delay="0.8"
-                    >
-                      <Link
-                        to="/show-details"
-                        className="btn btn-hover iq-button"
-                      >
-                        <i className="fa fa-play mr-2" aria-hidden="true"></i>
-                        Play Now
-                      </Link>
-                      <Link to="/show-details" className="btn btn-link">
-                        More details
-                      </Link>
-                    </div>
-                  </Col>
-                  <Col
-                    xl="5"
-                    lg="12"
-                    md="12"
-                    className="trailor-video  text-center"
-                  >
-                    <Link
-                      onClick={() => setToggler3(!toggler3)}
-                      to="/"
-                      className="video-open playbtn"
-                    >
-                      <svg
-                        version="1.1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                        x="0px"
-                        y="0px"
-                        width="80px"
-                        height="80px"
-                        viewBox="0 0 213.7 213.7"
-                        enableBackground="new 0 0 213.7 213.7"
-                        xmlSpace="preserve"
-                      >
-                        <polygon
-                          className="triangle"
-                          fill="none"
-                          strokeWidth="7"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeMiterlimit="10"
-                          points="73.5,62.5 148.5,105.8 73.5,149.1 "
-                        />
-                        <circle
-                          className="circle"
-                          fill="none"
-                          strokeWidth="7"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeMiterlimit="10"
-                          cx="106.8"
-                          cy="106.8"
-                          r="103.3"
-                        />
-                      </svg>
-                      <span className="w-trailor">Watch Trailer</span>
-                    </Link>
-                  </Col>
-                </Row>
-              </div>
-            </Container>
-          </SwiperSlide>
+                        <Link
+                          onClick={() => setToggler1(!toggler1)}
+                          to="/"
+                          className="video-open playbtn"
+                        >
+                          <svg
+                            version="1.1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlnsXlink="http://www.w3.org/1999/xlink"
+                            x="0px"
+                            y="0px"
+                            width="80px"
+                            height="80px"
+                            viewBox="0 0 213.7 213.7"
+                            enableBackground="new 0 0 213.7 213.7"
+                            xmlSpace="preserve"
+                          >
+                            <polygon
+                              className="triangle"
+                              fill="none"
+                              strokeWidth="7"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeMiterlimit="10"
+                              points="73.5,62.5 148.5,105.8 73.5,149.1 "
+                            />
+                            <circle
+                              className="circle"
+                              fill="none"
+                              strokeWidth="7"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeMiterlimit="10"
+                              cx="106.8"
+                              cy="106.8"
+                              r="103.3"
+                            />
+                          </svg>
+                          <span className="w-trailor">
+                            {mainSlider?.general_content?.trailer?.media_id}
+                          </span>
+                        </Link>
+                      </Col>
+                    )}
+                  </Row>
+                </div>
+              </Container>
+            </SwiperSlide>
+          ))}
         </Swiper>
       </section>
       <div className="main-content">
+        {/* Latest Movies  */}
         <section id="iq-favorites">
           <Container fluid>
             <Row>
@@ -733,8 +511,8 @@ const Homepage = () => {
                     breakpoints={{
                       320: { slidesPerView: 1 },
                       550: { slidesPerView: 2 },
-                      991: { slidesPerView: 3 },
-                      1400: { slidesPerView: 4 },
+                      991: { slidesPerView: 4 },
+                      1400: { slidesPerView: 5 },
                     }}
                     loop={true}
                     slidesPerView={4}
@@ -742,417 +520,104 @@ const Homepage = () => {
                     as="ul"
                     className="favorites-slider list-inline  row p-0 m-0 iq-rtl-direction"
                   >
-                    <SwiperSlide as="li">
-                      <div className=" block-images position-relative">
-                        <div className="img-box">
-                          <img src={fav1} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Sand Dust</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              13+
-                            </div>
-                            <span className="text-white">2h 30m</span>
+                    {latestData.map((data) => (
+                      <SwiperSlide as="li">
+                        <div className=" block-images position-relative">
+                          <div className="img-box">
+                            <img
+                              src={data?.thumbnail?.banner_thumbnail_url}
+                              className="img-fluid"
+                              alt=""
+                            />
                           </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
+                          <div className="block-description">
+                            <h6 className="iq-title">
+                              <Link to="/show-details">
+                                {data?.media?.title}
+                              </Link>
+                            </h6>
+                            <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                              <div className="badge badge-secondary p-1 mr-2">
+                                13+
                               </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
+                              <span className="text-white">
+                                {data?.media?.duration}
                               </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img src={fav2} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Last Race</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              7+
                             </div>
-                            <span className="text-white">2 Seasons</span>
-                          </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img src={fav3} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Boop Bitty</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              15+
+                            <div className="hover-buttons">
+                              <Link
+                                to="/show-details"
+                                role="button"
+                                className="btn btn-hover iq-button"
+                              >
+                                <i
+                                  className="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </Link>
                             </div>
-                            <span className="text-white">2h 30m</span>
                           </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
+                          <div className="block-social-info">
+                            <ul className="list-inline p-0 m-0 music-play-lists">
+                              <li className="share">
+                                <span>
+                                  <i className="ri-share-fill"></i>
+                                </span>
+                                <div className="share-box">
+                                  <div className="d-flex align-items-center">
+                                    <Link
+                                      to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="share-ico"
+                                      tabIndex="0"
+                                    >
+                                      <i className="ri-facebook-fill"></i>
+                                    </Link>
+                                    <Link
+                                      to="https://twitter.com/intent/tweet?text=Currentlyreading"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="share-ico"
+                                      tabIndex="0"
+                                    >
+                                      <i className="ri-twitter-fill"></i>
+                                    </Link>
+                                    <Link
+                                      to="#"
+                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      className="share-ico iq-copy-link"
+                                      tabIndex="0"
+                                    >
+                                      <i className="ri-links-fill"></i>
+                                    </Link>
+                                  </div>
                                 </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img src={fav4} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Dino Land</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              18+
-                            </div>
-                            <span className="text-white">3 Seasons</span>
-                          </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
+                              </li>
+                              <li>
+                                <span>
+                                  <i className="ri-heart-fill"></i>
+                                </span>
+                                <span className="count-box">19+</span>
+                              </li>
+                              <li>
+                                <span>
+                                  <i className="ri-add-line"></i>
+                                </span>
+                              </li>
+                            </ul>
                           </div>
                         </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img src={fav5} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Jaction action</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              10+
-                            </div>
-                            <span className="text-white">1 Season</span>
-                          </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
+                      </SwiperSlide>
+                    ))}
                   </Swiper>
                 </div>
               </Col>
             </Row>
           </Container>
         </section>
+        {/* Upcoming Movies */}
         <section id="iq-upcoming-movie">
           <Container fluid>
             <Row>
@@ -1174,8 +639,8 @@ const Homepage = () => {
                     breakpoints={{
                       320: { slidesPerView: 1 },
                       550: { slidesPerView: 2 },
-                      991: { slidesPerView: 3 },
-                      1400: { slidesPerView: 4 },
+                      991: { slidesPerView: 4 },
+                      1400: { slidesPerView: 5 },
                     }}
                     navigation={{
                       prevEl: "#prev1",
@@ -1187,420 +652,106 @@ const Homepage = () => {
                     as="ul"
                     className="favorites-slider list-inline row p-0 m-0 iq-rtl-direction"
                   >
-                    <SwiperSlide as="li">
-                      <div className=" block-images position-relative">
-                        <div className="img-box">
-                          <img src={upcoming1} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">The Last Breath</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              5+
-                            </div>
-                            <span className="text-white">2h 30m</span>
+                    {upcomingData.map((data) => (
+                      <SwiperSlide as="li">
+                        <div className=" block-images position-relative">
+                          <div className="img-box">
+                            <img
+                              src={data?.thumbnail?.banner_thumbnail_url}
+                              className="img-fluid"
+                              alt=""
+                            />
                           </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
+                          <div className="block-description">
+                            <h6 className="iq-title">
+                              <Link to="/show-details">
+                                {data?.media?.title}
+                              </Link>
+                            </h6>
+                            <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                              <div className="badge badge-secondary p-1 mr-2">
+                                5+
                               </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
+                              <span className="text-white">
+                                {data?.media?.duration}
                               </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img src={upcoming2} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Shadow</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              22+
                             </div>
-                            <span className="text-white">2h 15m</span>
-                          </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img src={upcoming3} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            {" "}
-                            <Link to="/show-details">Another Danger</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              25+
+                            <div className="hover-buttons">
+                              <Link
+                                to="/show-details"
+                                role="button"
+                                className="btn btn-hover iq-button"
+                              >
+                                <i
+                                  className="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </Link>
                             </div>
-                            <span className="text-white">3h</span>
                           </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
+                          <div className="block-social-info">
+                            <ul className="list-inline p-0 m-0 music-play-lists">
+                              <li className="share">
+                                <span>
+                                  <i className="ri-share-fill"></i>
+                                </span>
+                                <div className="share-box">
+                                  <div className="d-flex align-items-center">
+                                    <Link
+                                      to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="share-ico"
+                                      tabIndex="0"
+                                    >
+                                      <i className="ri-facebook-fill"></i>
+                                    </Link>
+                                    <Link
+                                      to="https://twitter.com/intent/tweet?text=Currentlyreading"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="share-ico"
+                                      tabIndex="0"
+                                    >
+                                      <i className="ri-twitter-fill"></i>
+                                    </Link>
+                                    <Link
+                                      to="#"
+                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      className="share-ico iq-copy-link"
+                                      tabIndex="0"
+                                    >
+                                      <i className="ri-links-fill"></i>
+                                    </Link>
+                                  </div>
                                 </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img src={upcoming4} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">1980</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              11+
-                            </div>
-                            <span className="text-white">2h 45m</span>
-                          </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
+                              </li>
+                              <li>
+                                <span>
+                                  <i className="ri-heart-fill"></i>
+                                </span>
+                                <span className="count-box">19+</span>
+                              </li>
+                              <li>
+                                <span>
+                                  <i className="ri-add-line"></i>
+                                </span>
+                              </li>
+                            </ul>
                           </div>
                         </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img src={upcoming5} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Vugotronic</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              9+
-                            </div>
-                            <span className="text-white">2h 30m</span>
-                          </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
+                      </SwiperSlide>
+                    ))}
                   </Swiper>
                 </div>
               </Col>
             </Row>
           </Container>
         </section>
-        {/* vertical slider */}
-        {/* <div className="verticle-slider">
+        {/* VERTICAL SLIDER */}
+        vertical slider
+        <div className="verticle-slider">
           <Container fluid>
             <section className="slider">
               <div className="slider__flex position-relative">
@@ -1613,7 +764,7 @@ const Homepage = () => {
               </div>
             </section>
           </Container>
-        </div> */}
+        </div>
         <div class="verticle-slider">
           <Container fluid>
             <section className="slider">
@@ -1648,825 +799,102 @@ const Homepage = () => {
                       as="ul"
                       className="swiper-vertical top-ten-slider-nav"
                     >
-                      <SwiperSlide
-                        as="li"
-                        style={{
-                          height: "194.5px",
-                          width: "100%",
-                          marginBottom: "24px",
-                        }}
-                      >
-                        {" "}
-                        <div class="block-images position-relative ">
-                          <div class="img-box slider--image">
-                            <img
-                              src={trending1}
-                              class="img-fluid"
-                              alt=""
-                              loading="lazy"
-                            />
-                          </div>
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Shadow Warrior</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
+                      {moviesData.map((movie) => (
+                        <SwiperSlide
+                          as="li"
+                          style={{
+                            height: "194.5px",
+                            width: "100%",
+                            marginBottom: "24px",
+                          }}
+                        >
+                          {" "}
+                          <div class="block-images position-relative ">
+                            <div class="img-box slider--image">
+                              <img
+                                src={
+                                  movie?.thumbnail?.banner_thumbnail_url ||
+                                  upcoming1
+                                }
+                                class="img-fluid"
+                                alt=""
+                                loading="lazy"
+                              />
                             </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
+                            <div class="block-description">
+                              <h6 class="iq-title">
+                                <a href="show-detail.html">{movie?.title}</a>
+                              </h6>
+                              <div class="movie-time d-flex align-items-center my-2">
+                                <span class="text-white">1hr : 50mins</span>
+                              </div>
+                              <div class="hover-buttons">
+                                <a
+                                  href="show-detail.html"
+                                  role="button"
+                                  class="btn btn-hover"
+                                >
+                                  <i
+                                    class="fa fa-play mr-1"
+                                    aria-hidden="true"
+                                  ></i>
+                                  Play Now
+                                </a>
+                              </div>
                             </div>
-                          </div>
-                          <div class="block-social-info">
-                            <ul class="list-inline p-0 m-0 music-play-lists">
-                              <li class="share">
-                                <span>
-                                  <i class="ri-share-fill"></i>
-                                </span>
-                                <div class="share-box">
-                                  <div class="d-flex align-items-center">
-                                    <a
-                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-facebook-fill"></i>
-                                    </a>
-                                    <a
-                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-twitter-fill"></i>
-                                    </a>
-                                    <a
-                                      href="#"
-                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      class="share-ico iq-copy-link"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-links-fill"></i>
-                                    </a>
+                            <div class="block-social-info">
+                              <ul class="list-inline p-0 m-0 music-play-lists">
+                                <li class="share">
+                                  <span>
+                                    <i class="ri-share-fill"></i>
+                                  </span>
+                                  <div class="share-box">
+                                    <div class="d-flex align-items-center">
+                                      <a
+                                        href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="share-ico"
+                                        tabindex="0"
+                                      >
+                                        <i class="ri-facebook-fill"></i>
+                                      </a>
+                                      <a
+                                        href="https://twitter.com/intent/tweet?text=Currentlyreading"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="share-ico"
+                                        tabindex="0"
+                                      >
+                                        <i class="ri-twitter-fill"></i>
+                                      </a>
+                                      <a
+                                        href="#"
+                                        data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                        class="share-ico iq-copy-link"
+                                        tabindex="0"
+                                      >
+                                        <i class="ri-links-fill"></i>
+                                      </a>
+                                    </div>
                                   </div>
-                                </div>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-heart-fill"></i>
-                                </span>
-                                <span class="count-box">2+</span>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-add-line"></i>
-                                </span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                      <SwiperSlide
-                        as="li"
-                        style={{
-                          height: "194.5px",
-                          width: "100% !important",
-                          marginBottom: "24px",
-                        }}
-                      >
-                        {" "}
-                        <div class="block-images position-relative ">
-                          <div class="img-box slider--image">
-                            <img
-                              src={trending2}
-                              class="img-fluid"
-                              alt=""
-                              loading="lazy"
-                            />
-                          </div>
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 1</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
+                                </li>
+                                <li>
+                                  <span>
+                                    <i class="ri-heart-fill"></i>
+                                  </span>
+                                  <span class="count-box">2+</span>
+                                </li>
+                                <li>
+                                  <span>
+                                    <i class="ri-add-line"></i>
+                                  </span>
+                                </li>
+                              </ul>
                             </div>
                           </div>
-                          <div class="block-social-info">
-                            <ul class="list-inline p-0 m-0 music-play-lists">
-                              <li class="share">
-                                <span>
-                                  <i class="ri-share-fill"></i>
-                                </span>
-                                <div class="share-box">
-                                  <div class="d-flex align-items-center">
-                                    <a
-                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-facebook-fill"></i>
-                                    </a>
-                                    <a
-                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-twitter-fill"></i>
-                                    </a>
-                                    <a
-                                      href="#"
-                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      class="share-ico iq-copy-link"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-links-fill"></i>
-                                    </a>
-                                  </div>
-                                </div>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-heart-fill"></i>
-                                </span>
-                                <span class="count-box">2+</span>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-add-line"></i>
-                                </span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                      <SwiperSlide
-                        as="li"
-                        style={{
-                          height: "194.5px",
-                          width: "100% !important",
-                          marginBottom: "24px",
-                        }}
-                      >
-                        {" "}
-                        <div class="block-images position-relative ">
-                          <div class="img-box slider--image">
-                            <img
-                              src={trending2}
-                              class="img-fluid"
-                              alt=""
-                              loading="lazy"
-                            />
-                          </div>
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 2</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                          <div class="block-social-info">
-                            <ul class="list-inline p-0 m-0 music-play-lists">
-                              <li class="share">
-                                <span>
-                                  <i class="ri-share-fill"></i>
-                                </span>
-                                <div class="share-box">
-                                  <div class="d-flex align-items-center">
-                                    <a
-                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-facebook-fill"></i>
-                                    </a>
-                                    <a
-                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-twitter-fill"></i>
-                                    </a>
-                                    <a
-                                      href="#"
-                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      class="share-ico iq-copy-link"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-links-fill"></i>
-                                    </a>
-                                  </div>
-                                </div>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-heart-fill"></i>
-                                </span>
-                                <span class="count-box">2+</span>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-add-line"></i>
-                                </span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                      <SwiperSlide
-                        as="li"
-                        style={{
-                          height: "194.5px",
-                          width: "100% !important",
-                          marginBottom: "24px",
-                        }}
-                      >
-                        {" "}
-                        <div class="block-images position-relative ">
-                          <div class="img-box slider--image">
-                            <img
-                              src={trending2}
-                              class="img-fluid"
-                              alt=""
-                              loading="lazy"
-                            />
-                          </div>
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 3</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                          <div class="block-social-info">
-                            <ul class="list-inline p-0 m-0 music-play-lists">
-                              <li class="share">
-                                <span>
-                                  <i class="ri-share-fill"></i>
-                                </span>
-                                <div class="share-box">
-                                  <div class="d-flex align-items-center">
-                                    <a
-                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-facebook-fill"></i>
-                                    </a>
-                                    <a
-                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-twitter-fill"></i>
-                                    </a>
-                                    <a
-                                      href="#"
-                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      class="share-ico iq-copy-link"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-links-fill"></i>
-                                    </a>
-                                  </div>
-                                </div>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-heart-fill"></i>
-                                </span>
-                                <span class="count-box">2+</span>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-add-line"></i>
-                                </span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                      <SwiperSlide
-                        as="li"
-                        style={{
-                          height: "194.5px",
-                          width: "100% !important",
-                          marginBottom: "24px",
-                        }}
-                      >
-                        {" "}
-                        <div class="block-images position-relative ">
-                          <div class="img-box slider--image">
-                            <img
-                              src={trending2}
-                              class="img-fluid"
-                              alt=""
-                              loading="lazy"
-                            />
-                          </div>
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 4</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                          <div class="block-social-info">
-                            <ul class="list-inline p-0 m-0 music-play-lists">
-                              <li class="share">
-                                <span>
-                                  <i class="ri-share-fill"></i>
-                                </span>
-                                <div class="share-box">
-                                  <div class="d-flex align-items-center">
-                                    <a
-                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-facebook-fill"></i>
-                                    </a>
-                                    <a
-                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-twitter-fill"></i>
-                                    </a>
-                                    <a
-                                      href="#"
-                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      class="share-ico iq-copy-link"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-links-fill"></i>
-                                    </a>
-                                  </div>
-                                </div>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-heart-fill"></i>
-                                </span>
-                                <span class="count-box">2+</span>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-add-line"></i>
-                                </span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                      <SwiperSlide
-                        as="li"
-                        style={{
-                          height: "194.5px",
-                          width: "100% !important",
-                          marginBottom: "24px",
-                        }}
-                      >
-                        {" "}
-                        <div class="block-images position-relative ">
-                          <div class="img-box slider--image">
-                            <img
-                              src={trending2}
-                              class="img-fluid"
-                              alt=""
-                              loading="lazy"
-                            />
-                          </div>
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 6</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                          <div class="block-social-info">
-                            <ul class="list-inline p-0 m-0 music-play-lists">
-                              <li class="share">
-                                <span>
-                                  <i class="ri-share-fill"></i>
-                                </span>
-                                <div class="share-box">
-                                  <div class="d-flex align-items-center">
-                                    <a
-                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-facebook-fill"></i>
-                                    </a>
-                                    <a
-                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-twitter-fill"></i>
-                                    </a>
-                                    <a
-                                      href="#"
-                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      class="share-ico iq-copy-link"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-links-fill"></i>
-                                    </a>
-                                  </div>
-                                </div>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-heart-fill"></i>
-                                </span>
-                                <span class="count-box">2+</span>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-add-line"></i>
-                                </span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                      <SwiperSlide
-                        as="li"
-                        style={{
-                          height: "194.5px",
-                          width: "100% !important",
-                          marginBottom: "24px",
-                        }}
-                      >
-                        {" "}
-                        <div class="block-images position-relative ">
-                          <div class="img-box slider--image">
-                            <img
-                              src={trending2}
-                              class="img-fluid"
-                              alt=""
-                              loading="lazy"
-                            />
-                          </div>
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 7</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                          <div class="block-social-info">
-                            <ul class="list-inline p-0 m-0 music-play-lists">
-                              <li class="share">
-                                <span>
-                                  <i class="ri-share-fill"></i>
-                                </span>
-                                <div class="share-box">
-                                  <div class="d-flex align-items-center">
-                                    <a
-                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-facebook-fill"></i>
-                                    </a>
-                                    <a
-                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-twitter-fill"></i>
-                                    </a>
-                                    <a
-                                      href="#"
-                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      class="share-ico iq-copy-link"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-links-fill"></i>
-                                    </a>
-                                  </div>
-                                </div>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-heart-fill"></i>
-                                </span>
-                                <span class="count-box">2+</span>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-add-line"></i>
-                                </span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                      <SwiperSlide
-                        as="li"
-                        style={{
-                          height: "194.5px",
-                          width: "100% !important",
-                          marginBottom: "24px",
-                        }}
-                      >
-                        {" "}
-                        <div class="block-images position-relative ">
-                          <div class="img-box slider--image">
-                            <img
-                              src={trending2}
-                              class="img-fluid"
-                              alt=""
-                              loading="lazy"
-                            />
-                          </div>
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 8</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                          <div class="block-social-info">
-                            <ul class="list-inline p-0 m-0 music-play-lists">
-                              <li class="share">
-                                <span>
-                                  <i class="ri-share-fill"></i>
-                                </span>
-                                <div class="share-box">
-                                  <div class="d-flex align-items-center">
-                                    <a
-                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-facebook-fill"></i>
-                                    </a>
-                                    <a
-                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-twitter-fill"></i>
-                                    </a>
-                                    <a
-                                      href="#"
-                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      class="share-ico iq-copy-link"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-links-fill"></i>
-                                    </a>
-                                  </div>
-                                </div>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-heart-fill"></i>
-                                </span>
-                                <span class="count-box">2+</span>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-add-line"></i>
-                                </span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                      <SwiperSlide
-                        as="li"
-                        style={{
-                          height: "194.5px",
-                          width: "100% !important",
-                          marginBottom: "24px",
-                        }}
-                      >
-                        {" "}
-                        <div class="block-images position-relative ">
-                          <div class="img-box slider--image">
-                            <img
-                              src={trending2}
-                              class="img-fluid"
-                              alt=""
-                              loading="lazy"
-                            />
-                          </div>
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 9</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                          <div class="block-social-info">
-                            <ul class="list-inline p-0 m-0 music-play-lists">
-                              <li class="share">
-                                <span>
-                                  <i class="ri-share-fill"></i>
-                                </span>
-                                <div class="share-box">
-                                  <div class="d-flex align-items-center">
-                                    <a
-                                      href="https://www..com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-facebook-fill"></i>
-                                    </a>
-                                    <a
-                                      href="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="share-ico"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-twitter-fill"></i>
-                                    </a>
-                                    <a
-                                      href="#"
-                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                      class="share-ico iq-copy-link"
-                                      tabindex="0"
-                                    >
-                                      <i class="ri-links-fill"></i>
-                                    </a>
-                                  </div>
-                                </div>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-heart-fill"></i>
-                                </span>
-                                <span class="count-box">2+</span>
-                              </li>
-                              <li>
-                                <span>
-                                  <i class="ri-add-line"></i>
-                                </span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </SwiperSlide>
+                        </SwiperSlide>
+                      ))}
                     </Swiper>
                   </div>
                   <div class="slider-next btn-verticle" id="next31">
@@ -2492,376 +920,54 @@ const Homepage = () => {
                     as="ul"
                     className="swiper-vertical top-ten-slider-nav"
                   >
-                    <SwiperSlide
-                      as="li"
-                      // style={{
-                      //   height: "194.5px",
-                      //   width: "100%",
-                      //   marginBottom: "24px",
-                      // }}
-                    >
-                      {" "}
-                      <div class="slider--image block-images">
-                        <img src={trending1} alt="" loading="lazy" />
-                        <div className="description">
-                          {" "}
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Shadow Warrior</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide
-                      as="li"
-                      // style={{
-                      //   height: "194.5px",
-                      //   width: "100%",
-                      //   marginBottom: "24px",
-                      // }}
-                    >
-                      {" "}
-                      <div class="slider--image block-images">
-                        <img src={trending1} alt="" loading="lazy" />
-                        <div className="description">
-                          {" "}
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 1</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
+                    {moviesData.map((movie) => (
+                      <SwiperSlide
+                        as="li"
+                        // style={{
+                        //   height: "194.5px",
+                        //   width: "100%",
+                        //   marginBottom: "24px",
+                        // }}
+                      >
+                        <div class="slider--image block-images">
+                          <img
+                            src={
+                              movie?.thumbnail?.banner_thumbnail_url ||
+                              upcoming1
+                            }
+                            alt=""
+                            loading="lazy"
+                          />
+                          <div className="description">
+                            <div class="block-description">
+                              <h6 class="iq-title">
+                                <a href="show-detail.html">
+                                  {movie?.media?.title}
+                                </a>
+                              </h6>
+                              <div class="movie-time d-flex align-items-center my-2">
+                                <span class="text-white">
+                                  {movie?.category}
+                                </span>
+                              </div>
+                              <div class="hover-buttons">
+                                <a
+                                  href="show-detail.html"
+                                  role="button"
+                                  class="btn btn-hover"
+                                >
+                                  <i
+                                    class="fa fa-play mr-1"
+                                    aria-hidden="true"
+                                  ></i>
+                                  Play Now
+                                </a>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </SwiperSlide>{" "}
-                    <SwiperSlide
-                      as="li"
-                      // style={{
-                      //   height: "194.5px",
-                      //   width: "100%",
-                      //   marginBottom: "24px",
-                      // }}
-                    >
-                      {" "}
-                      <div class="slider--image block-images">
-                        <img src={trending1} alt="" loading="lazy" />
-                        <div className="description">
-                          {" "}
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 2</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>{" "}
-                    <SwiperSlide
-                      as="li"
-                      // style={{
-                      //   height: "194.5px",
-                      //   width: "100%",
-                      //   marginBottom: "24px",
-                      // }}
-                    >
-                      {" "}
-                      <div class="slider--image block-images">
-                        <img src={trending1} alt="" loading="lazy" />
-                        <div className="description">
-                          {" "}
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 3</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>{" "}
-                    <SwiperSlide
-                      as="li"
-                      // style={{
-                      //   height: "194.5px",
-                      //   width: "100%",
-                      //   marginBottom: "24px",
-                      // }}
-                    >
-                      {" "}
-                      <div class="slider--image block-images">
-                        <img src={trending1} alt="" loading="lazy" />
-                        <div className="description">
-                          {" "}
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 4</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>{" "}
-                    <SwiperSlide
-                      as="li"
-                      // style={{
-                      //   height: "194.5px",
-                      //   width: "100%",
-                      //   marginBottom: "24px",
-                      // }}
-                    >
-                      {" "}
-                      <div class="slider--image block-images">
-                        <img src={trending1} alt="" loading="lazy" />
-                        <div className="description">
-                          {" "}
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 5</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>{" "}
-                    <SwiperSlide
-                      as="li"
-                      // style={{
-                      //   height: "194.5px",
-                      //   width: "100%",
-                      //   marginBottom: "24px",
-                      // }}
-                    >
-                      {" "}
-                      <div class="slider--image block-images">
-                        <img src={trending1} alt="" loading="lazy" />
-                        <div className="description">
-                          {" "}
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 6</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>{" "}
-                    <SwiperSlide
-                      as="li"
-                      // style={{
-                      //   height: "194.5px",
-                      //   width: "100%",
-                      //   marginBottom: "24px",
-                      // }}
-                    >
-                      {" "}
-                      <div class="slider--image block-images">
-                        <img src={trending1} alt="" loading="lazy" />
-                        <div className="description">
-                          {" "}
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 7</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>{" "}
-                    <SwiperSlide
-                      as="li"
-                      // style={{
-                      //   height: "194.5px",
-                      //   width: "100%",
-                      //   marginBottom: "24px",
-                      // }}
-                    >
-                      {" "}
-                      <div class="slider--image block-images">
-                        <img src={trending1} alt="" loading="lazy" />
-                        <div className="description">
-                          {" "}
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html">Skull Island 8</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide
-                      as="li"
-                      // style={{
-                      //   height: "194.5px",
-                      //   width: "100%",
-                      //   marginBottom: "24px",
-                      // }}
-                    >
-                      {" "}
-                      <div class="slider--image block-images">
-                        <img src={trending1} alt="" loading="lazy" />
-                        <div className="description">
-                          {" "}
-                          <div class="block-description">
-                            <h6 class="iq-title">
-                              <a href="show-detail.html"> 9</a>
-                            </h6>
-                            <div class="movie-time d-flex align-items-center my-2">
-                              <span class="text-white">1hr : 50mins</span>
-                            </div>
-                            <div class="hover-buttons">
-                              <a
-                                href="show-detail.html"
-                                role="button"
-                                class="btn btn-hover"
-                              >
-                                <i
-                                  class="fa fa-play mr-1"
-                                  aria-hidden="true"
-                                ></i>
-                                Play Now
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>
+                      </SwiperSlide>
+                    ))}
                   </Swiper>
                 </div>
 
@@ -2876,7 +982,7 @@ const Homepage = () => {
             </section>
           </Container>
         </div>
-        {/* vertical slider end */}
+        {/* Vertical ENDS */}
         <section id="iq-suggestede" className="s-margin">
           <Container fluid>
             <Row>
@@ -2904,418 +1010,104 @@ const Homepage = () => {
                     breakpoints={{
                       320: { slidesPerView: 1 },
                       550: { slidesPerView: 2 },
-                      991: { slidesPerView: 3 },
-                      1400: { slidesPerView: 4 },
+                      991: { slidesPerView: 4 },
+                      1400: { slidesPerView: 5 },
                     }}
                     loop={true}
                     as="ul"
                     className="list-inline favorites-slider row p-0 m-0 iq-rtl-direction"
                   >
-                    <SwiperSlide as="li">
-                      <div className=" block-images position-relative">
-                        <div className="img-box">
-                          <img src={suggested1} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Inside the Sea</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              11+
-                            </div>
-                            <span className="text-white">2h 30m</span>
+                    {suggestedData.map((data) => (
+                      <SwiperSlide as="li">
+                        <div className=" block-images position-relative">
+                          <div className="img-box">
+                            <img
+                              src={data?.thumbnail?.banner_thumbnail_url}
+                              className="img-fluid"
+                              alt=""
+                            />
                           </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
+                          <div className="block-description">
+                            <h6 className="iq-title">
+                              <Link to="/show-details">
+                                {data?.media?.title}
+                              </Link>
+                            </h6>
+                            <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                              <div className="badge badge-secondary p-1 mr-2">
+                                11+
                               </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
+                              <span className="text-white">
+                                {data?.media?.duration}
                               </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img src={suggested2} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Jumbo Queen</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              9+
                             </div>
-                            <span className="text-white">2 Seasons</span>
-                          </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img src={suggested3} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Unknown Land</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              17+
+                            <div className="hover-buttons">
+                              <Link
+                                to="/show-details"
+                                role="button"
+                                className="btn btn-hover iq-button"
+                              >
+                                <i
+                                  className="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </Link>
                             </div>
-                            <span className="text-white">2h 30m</span>
                           </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
+                          <div className="block-social-info">
+                            <ul className="list-inline p-0 m-0 music-play-lists">
+                              <li className="share">
+                                <span>
+                                  <i className="ri-share-fill"></i>
+                                </span>
+                                <div className="share-box">
+                                  <div className="d-flex align-items-center">
+                                    <Link
+                                      to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="share-ico"
+                                      tabIndex="0"
+                                    >
+                                      <i className="ri-facebook-fill"></i>
+                                    </Link>
+                                    <Link
+                                      to="https://twitter.com/intent/tweet?text=Currentlyreading"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="share-ico"
+                                      tabIndex="0"
+                                    >
+                                      <i className="ri-twitter-fill"></i>
+                                    </Link>
+                                    <Link
+                                      to="#"
+                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      className="share-ico iq-copy-link"
+                                      tabIndex="0"
+                                    >
+                                      <i className="ri-links-fill"></i>
+                                    </Link>
+                                  </div>
                                 </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img src={suggested4} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Friends</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              14+
-                            </div>
-                            <span className="text-white">10 Seasons</span>
-                          </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
+                              </li>
+                              <li>
+                                <span>
+                                  <i className="ri-heart-fill"></i>
+                                </span>
+                                <span className="count-box">19+</span>
+                              </li>
+                              <li>
+                                <span>
+                                  <i className="ri-add-line"></i>
+                                </span>
+                              </li>
+                            </ul>
                           </div>
                         </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img src={suggested5} className="img-fluid" alt="" />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Blood Block</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              13+
-                            </div>
-                            <span className="text-white">2h 40m</span>
-                          </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
+                      </SwiperSlide>
+                    ))}
                   </Swiper>
                 </div>
               </Col>
@@ -3423,55 +1215,26 @@ const Homepage = () => {
                     breakpoints={{
                       320: { slidesPerView: 1 },
                       550: { slidesPerView: 2 },
-                      991: { slidesPerView: 3 },
-                      1400: { slidesPerView: 4 },
+                      991: { slidesPerView: 4 },
+                      1400: { slidesPerView: 5 },
                       1500: { slidesPerView: 5 },
                     }}
                     loop={true}
                     className="list-inline p-0 m-0 row align-items-center iq-rtl-direction"
                   >
-                    <SwiperSlide as="li">
-                      <Link to="#">
-                        <div className="movie-slick position-relative">
-                          <img src={trending1} className="img-fluid" alt="" />
-                        </div>
-                      </Link>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <Link to="#">
-                        <div className="movie-slick position-relative">
-                          <img src={trending2} className="img-fluid" alt="" />
-                        </div>
-                      </Link>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <Link to="#">
-                        <div className="movie-slick position-relative">
-                          <img src={trending3} className="img-fluid" alt="" />
-                        </div>
-                      </Link>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <Link to="#">
-                        <div className="movie-slick position-relative">
-                          <img src={trending4} className="img-fluid" alt="" />
-                        </div>
-                      </Link>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <Link to="#">
-                        <div className="movie-slick position-relative">
-                          <img src={trending5} className="img-fluid" alt="" />
-                        </div>
-                      </Link>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <Link to="#">
-                        <div className="movie-slick position-relative">
-                          <img src={trending6} className="img-fluid" alt="" />
-                        </div>
-                      </Link>
-                    </SwiperSlide>
+                    {trendingApiData.map((data) => (
+                      <SwiperSlide as="li">
+                        <Link to="#">
+                          <div className="movie-slick position-relative">
+                            <img
+                              src={data?.thumbnail?.banner_thumbnail_url}
+                              className="img-fluid"
+                              alt=""
+                            />
+                          </div>
+                        </Link>
+                      </SwiperSlide>
+                    ))}
                   </Swiper>
                 </div>
                 <div>
@@ -3483,5100 +1246,848 @@ const Homepage = () => {
                     id="trending-slider"
                     className="mt-3  list-inline p-0 m-0  d-flex align-items-center iq-rtl-direction"
                   >
-                    <SwiperSlide as="li">
-                      <div
-                        className="tranding-block position-relative"
-                        style={{ backgroundImage: `url(${trending1})` }}
-                      >
-                        <Tab.Container
-                          defaultActiveKey="trending-data1"
-                          className="trending-custom-tab"
+                    {trendingApiData.map((data) => (
+                      <SwiperSlide as="li">
+                        <div
+                          className="tranding-block position-relative"
+                          style={{
+                            backgroundImage: `url(${data?.thumbnail?.banner_thumbnail_url})`,
+                          }}
                         >
-                          <div className="tab-title-info position-relative iq-ltr-direction">
-                            <Nav
-                              as="ul"
-                              variant="pills"
-                              className="trending-pills nav-pills d-flex justify-content-center align-items-center text-center iq-ltr-direction"
-                            >
-                              <Nav.Item as="li" className="nav-item">
-                                <Nav.Link href="" eventKey="trending-data1">
-                                  Overview
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item as="li" className="nav-item">
-                                <Nav.Link href="" eventKey="trending-data2">
-                                  Episodes
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item as="li" className="nav-item">
-                                <Nav.Link href="" eventKey="trending-data3">
-                                  Trailers
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item as="li" className="nav-item">
-                                <Nav.Link href="" eventKey="trending-data4">
-                                  Similar Like This
-                                </Nav.Link>
-                              </Nav.Item>
-                            </Nav>
-                          </div>
-                          <Tab.Content className="trending-content">
-                            <Tab.Pane
-                              eventKey="trending-data1"
-                              className="overlay-tab show fade"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="res-logo">
+                          <Tab.Container
+                            defaultActiveKey="trending-data1"
+                            className="trending-custom-tab"
+                          >
+                            <div className="tab-title-info position-relative iq-ltr-direction">
+                              <Nav
+                                as="ul"
+                                variant="pills"
+                                className="trending-pills nav-pills d-flex justify-content-center align-items-center text-center iq-ltr-direction"
+                              >
+                                <Nav.Item as="li" className="nav-item">
+                                  <Nav.Link href="" eventKey="trending-data1">
+                                    Overview
+                                  </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item as="li" className="nav-item">
+                                  <Nav.Link href="" eventKey="trending-data2">
+                                    Episodes
+                                  </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item as="li" className="nav-item">
+                                  <Nav.Link href="" eventKey="trending-data3">
+                                    Trailers
+                                  </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item as="li" className="nav-item">
+                                  <Nav.Link href="" eventKey="trending-data4">
+                                    Similar Like This
+                                  </Nav.Link>
+                                </Nav.Item>
+                              </Nav>
+                            </div>
+                            {/* NEECHY WALA CONTENT */}
+                            <Tab.Content className="trending-content">
+                              <Tab.Pane
+                                eventKey="trending-data1"
+                                className="overlay-tab show fade"
+                              >
+                                <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
+                                  <Link to="#" tabIndex="0">
+                                    <div className="res-logo">
+                                      <div className="channel-logo">
+                                        <img
+                                          src={logo}
+                                          className="c-logo"
+                                          alt="streamit"
+                                        />
+                                      </div>
+                                    </div>
+                                  </Link>
+                                  <h1 className="trending-text big-title text-uppercase">
+                                    {data?.media?.title}
+                                  </h1>
+                                  <div className="d-flex align-items-center text-white text-detail">
+                                    <span className="badge badge-secondary p-3">
+                                      18+
+                                    </span>
+                                    <span className="ml-3">3 Seasons</span>
+                                    <span className="trending-year">2020</span>
+                                  </div>
+                                  <div className="d-flex align-items-center series mb-4">
+                                    <Link to="#">
+                                      <img
+                                        src={trendinglabel}
+                                        className="img-fluid"
+                                        alt=""
+                                      />
+                                    </Link>
+                                    <span className="text-gold ml-3">
+                                      #2 in Series Today
+                                    </span>
+                                  </div>
+                                  <p className="trending-dec" maxLength={50}>
+                                    Lorem Ipsum is simply dummy text of the
+                                    printing and typesetting industry.
+                                  </p>
+                                  <div className="p-btns">
+                                    <div className="d-flex align-items-center p-0">
+                                      <Link
+                                        to="/show-details"
+                                        className="btn btn-hover mr-2"
+                                        tabIndex="0"
+                                      >
+                                        <i
+                                          className="fa fa-play mr-2"
+                                          aria-hidden="true"
+                                        ></i>
+                                        Play Now
+                                      </Link>
+                                      <Link
+                                        to="#"
+                                        className="btn btn-link"
+                                        tabIndex="0"
+                                      >
+                                        <i className="ri-add-line"></i>My List
+                                      </Link>
+                                    </div>
+                                  </div>
+                                  <div className="trending-list">
+                                    <div className="text-primary title">
+                                      Starring:
+                                      <span className="text-body">
+                                        Wagner Moura, Boyd Holbrook, Joanna
+                                      </span>
+                                    </div>
+                                    <div className="text-primary title">
+                                      Genres:
+                                      <span className="text-body">
+                                        Crime, Action, Thriller, Biography
+                                      </span>
+                                    </div>
+                                    <div className="text-primary title">
+                                      This Is:
+                                      <span className="text-body">
+                                        Violent, Forceful
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </Tab.Pane>
+                              <Tab.Pane
+                                eventKey="trending-data2"
+                                className="overlay-tab  fade show "
+                                id="trending-episode1"
+                              >
+                                <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
+                                  <Link to="#" tabIndex="0">
                                     <div className="channel-logo">
                                       <img
                                         src={logo}
                                         className="c-logo"
-                                        alt="streamit"
+                                        alt="stramit"
                                       />
                                     </div>
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  the hero camp
-                                </h1>
-                                <div className="d-flex align-items-center text-white text-detail">
-                                  <span className="badge badge-secondary p-3">
-                                    18+
-                                  </span>
-                                  <span className="ml-3">3 Seasons</span>
-                                  <span className="trending-year">2020</span>
-                                </div>
-                                <div className="d-flex align-items-center series mb-4">
-                                  <Link to="#">
-                                    <img
-                                      src={trendinglabel}
-                                      className="img-fluid"
-                                      alt=""
-                                    />
                                   </Link>
-                                  <span className="text-gold ml-3">
-                                    #2 in Series Today
-                                  </span>
-                                </div>
-                                <p className="trending-dec">
-                                  Lorem Ipsum is simply dummy text of the
-                                  printing and typesetting industry. Lorem Ipsum
-                                  has been the industry's standard dummy text
-                                  ever since the 1500s.
-                                </p>
-                                <div className="p-btns">
-                                  <div className="d-flex align-items-center p-0">
-                                    <Link
-                                      to="/show-details"
-                                      className="btn btn-hover mr-2"
-                                      tabIndex="0"
+                                  <h1 className="trending-text big-title text-uppercase">
+                                    the hero camp
+                                  </h1>
+                                  <div className="d-flex align-items-center text-white text-detail mb-4">
+                                    <span className="season_date ml-2">
+                                      2 Seasons
+                                    </span>
+                                    <span className="trending-year">
+                                      Feb 2019
+                                    </span>
+                                  </div>
+                                  <div className="iq-custom-select d-inline-block sea-epi">
+                                    <Select options={options1} id="f2" />
+                                  </div>
+                                  <div
+                                    className="episodes-contens mt-4"
+                                    id="episode1"
+                                  >
+                                    <div
+                                      id="prev11"
+                                      className="swiper-button swiper-button-prev"
                                     >
-                                      <i
-                                        className="fa fa-play mr-2"
-                                        aria-hidden="true"
-                                      ></i>
-                                      Play Now
-                                    </Link>
-                                    <Link
-                                      to="#"
-                                      className="btn btn-link"
-                                      tabIndex="0"
+                                      <i className="fa fa-chevron-left"></i>
+                                    </div>
+                                    <div
+                                      id="next11"
+                                      className="swiper-button swiper-button-next"
                                     >
-                                      <i className="ri-add-line"></i>My List
-                                    </Link>
-                                  </div>
-                                </div>
-                                <div className="trending-list mt-4">
-                                  <div className="text-primary title">
-                                    Starring:
-                                    <span className="text-body">
-                                      Wagner Moura, Boyd Holbrook, Joanna
-                                    </span>
-                                  </div>
-                                  <div className="text-primary title">
-                                    Genres:
-                                    <span className="text-body">
-                                      Crime, Action, Thriller, Biography
-                                    </span>
-                                  </div>
-                                  <div className="text-primary title">
-                                    This Is:
-                                    <span className="text-body">
-                                      Violent, Forceful
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data2"
-                              className="overlay-tab  fade show "
-                              id="trending-episode1"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  the hero camp
-                                </h1>
-                                <div className="d-flex align-items-center text-white text-detail mb-4">
-                                  <span className="season_date ml-2">
-                                    2 Seasons
-                                  </span>
-                                  <span className="trending-year">
-                                    Feb 2019
-                                  </span>
-                                </div>
-                                <div className="iq-custom-select d-inline-block sea-epi">
-                                  <Select options={options1} id="f2" />
-                                </div>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode1"
-                                >
-                                  <div
-                                    id="prev11"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="fa fa-chevron-left"></i>
-                                  </div>
-                                  <div
-                                    id="next11"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="fa fa-chevron-right"></i>
-                                  </div>
-                                  <Swiper
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev11",
-                                      nextEl: "#next11",
-                                    }}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    loop={true}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 1</Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body ">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 2</Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 3</Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body ">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 4</Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 5</Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data3"
-                              className="overlay-tab fade show"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  the hero camp
-                                </h1>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode2"
-                                >
-                                  <div
-                                    id="prev12"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="fa fa-chevron-left"></i>
-                                  </div>
-                                  <div
-                                    id="next12"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="fa fa-chevron-right"></i>
-                                  </div>
-                                  <Swiper
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev12",
-                                      nextEl: "#next12",
-                                    }}
-                                    loop={true}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 1
+                                      <i className="fa fa-chevron-right"></i>
+                                    </div>
+                                    <Swiper
+                                      spaceBetween={20}
+                                      navigation={{
+                                        prevEl: "#prev11",
+                                        nextEl: "#next11",
+                                      }}
+                                      breakpoints={{
+                                        320: { slidesPerView: 1 },
+                                        550: { slidesPerView: 2 },
+                                        991: { slidesPerView: 3 },
+                                        1400: { slidesPerView: 4 },
+                                      }}
+                                      loop={true}
+                                      className="list-inline p-0 m-0 iq-rtl-direction"
+                                    >
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
+                                          <Link to="#">
+                                            <img
+                                              src={episodes1}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
                                           </Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 2
-                                          </Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
+                                        <div className="episodes-description text-body">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#">Episode 1</Link>
+                                            <span className="text-primary">
+                                              2.25 m
+                                            </span>
+                                          </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
                                         </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
+                                      </SwiperSlide>
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
+                                          <Link to="#">
+                                            <img
+                                              src={episodes2}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 3
-                                          </Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
+                                        <div className="episodes-description text-body ">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#">Episode 2</Link>
+                                            <span className="text-primary">
+                                              3.23 m
+                                            </span>
+                                          </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
                                         </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
+                                      </SwiperSlide>
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
+                                          <Link to="#">
+                                            <img
+                                              src={episodes3}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 4
-                                          </Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
+                                        <div className="episodes-description text-body">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#">Episode 3</Link>
+                                            <span className="text-primary">
+                                              2 m
+                                            </span>
+                                          </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
                                         </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
+                                      </SwiperSlide>
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
+                                          <Link to="#">
+                                            <img
+                                              src={episodes4}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 5
-                                          </Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
+                                        <div className="episodes-description text-body ">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#">Episode 4</Link>
+                                            <span className="text-primary">
+                                              1.12 m
+                                            </span>
+                                          </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
                                         </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
+                                      </SwiperSlide>
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
+                                          <Link to="#">
+                                            <img
+                                              src={episodes5}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div className="episodes-description text-body">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#">Episode 5</Link>
+                                            <span className="text-primary">
+                                              2.54 m
+                                            </span>
+                                          </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
+                                        </div>
+                                      </SwiperSlide>
+                                    </Swiper>
+                                  </div>
                                 </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data4"
-                              className="overlay-tab fade show"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  the hero camp
-                                </h1>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode3"
-                                >
-                                  <div
-                                    id="prev13"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next13"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev13",
-                                      nextEl: "#next13",
-                                    }}
-                                    loop={true}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 1</Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 2</Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 3</Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 4</Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 5</Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                          </Tab.Content>
-                        </Tab.Container>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div
-                        className="tranding-block position-relative"
-                        style={{ backgroundImage: `url(${trending2})` }}
-                      >
-                        <Tab.Container
-                          defaultActiveKey="trending-data5"
-                          className="trending-custom-tab"
-                        >
-                          <div className="tab-title-info position-relative">
-                            <Nav
-                              as="ul"
-                              variant="pills"
-                              className="trending-pills d-flex justify-content-center align-items-center text-center iq-ltr-direction"
-                            >
-                              <Nav.Item as="li">
-                                <Nav.Link
-                                  eventKey="trending-data5"
-                                  aria-selected="true"
-                                >
-                                  Overview
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item as="li">
-                                <Nav.Link
-                                  eventKey="trending-data6"
-                                  aria-selected="true"
-                                >
-                                  Episodes
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item as="li">
-                                <Nav.Link
-                                  eventKey="trending-data7"
-                                  aria-selected="true"
-                                >
-                                  Trailers
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item as="li">
-                                <Nav.Link
-                                  eventKey="trending-data8"
-                                  aria-selected="true"
-                                >
-                                  Similar Like This
-                                </Nav.Link>
-                              </Nav.Item>
-                            </Nav>
-                          </div>
-                          <Tab.Content className="trending-content">
-                            <Tab.Pane
-                              eventKey="trending-data5"
-                              className="overlay-tab fade show"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="res-logo">
+                              </Tab.Pane>
+                              <Tab.Pane
+                                eventKey="trending-data3"
+                                className="overlay-tab fade show"
+                              >
+                                <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
+                                  <Link to="#" tabIndex="0">
                                     <div className="channel-logo">
                                       <img
                                         src={logo}
                                         className="c-logo"
-                                        alt="streamit"
+                                        alt="stramit"
                                       />
                                     </div>
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  The Appartment
-                                </h1>
-                                <div className="d-flex align-items-center text-white text-detail">
-                                  <span className="badge badge-secondary p-3">
-                                    15+
-                                  </span>
-                                  <span className="ml-3">2 Seasons</span>
-                                  <span className="trending-year">2020</span>
-                                </div>
-                                <div className="d-flex align-items-center series mb-4">
-                                  <Link to="#">
-                                    <img
-                                      src={trendinglabel}
-                                      className="img-fluid"
-                                      alt=""
-                                    />
                                   </Link>
-                                  <span className="text-gold ml-3">
-                                    #2 in Series Today
-                                  </span>
-                                </div>
-                                <p className="trending-dec">
-                                  Lorem Ipsum is simply dummy text of the
-                                  printing and typesetting industry. Lorem Ipsum
-                                  has been the industry's standard dummy text
-                                  ever since the 1500s.
-                                </p>
-                                <div className="p-btns">
-                                  <div className="d-flex align-items-center p-0">
-                                    <Link
-                                      to="#"
-                                      className="btn btn-hover mr-2"
-                                      tabIndex="0"
+                                  <h1 className="trending-text big-title text-uppercase">
+                                    the hero camp
+                                  </h1>
+                                  <div
+                                    className="episodes-contens mt-4"
+                                    id="episode2"
+                                  >
+                                    <div
+                                      id="prev12"
+                                      className="swiper-button swiper-button-prev"
                                     >
-                                      <i
-                                        className="fa fa-play mr-2"
-                                        aria-hidden="true"
-                                      ></i>
-                                      Play Now
-                                    </Link>
-                                    <Link
-                                      to="#"
-                                      className="btn btn-link"
-                                      tabIndex="0"
+                                      <i className="fa fa-chevron-left"></i>
+                                    </div>
+                                    <div
+                                      id="next12"
+                                      className="swiper-button swiper-button-next"
                                     >
-                                      <i className="ri-add-line"></i>My List
-                                    </Link>
-                                  </div>
-                                </div>
-                                <div className="trending-list mt-4">
-                                  <div className="text-primary title">
-                                    Starring:
-                                    <span className="text-body">
-                                      Wagner Moura, Boyd Holbrook, Joanna
-                                    </span>
-                                  </div>
-                                  <div className="text-primary title">
-                                    Genres:
-                                    <span className="text-body">
-                                      Crime, Action, Thriller, Biography
-                                    </span>
-                                  </div>
-                                  <div className="text-primary title">
-                                    This Is:
-                                    <span className="text-body">
-                                      Violent, Forceful
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data6"
-                              className="overlay-tab fade show"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  The Appartment
-                                </h1>
-                                <div className="d-flex align-items-center text-white text-detail mb-4">
-                                  <span className="season_date ml-2">
-                                    2 Seasons
-                                  </span>
-                                  <span className="trending-year">
-                                    Feb 2019
-                                  </span>
-                                </div>
-                                <div className="iq-custom-select d-inline-block sea-epi">
-                                  <Select options={options2} id="f3" />
-                                </div>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode1"
-                                >
-                                  <div
-                                    id="prev14"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next14"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev14",
-                                      nextEl: "#next14",
-                                    }}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    loop={true}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 1</Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 2</Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 3</Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 4</Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 5</Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data7"
-                              className="overlay-tab show fade"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  The Appartment
-                                </h1>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode2"
-                                >
-                                  <div
-                                    id="prev15"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next15"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev15",
-                                      nextEl: "#next15",
-                                    }}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    loop={true}
-                                    className="list-inline p-0 m-0"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
+                                      <i className="fa fa-chevron-right"></i>
+                                    </div>
+                                    <Swiper
+                                      spaceBetween={20}
+                                      navigation={{
+                                        prevEl: "#prev12",
+                                        nextEl: "#next12",
+                                      }}
+                                      loop={true}
+                                      breakpoints={{
+                                        320: { slidesPerView: 1 },
+                                        550: { slidesPerView: 2 },
+                                        991: { slidesPerView: 3 },
+                                        1400: { slidesPerView: 4 },
+                                      }}
+                                      className="list-inline p-0 m-0 iq-rtl-direction"
+                                    >
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
                                           <Link to="#" target="_blank">
-                                            Trailer 1
+                                            <img
+                                              src={episodes1}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
                                           </Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                target="_blank"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 2
-                                          </Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
+                                        <div className="episodes-description text-body">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#" target="_blank">
+                                              Trailer 1
                                             </Link>
+                                            <span className="text-primary">
+                                              2.25 m
+                                            </span>
+                                          </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
+                                        </div>
+                                      </SwiperSlide>
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
+                                          <Link to="#" target="_blank">
+                                            <img
+                                              src={episodes2}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                target="_blank"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 3
-                                          </Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
+                                        <div className="episodes-description text-body">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#" target="_blank">
+                                              Trailer 2
                                             </Link>
+                                            <span className="text-primary">
+                                              3.23 m
+                                            </span>
+                                          </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
+                                        </div>
+                                      </SwiperSlide>
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
+                                          <Link to="#" target="_blank">
+                                            <img
+                                              src={episodes3}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                target="_blank"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 4
-                                          </Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
+                                        <div className="episodes-description text-body">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#" target="_blank">
+                                              Trailer 3
                                             </Link>
+                                            <span className="text-primary">
+                                              2 m
+                                            </span>
+                                          </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
+                                        </div>
+                                      </SwiperSlide>
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
+                                          <Link to="#" target="_blank">
+                                            <img
+                                              src={episodes4}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                target="_blank"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 5
-                                          </Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
+                                        <div className="episodes-description text-body">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#" target="_blank">
+                                              Trailer 4
+                                            </Link>
+                                            <span className="text-primary">
+                                              1.12 m
+                                            </span>
+                                          </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
                                         </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
+                                      </SwiperSlide>
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
+                                          <Link to="#" target="_blank">
+                                            <img
+                                              src={episodes5}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                target="_blank"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div className="episodes-description text-body">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#" target="_blank">
+                                              Trailer 5
+                                            </Link>
+                                            <span className="text-primary">
+                                              2.54 m
+                                            </span>
+                                          </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
+                                        </div>
+                                      </SwiperSlide>
+                                    </Swiper>
+                                  </div>
                                 </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data8"
-                              className="overlay-tab show fade"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  The Appartment
-                                </h1>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode3"
-                                >
-                                  <div
-                                    id="prev16"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next16"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev16",
-                                      nextEl: "#next16",
-                                    }}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    loop={true}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 1</Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 2</Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 3</Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link to="#" tabIndex="0">
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 4</Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 5</Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                          </Tab.Content>
-                        </Tab.Container>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div
-                        className="tranding-block position-relative"
-                        style={{ backgroundImage: `url(${trending3})` }}
-                      >
-                        <Tab.Container
-                          defaultActiveKey="trending-data9"
-                          className="trending-custom-tab"
-                        >
-                          <div className="tab-title-info position-relative">
-                            <Nav
-                              as="ul"
-                              variant="pills"
-                              className="trending-pills d-flex justify-content-center align-items-center text-center iq-ltr-direction"
-                              role="tablist"
-                            >
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data9"
-                                  aria-selected="true"
-                                >
-                                  Overview
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data10"
-                                  aria-selected="true"
-                                >
-                                  Episodes
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data11"
-                                  aria-selected="true"
-                                >
-                                  Trailers
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data12"
-                                  aria-selected="true"
-                                >
-                                  Similar Like This
-                                </Nav.Link>
-                              </Nav.Item>
-                            </Nav>
-                          </div>
-                          <Tab.Content className="trending-content">
-                            <Tab.Pane
-                              eventKey="trending-data9"
-                              className="overlay-tab fade show"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="res-logo">
+                              </Tab.Pane>
+                              <Tab.Pane
+                                eventKey="trending-data4"
+                                className="overlay-tab fade show"
+                              >
+                                <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
+                                  <Link to="#" tabIndex="0">
                                     <div className="channel-logo">
                                       <img
                                         src={logo}
                                         className="c-logo"
-                                        alt="streamit"
+                                        alt="stramit"
                                       />
                                     </div>
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase ">
-                                  the marshal king
-                                </h1>
-                                <div className="d-flex align-items-center text-white text-detail">
-                                  <span className="badge badge-secondary p-3">
-                                    11+
-                                  </span>
-                                  <span className="ml-3">3 Seasons</span>
-                                  <span className="trending-year">2020</span>
-                                </div>
-                                <div className="d-flex align-items-center series mb-4">
-                                  <Link to="#">
-                                    <img
-                                      src={trendinglabel}
-                                      className="img-fluid"
-                                      alt=""
-                                    />
                                   </Link>
-                                  <span className="text-gold ml-3">
-                                    #11 in Series Today
-                                  </span>
-                                </div>
-                                <p className="trending-dec">
-                                  Lorem Ipsum is simply dummy text of the
-                                  printing and typesetting industry. Lorem Ipsum
-                                  has been the industry's standard dummy text
-                                  ever since the 1500s.
-                                </p>
-                                <div className="p-btns">
-                                  <div className="d-flex align-items-center p-0">
-                                    <Link
-                                      to="#"
-                                      className="btn btn-hover mr-2"
-                                      tabIndex="0"
+                                  <h1 className="trending-text big-title text-uppercase">
+                                    the hero camp
+                                  </h1>
+                                  <div
+                                    className="episodes-contens mt-4"
+                                    id="episode3"
+                                  >
+                                    <div
+                                      id="prev13"
+                                      className="swiper-button swiper-button-prev"
                                     >
-                                      <i
-                                        className="fa fa-play mr-2"
-                                        aria-hidden="true"
-                                      ></i>
-                                      Play Now
-                                    </Link>
-                                    <Link
-                                      to="#"
-                                      className="btn btn-link"
-                                      tabIndex="0"
-                                    >
-                                      <i className="ri-add-line"></i>
-                                      My List
-                                    </Link>
-                                  </div>
-                                </div>
-                                <div className="trending-list mt-4">
-                                  <div className="text-primary title">
-                                    Starring:
-                                    <span className="text-body">
-                                      Wagner Moura, Boyd Holbrook, Joanna
-                                    </span>
-                                  </div>
-                                  <div className="text-primary title">
-                                    Genres:
-                                    <span className="text-body">
-                                      Crime, Action, Thriller, Biography
-                                    </span>
-                                  </div>
-                                  <div className="text-primary title">
-                                    This Is:
-                                    <span className="text-body">
-                                      Violent, Forceful
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data10"
-                              className="overlay-tab fade show"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  the marshal king
-                                </h1>
-                                <div className="d-flex align-items-center text-white text-detail mb-4">
-                                  <span className="season_date ml-2">
-                                    2 Seasons
-                                  </span>
-                                  <span className="trending-year">
-                                    Feb 2019
-                                  </span>
-                                </div>
-                                <div className="iq-custom-select d-inline-block sea-epi">
-                                  <Select options={options1} id="f4" />
-                                </div>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode1"
-                                >
-                                  <div
-                                    id="prev17"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next17"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev17",
-                                      nextEl: "#next17",
-                                    }}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    loop={true}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 1</Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 2</Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 3</Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 4</Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 5</Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data11"
-                              className="overlay-tab fade show"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  the marshal king
-                                </h1>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode2"
-                                >
-                                  <div
-                                    id="prev18"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next18"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev18",
-                                      nextEl: "#next18",
-                                    }}
-                                    loop={true}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="#"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 1
-                                          </Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 2
-                                          </Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 3
-                                          </Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 4
-                                          </Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 5
-                                          </Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data12"
-                              className="overlay-tab show fade"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  the marshal king
-                                </h1>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode3"
-                                >
-                                  <div
-                                    id="prev19"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next19"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev19",
-                                      nextEl: "#next19",
-                                    }}
-                                    loop={true}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 1</Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 2</Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 3</Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 4</Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 5</Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                          </Tab.Content>
-                        </Tab.Container>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div
-                        className="tranding-block position-relative"
-                        style={{ backgroundImage: `url(${trending4})` }}
-                      >
-                        <Tab.Container
-                          defaultActiveKey="trending-data13"
-                          className="trending-custom-tab"
-                        >
-                          <div className="tab-title-info position-relative">
-                            <Nav
-                              as="ul"
-                              variant="pills"
-                              className="trending-pills d-flex justify-content-center align-items-center text-center iq-ltr-direction"
-                            >
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data13"
-                                  aria-selected="true"
-                                >
-                                  Overview
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data14"
-                                  aria-selected="true"
-                                >
-                                  Episodes
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data15"
-                                  aria-selected="true"
-                                >
-                                  Trailers
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data16"
-                                  aria-selected="true"
-                                >
-                                  Similar Like This
-                                </Nav.Link>
-                              </Nav.Item>
-                            </Nav>
-                          </div>
-                          <Tab.Content className="trending-content">
-                            <Tab.Pane
-                              eventKey="trending-data13"
-                              className="overlay-tab fade show"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="res-logo">
-                                    <div className="channel-logo">
-                                      <img
-                                        src={logo}
-                                        className="c-logo"
-                                        alt="streamit"
-                                      />
+                                      <i className="ri-arrow-left-s-line"></i>
                                     </div>
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase ">
-                                  Dark Zone
-                                </h1>
-                                <div className="d-flex align-items-center text-white text-detail">
-                                  <span className="badge badge-secondary p-3">
-                                    17+
-                                  </span>
-                                  <span className="ml-3">1 Season</span>
-                                  <span className="trending-year">2020</span>
-                                </div>
-                                <div className="d-flex align-items-center series mb-4">
-                                  <Link to="#">
-                                    <img
-                                      src={trendinglabel}
-                                      className="img-fluid"
-                                      alt=""
-                                    />
-                                  </Link>
-                                  <span className="text-gold ml-3">
-                                    #2 in Series Today
-                                  </span>
-                                </div>
-                                <p className="trending-dec">
-                                  Lorem Ipsum is simply dummy text of the
-                                  printing and typesetting industry. Lorem Ipsum
-                                  has been the industry's standard dummy text
-                                  ever since the 1500s.
-                                </p>
-                                <div className="p-btns">
-                                  <div className="d-flex align-items-center p-0">
-                                    <Link
-                                      to="#"
-                                      className="btn btn-hover mr-2"
-                                      tabIndex="0"
+                                    <div
+                                      id="next13"
+                                      className="swiper-button swiper-button-next"
                                     >
-                                      <i
-                                        className="fa fa-play mr-2"
-                                        aria-hidden="true"
-                                      ></i>
-                                      Play Now
-                                    </Link>
-                                    <Link
-                                      to="#"
-                                      className="btn btn-link"
-                                      tabIndex="0"
-                                    >
-                                      <i className="ri-add-line"></i>My List
-                                    </Link>
-                                  </div>
-                                </div>
-                                <div className="trending-list mt-4">
-                                  <div className="text-primary title">
-                                    Starring:
-                                    <span className="text-body">
-                                      Wagner Moura, Boyd Holbrook, Joanna
-                                    </span>
-                                  </div>
-                                  <div className="text-primary title">
-                                    Genres:
-                                    <span className="text-body">
-                                      Crime, Action, Thriller, Biography
-                                    </span>
-                                  </div>
-                                  <div className="text-primary title">
-                                    This Is:
-                                    <span className="text-body">
-                                      Violent, Forceful
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data14"
-                              className="overlay-tab fade show"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  Dark Zone
-                                </h1>
-                                <div className="d-flex align-items-center text-white text-detail mb-4">
-                                  <span className="season_date ml-2">
-                                    2 Seasons
-                                  </span>
-                                  <span className="trending-year">
-                                    Feb 2019
-                                  </span>
-                                </div>
-                                <div className="iq-custom-select d-inline-block sea-epi">
-                                  <Select options={options2} id="f5" />
-                                </div>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode1"
-                                >
-                                  <div
-                                    id="prev20"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next20"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev20",
-                                      nextEl: "#next20",
-                                    }}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    loop={true}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 1</Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 2</Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 3</Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 4</Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 5</Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data15"
-                              className="overlay-tab show fade"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  Dark Zone
-                                </h1>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode2"
-                                >
-                                  <div
-                                    id="prev21"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next21"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev21",
-                                      nextEl: "#next21",
-                                    }}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    loop={true}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 1
-                                          </Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 2
-                                          </Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 3
-                                          </Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 4
-                                          </Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 5
-                                          </Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data16"
-                              className="overlay-tab show fade"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  Dark Zone
-                                </h1>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode3"
-                                >
-                                  <div
-                                    id="prev22"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next22"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev22",
-                                      nextEl: "#next22",
-                                    }}
-                                    loop={true}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link to="#" tabIndex="0">
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 1</Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 2</Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 3</Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 4</Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 5</Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                          </Tab.Content>
-                        </Tab.Container>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div
-                        className="tranding-block position-relative"
-                        style={{ backgroundImage: `url(${trending5})` }}
-                      >
-                        <Tab.Container
-                          defaultActiveKey="trending-data17"
-                          className="trending-custom-tab"
-                        >
-                          <div className="tab-title-info position-relative">
-                            <Nav
-                              as="ul"
-                              variant="pills"
-                              className="trending-pills d-flex justify-content-center align-items-center text-center iq-ltr-direction"
-                            >
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data17"
-                                  aria-selected="true"
-                                >
-                                  Overview
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data18"
-                                  aria-selected="true"
-                                >
-                                  Episodes
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data19"
-                                  aria-selected="true"
-                                >
-                                  Trailers
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data20"
-                                  aria-selected="true"
-                                >
-                                  Similar Like This
-                                </Nav.Link>
-                              </Nav.Item>
-                            </Nav>
-                          </div>
-                          <Tab.Content className="trending-content">
-                            <Tab.Pane
-                              eventKey="trending-data17"
-                              className="overlay-tab fade show"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="res-logo">
-                                    <div className="channel-logo">
-                                      <img
-                                        src={logo}
-                                        className="c-logo"
-                                        alt="streamit"
-                                      />
+                                      <i className="ri-arrow-right-s-line"></i>
                                     </div>
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  Opposites Attract
-                                </h1>
-                                <div className="d-flex align-items-center text-white text-detail">
-                                  <span className="badge badge-secondary p-3">
-                                    7+
-                                  </span>
-                                  <span className="ml-3">2 Seasons</span>
-                                  <span className="trending-year">2020</span>
-                                </div>
-                                <div className="d-flex align-items-center series mb-4">
-                                  <Link to="#">
-                                    <img
-                                      src={trendinglabel}
-                                      className="img-fluid"
-                                      alt=""
-                                    />
-                                  </Link>
-                                  <span className="text-gold ml-3">
-                                    #2 in Series Today
-                                  </span>
-                                </div>
-                                <p className="trending-dec">
-                                  Lorem Ipsum is simply dummy text of the
-                                  printing and typesetting industry. Lorem Ipsum
-                                  has been the industry's standard dummy text
-                                  ever since the 1500s.
-                                </p>
-                                <div className="p-btns">
-                                  <div className="d-flex align-items-center p-0">
-                                    <Link
-                                      to="#"
-                                      className="btn btn-hover mr-2"
-                                      tabIndex="0"
+                                    <Swiper
+                                      slidesPerView={4}
+                                      spaceBetween={20}
+                                      navigation={{
+                                        prevEl: "#prev13",
+                                        nextEl: "#next13",
+                                      }}
+                                      loop={true}
+                                      breakpoints={{
+                                        320: { slidesPerView: 1 },
+                                        550: { slidesPerView: 2 },
+                                        991: { slidesPerView: 3 },
+                                        1400: { slidesPerView: 4 },
+                                      }}
+                                      className="list-inline p-0 m-0 iq-rtl-direction"
                                     >
-                                      <i
-                                        className="fa fa-play mr-2"
-                                        aria-hidden="true"
-                                      ></i>
-                                      Play Now
-                                    </Link>
-                                    <Link
-                                      to="#"
-                                      className="btn btn-link"
-                                      tabIndex="0"
-                                    >
-                                      <i className="ri-add-line"></i>
-                                      My List
-                                    </Link>
-                                  </div>
-                                </div>
-                                <div className="trending-list mt-4">
-                                  <div className="text-primary title">
-                                    Starring:
-                                    <span className="text-body">
-                                      Wagner Moura, Boyd Holbrook, Joanna
-                                    </span>
-                                  </div>
-                                  <div className="text-primary title">
-                                    Genres:
-                                    <span className="text-body">
-                                      Crime, Action, Thriller, Biography
-                                    </span>
-                                  </div>
-                                  <div className="text-primary title">
-                                    This Is:
-                                    <span className="text-body">
-                                      Violent, Forceful
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data18"
-                              className="overlay-tab show fade"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  Opposites Attract
-                                </h1>
-                                <div className="d-flex align-items-center text-white text-detail mb-4">
-                                  <span className="season_date ml-2">
-                                    2 Seasons
-                                  </span>
-                                  <span className="trending-year">
-                                    Feb 2019
-                                  </span>
-                                </div>
-                                <div className="iq-custom-select d-inline-block sea-epi">
-                                  <Select options={options2} id="f6" />
-                                </div>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode1"
-                                >
-                                  <div
-                                    id="prev23"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next23"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev23",
-                                      nextEl: "#next23",
-                                    }}
-                                    loop={true}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 1</Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 2</Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 3</Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 4</Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 5</Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data19"
-                              className="overlay-tab show fade"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  Opposites Attract
-                                </h1>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode2"
-                                >
-                                  <div
-                                    id="prev24"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next24"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev24",
-                                      nextEl: "#next24",
-                                    }}
-                                    loop={true}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 1
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
+                                          <Link to="#">
+                                            <img
+                                              src={episodes1}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
                                           </Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 2
+                                        <div className="episodes-description text-body">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#">Episode 1</Link>
+                                            <span className="text-primary">
+                                              2.25 m
+                                            </span>
+                                          </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
+                                        </div>
+                                      </SwiperSlide>
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
+                                          <Link to="#">
+                                            <img
+                                              src={episodes2}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
                                           </Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 3
+                                        <div className="episodes-description text-body">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#">Episode 2</Link>
+                                            <span className="text-primary">
+                                              3.23 m
+                                            </span>
+                                          </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
+                                        </div>
+                                      </SwiperSlide>
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
+                                          <Link to="#">
+                                            <img
+                                              src={episodes3}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
                                           </Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 4
+                                        <div className="episodes-description text-body">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#">Episode 3</Link>
+                                            <span className="text-primary">
+                                              2 m
+                                            </span>
+                                          </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
+                                        </div>
+                                      </SwiperSlide>
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
+                                          <Link to="#">
+                                            <img
+                                              src={episodes4}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
                                           </Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 5
+                                        <div className="episodes-description text-body">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#">Episode 4</Link>
+                                            <span className="text-primary">
+                                              1.12 m
+                                            </span>
+                                          </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
+                                        </div>
+                                      </SwiperSlide>
+                                      <SwiperSlide className="e-item">
+                                        <div className="block-image position-relative">
+                                          <Link to="#">
+                                            <img
+                                              src={episodes5}
+                                              className="img-fluid"
+                                              alt=""
+                                            />
                                           </Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data20"
-                              className="overlay-tab show fade"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  Opposites Attract
-                                </h1>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode3"
-                                >
-                                  <div
-                                    id="prev24"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next24"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      pevEl: "#prev24",
-                                      nextEl: "#next24",
-                                    }}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    loop={true}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
+                                          <div className="episode-play-info">
+                                            <div className="episode-play">
+                                              <Link
+                                                to="/show-details"
+                                                tabIndex="0"
+                                              >
+                                                <i className="ri-play-fill"></i>
+                                              </Link>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 1</Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
+                                        <div className="episodes-description text-body">
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <Link to="#">Episode 5</Link>
+                                            <span className="text-primary">
+                                              2.54 m
+                                            </span>
                                           </div>
+                                          <p className="mb-0">
+                                            Lorem Ipsum is simply dummy text of
+                                            the printing and typesetting
+                                            industry. Lorem Ipsum has been the
+                                            industry's standard.
+                                          </p>
                                         </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 2</Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 3</Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 4</Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 5</Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                          </Tab.Content>
-                        </Tab.Container>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div
-                        className="tranding-block position-relative"
-                        style={{ backgroundImage: `url(${trending6})` }}
-                      >
-                        <Tab.Container
-                          defaultActiveKey="trending-data21"
-                          className="trending-custom-tab"
-                        >
-                          <div className="tab-title-info position-relative">
-                            <Nav
-                              as="ul"
-                              variant="pills"
-                              className="trending-pills d-flex justify-content-center align-items-center text-center iq-ltr-direction"
-                            >
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data21"
-                                  aria-selected="true"
-                                >
-                                  Overview
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data22"
-                                  aria-selected="true"
-                                >
-                                  Episodes
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data23"
-                                  aria-selected="true"
-                                >
-                                  Trailers
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link
-                                  eventKey="trending-data24"
-                                  aria-selected="true"
-                                >
-                                  Similar Like This
-                                </Nav.Link>
-                              </Nav.Item>
-                            </Nav>
-                          </div>
-                          <Tab.Content className="trending-content">
-                            <Tab.Pane
-                              eventKey="trending-data21"
-                              className="overlay-tab fade show"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="res-logo">
-                                    <div className="channel-logo">
-                                      <img
-                                        src={logo}
-                                        className="c-logo"
-                                        alt="streamit"
-                                      />
-                                    </div>
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  Fire Storm
-                                </h1>
-                                <div className="d-flex align-items-center text-white text-detail">
-                                  <span className="badge badge-secondary p-3">
-                                    17+
-                                  </span>
-                                  <span className="ml-3">2 Seasons</span>
-                                  <span className="trending-year">2020</span>
-                                </div>
-                                <div className="d-flex align-items-center series mb-4">
-                                  <Link to="#">
-                                    <img
-                                      src={trendinglabel}
-                                      className="img-fluid"
-                                      alt=""
-                                    />
-                                  </Link>
-                                  <span className="text-gold ml-3">
-                                    #2 in Series Today
-                                  </span>
-                                </div>
-                                <p className="trending-dec">
-                                  Lorem Ipsum is simply dummy text of the
-                                  printing and typesetting industry. Lorem Ipsum
-                                  has been the industry's standard dummy text
-                                  ever since the 1500s.
-                                </p>
-                                <div className="p-btns">
-                                  <div className="d-flex align-items-center p-0">
-                                    <Link
-                                      to="#"
-                                      className="btn btn-hover mr-2"
-                                      tabIndex="0"
-                                    >
-                                      <i
-                                        className="fa fa-play mr-2"
-                                        aria-hidden="true"
-                                      ></i>
-                                      Play Now
-                                    </Link>
-                                    <Link
-                                      to="#"
-                                      className="btn btn-link"
-                                      tabIndex="0"
-                                    >
-                                      <i className="ri-add-line"></i>My List
-                                    </Link>
+                                      </SwiperSlide>
+                                    </Swiper>
                                   </div>
                                 </div>
-                                <div className="trending-list mt-4">
-                                  <div className="text-primary title">
-                                    Starring:
-                                    <span className="text-body">
-                                      Wagner Moura, Boyd Holbrook, Joanna
-                                    </span>
-                                  </div>
-                                  <div className="text-primary title">
-                                    Genres:
-                                    <span className="text-body">
-                                      Crime, Action, Thriller, Biography
-                                    </span>
-                                  </div>
-                                  <div className="text-primary title">
-                                    This Is:
-                                    <span className="text-body">
-                                      Violent, Forceful
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data22"
-                              className="overlay-tab show fade"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  Fire Storm
-                                </h1>
-                                <div className="d-flex align-items-center text-white text-detail mb-4">
-                                  <span className="season_date ml-2">
-                                    2 Seasons
-                                  </span>
-                                  <span className="trending-year">
-                                    Feb 2019
-                                  </span>
-                                </div>
-                                <div className="iq-custom-select d-inline-block sea-epi">
-                                  <Select options={options1} id="f7" />
-                                </div>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode1"
-                                >
-                                  <div
-                                    id="prev25"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next25"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev25",
-                                      nextEl: "#next25",
-                                    }}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    loop={true}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 1</Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 2</Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 3</Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 4</Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 5</Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data23"
-                              className="overlay-tab show fade"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  Fire Storm
-                                </h1>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode2"
-                                >
-                                  <div
-                                    id="prev26"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next26"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    navigation={{
-                                      prevEl: "#prev26",
-                                      nextEl: "#next26",
-                                    }}
-                                    loop={true}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    className="list-inline p-0 m-0"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 1
-                                          </Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 2
-                                          </Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 3
-                                          </Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 4
-                                          </Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#" target="_blank">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              target="_blank"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#" target="_blank">
-                                            Trailer 5
-                                          </Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane
-                              eventKey="trending-data24"
-                              className="overlay-tab show fade"
-                            >
-                              <div className="trending-info align-items-center w-100 animated fadeInUp iq-ltr-direction">
-                                <Link to="#" tabIndex="0">
-                                  <div className="channel-logo">
-                                    <img
-                                      src={logo}
-                                      className="c-logo"
-                                      alt="stramit"
-                                    />
-                                  </div>
-                                </Link>
-                                <h1 className="trending-text big-title text-uppercase">
-                                  Fire Storm
-                                </h1>
-                                <div
-                                  className="episodes-contens mt-4"
-                                  id="episode3"
-                                >
-                                  <div
-                                    id="prev27"
-                                    className="swiper-button swiper-button-prev"
-                                  >
-                                    <i className="ri-arrow-left-s-line"></i>
-                                  </div>
-                                  <div
-                                    id="next27"
-                                    className="swiper-button swiper-button-next"
-                                  >
-                                    <i className="ri-arrow-right-s-line"></i>
-                                  </div>
-                                  <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={20}
-                                    breakpoints={{
-                                      320: { slidesPerView: 1 },
-                                      550: { slidesPerView: 2 },
-                                      991: { slidesPerView: 3 },
-                                      1400: { slidesPerView: 4 },
-                                    }}
-                                    navigation={{
-                                      prevEl: "#prev27",
-                                      nextEl: "#next27",
-                                    }}
-                                    loop={true}
-                                    className="list-inline p-0 m-0 iq-rtl-direction"
-                                  >
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes1}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link to="#" tabIndex="0">
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 1</Link>
-                                          <span className="text-primary">
-                                            2.25 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes2}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 2</Link>
-                                          <span className="text-primary">
-                                            3.23 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes3}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 3</Link>
-                                          <span className="text-primary">
-                                            2 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes4}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 4</Link>
-                                          <span className="text-primary">
-                                            1.12 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide className="e-item">
-                                      <div className="block-image position-relative">
-                                        <Link to="#">
-                                          <img
-                                            src={episodes5}
-                                            className="img-fluid"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <div className="episode-play-info">
-                                          <div className="episode-play">
-                                            <Link
-                                              to="/show-details"
-                                              tabIndex="0"
-                                            >
-                                              <i className="ri-play-fill"></i>
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="episodes-description text-body">
-                                        <div className="d-flex align-items-center justify-content-between">
-                                          <Link to="#">Episode 5</Link>
-                                          <span className="text-primary">
-                                            2.54 m
-                                          </span>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard.
-                                        </p>
-                                      </div>
-                                    </SwiperSlide>
-                                  </Swiper>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                          </Tab.Content>
-                        </Tab.Container>
-                      </div>
-                    </SwiperSlide>
+                              </Tab.Pane>
+                            </Tab.Content>
+                          </Tab.Container>
+                        </div>
+                      </SwiperSlide>
+                    ))}
                   </Swiper>
                 </div>
               </Col>
@@ -8608,8 +2119,8 @@ const Homepage = () => {
                     breakpoints={{
                       320: { slidesPerView: 1 },
                       550: { slidesPerView: 2 },
-                      991: { slidesPerView: 3 },
-                      1400: { slidesPerView: 4 },
+                      991: { slidesPerView: 4 },
+                      1400: { slidesPerView: 5 },
                     }}
                     loop={true}
                     slidesPerView={4}
@@ -8617,431 +2128,95 @@ const Homepage = () => {
                     as="ul"
                     className="favorites-slider list-inline row p-0 m-0 iq-rtl-direction"
                   >
-                    <SwiperSlide as="li">
-                      <div className=" block-images position-relative">
-                        <div className="img-box">
-                          <img
-                            src={tvthrillers1}
-                            className="img-fluid"
-                            alt=""
-                          />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Day of Darkness</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              15+
-                            </div>
-                            <span className="text-white">2 Seasons</span>
+                    {recommandedData.map((data) => (
+                      <SwiperSlide as="li">
+                        <div className=" block-images position-relative">
+                          <div className="img-box">
+                            <img
+                              src={data?.thumbnail?.banner_thumbnail_url}
+                              className="img-fluid"
+                              alt=""
+                            />
                           </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
+                          <div className="block-description">
+                            <h6 className="iq-title">
+                              <Link to="/show-details">
+                                {data?.media?.title}
+                              </Link>
+                            </h6>
+                            <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
+                              <div className="badge badge-secondary p-1 mr-2">
+                                15+
                               </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img
-                            src={tvthrillers2}
-                            className="img-fluid"
-                            alt=""
-                          />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">My True Friends</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              7+
+                              <span className="text-white">2 Seasons</span>
                             </div>
-                            <span className="text-white">2 Seasons</span>
-                          </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img
-                            src={tvthrillers3}
-                            className="img-fluid"
-                            alt=""
-                          />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Arrival 1999</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              11+
+                            <div className="hover-buttons">
+                              <Link
+                                to="/show-details"
+                                role="button"
+                                className="btn btn-hover iq-button"
+                              >
+                                <i
+                                  className="fa fa-play mr-1"
+                                  aria-hidden="true"
+                                ></i>
+                                Play Now
+                              </Link>
                             </div>
-                            <span className="text-white">3 Seasons</span>
                           </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
+                          <div className="block-social-info">
+                            <ul className="list-inline p-0 m-0 music-play-lists">
+                              <li className="share">
+                                <span>
+                                  <i className="ri-share-fill"></i>
+                                </span>
+                                <div className="share-box">
+                                  <div className="d-flex align-items-center">
+                                    <Link
+                                      to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="share-ico"
+                                      tabIndex="0"
+                                    >
+                                      <i className="ri-facebook-fill"></i>
+                                    </Link>
+                                    <Link
+                                      to="https://twitter.com/intent/tweet?text=Currentlyreading"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="share-ico"
+                                      tabIndex="0"
+                                    >
+                                      <i className="ri-twitter-fill"></i>
+                                    </Link>
+                                    <Link
+                                      to="#"
+                                      data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
+                                      className="share-ico iq-copy-link"
+                                      tabIndex="0"
+                                    >
+                                      <i className="ri-links-fill"></i>
+                                    </Link>
+                                  </div>
                                 </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className=" block-images position-relative">
-                        <div className="img-box">
-                          <img
-                            src={tvthrillers4}
-                            className="img-fluid"
-                            alt=""
-                          />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">Night Mare</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              18+
-                            </div>
-                            <span className="text-white">3 Seasons</span>
-                          </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
+                              </li>
+                              <li>
+                                <span>
+                                  <i className="ri-heart-fill"></i>
+                                </span>
+                                <span className="count-box">19+</span>
+                              </li>
+                              <li>
+                                <span>
+                                  <i className="ri-add-line"></i>
+                                </span>
+                              </li>
+                            </ul>
                           </div>
                         </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide as="li">
-                      <div className="block-images position-relative">
-                        <div className="img-box">
-                          <img
-                            src={tvthrillers5}
-                            className="img-fluid"
-                            alt=""
-                          />
-                        </div>
-                        <div className="block-description">
-                          <h6 className="iq-title">
-                            <Link to="/show-details">The Marshal King</Link>
-                          </h6>
-                          <div className="movie-time d-flex align-items-center my-2 iq-ltr-direction">
-                            <div className="badge badge-secondary p-1 mr-2">
-                              17+
-                            </div>
-                            <span className="text-white">1 Season</span>
-                          </div>
-                          <div className="hover-buttons">
-                            <Link
-                              to="/show-details"
-                              role="button"
-                              className="btn btn-hover iq-button"
-                            >
-                              <i
-                                className="fa fa-play mr-1"
-                                aria-hidden="true"
-                              ></i>
-                              Play Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="block-social-info">
-                          <ul className="list-inline p-0 m-0 music-play-lists">
-                            <li className="share">
-                              <span>
-                                <i className="ri-share-fill"></i>
-                              </span>
-                              <div className="share-box">
-                                <div className="d-flex align-items-center">
-                                  <Link
-                                    to="https://www.facebook.com/sharer?u=https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-facebook-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="https://twitter.com/intent/tweet?text=Currentlyreading"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-ico"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-twitter-fill"></i>
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-link="https://iqonic.design/wp-themes/streamit_wp/movie/shadow/"
-                                    className="share-ico iq-copy-link"
-                                    tabIndex="0"
-                                  >
-                                    <i className="ri-links-fill"></i>
-                                  </Link>
-                                </div>
-                              </div>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-heart-fill"></i>
-                              </span>
-                              <span className="count-box">19+</span>
-                            </li>
-                            <li>
-                              <span>
-                                <i className="ri-add-line"></i>
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </SwiperSlide>
+                      </SwiperSlide>
+                    ))}
                   </Swiper>
                 </div>
               </Col>

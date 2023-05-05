@@ -325,10 +325,10 @@ const HeaderStyle1 = (props) => {
                           <Link to="/">Genre</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/">Movies</Link>
+                          <Link to="/movies">Movies</Link>
                         </li>
                         <li className="menu-item">
-                          <Link to="/">Videos</Link>
+                          <Link to="/videos">Videos</Link>
                         </li>
                         <li className="menu-item">
                           <Link to="/">Podcast</Link>
